@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="sheet" id="sheet">
 <div class="paper" id="paper" data-mood="none">
 
   <header class="masthead">
@@ -25,10 +26,9 @@
     </div>
   </header>
 
-  <div class="markets" id="markets" aria-live="polite">
+  <div class="markets" aria-label="Market quotes">
     <span class="markets-title">Markets</span>
-    <span id="mkBtc">Bitcoin ...</span>
-    <span id="mkNdq">Nasdaq ...</span>
+    <div class="tape" id="tape"><div class="tape-track" id="tapeTrack"></div></div>
     <span class="sample-tag" id="mkSample" hidden>sample figures</span>
   </div>
 
@@ -108,6 +108,7 @@
     <p class="disclaimer">Not financial advice. NewsTide reads the news background; it does not know the future. Trade on your own judgment.</p>
     <p class="price" id="price">Price of this edition: $0.000. Spent this session: $0.000.</p>
   </footer>
+</div>
 </div>
 <script src="app.js" type="module"></script>
 </body>

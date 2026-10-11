@@ -31,6 +31,7 @@ One page, top to bottom:
 ## Look and Feel
 - Simple and understandable for anyone; not bright, not complicated; few moving parts. RSI is the reference for simplicity only, the indicator does not have to look like RSI (`scope.md > Inspiration & Identity`).
 - Not boring or bland: the market strip fills the page with live context.
+- The paper is not a flat color: newsprint grain and a faint printed market chart showing through; the page edges are slightly torn and uneven, like a real newspaper lying on a table.
 - Dark and light themes.
 - The whole page reacts to the verdict: light green when the background is bullish, red when it is bearish, light yellowish when neutral.
 - A smiling bull next to the arrow when bullish; a cheerful bear when bearish ("if the mood is bearish, the bear is happy"); a hamster when neutral.
@@ -81,7 +82,8 @@ Inside, the indicator builds a logical chain: one factor affects another, that a
 - [ ] For each of ETH, SOL, AAVE the gathering uses the coin's Telegram channel and the other sources above.
 
 ### Market strip
-- [ ] The top of the page shows Bitcoin price, Nasdaq, and main news of the day and week.
+- [ ] The top of the page shows a running line of major quotes (crypto: BTC, ETH, SOL, AAVE; stocks: Nasdaq, S&P 500, Dow Jones; gold, Brent oil, dollar index, EUR/USD, US 10-year yield). It scrolls, fades out at the edge and repeats.
+- [ ] Main news of the day and the week are short headlines; clicking one opens a short summary and a link to the full story. These are market-wide news, not tied to one coin.
 
 ### X connection
 - [ ] On first use the page offers to connect X and explains why.

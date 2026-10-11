@@ -19,17 +19,35 @@ app.get('/api/coins', (req, res) => {
 app.get('/api/market', (req, res) => {
   res.json({
     sample: true,
-    btc: { usd: 82978, change24h: -1.2 },
-    nasdaq: { value: 18342.6, change: 0.4 },
+    quotes: [
+      { name: 'Bitcoin', value: '$82,978', change: -1.2 },
+      { name: 'Ether', value: '$2,500', change: 0.8 },
+      { name: 'Solana', value: '$109.40', change: -2.1 },
+      { name: 'Aave', value: '$167.40', change: 1.5 },
+      { name: 'Nasdaq', value: '18,342.6', change: 0.4 },
+      { name: 'S&P 500', value: '5,812.3', change: 0.2 },
+      { name: 'Dow Jones', value: '42,310', change: -0.1 },
+      { name: 'Gold', value: '$2,664', change: 0.6 },
+      { name: 'Brent oil', value: '$74.20', change: -1.4 },
+      { name: 'Dollar index', value: '103.1', change: 0.1 },
+      { name: 'EUR/USD', value: '1.0921', change: -0.2 },
+      { name: 'US 10-year yield', value: '4.08%', change: 0.03, unit: 'pt' }
+    ],
     today: [
-      { title: 'Spot ether ETFs see second day of inflows', source: 'CoinDesk' },
-      { title: 'Solana validators approve fee change', source: 'Cointelegraph' },
-      { title: 'Stablecoin supply reaches new high', source: 'CoinDesk' }
+      { title: 'Spot ether ETFs see second day of inflows', source: 'CoinDesk',
+        summary: 'US spot ether funds took in fresh money for a second session, led by the largest issuers. Analysts read it as institutions returning after a quiet month.' },
+      { title: 'Solana validators approve fee change', source: 'Cointelegraph',
+        summary: 'A governance vote among Solana validators passed a change to how priority fees are shared. It takes effect at the next epoch boundary.' },
+      { title: 'Stablecoin supply reaches new high', source: 'CoinDesk',
+        summary: 'The combined supply of the largest dollar stablecoins rose to a record, often read as dry powder waiting on the sidelines of the crypto market.' }
     ],
     week: [
-      { title: 'Fed holds rates, signals patience on cuts', source: 'Federal Reserve' },
-      { title: 'US inflation cools slightly in September', source: 'MarketWatch' },
-      { title: 'Oil slips as supply worries ease', source: 'Investing' }
+      { title: 'Fed holds rates, signals patience on cuts', source: 'Federal Reserve',
+        summary: 'The Federal Reserve kept its policy rate unchanged and said it wants more evidence that inflation is cooling before cutting.' },
+      { title: 'US inflation cools slightly in September', source: 'MarketWatch',
+        summary: 'Consumer prices rose a little less than expected last month, giving markets some hope for a rate cut later this year.' },
+      { title: 'Oil slips as supply worries ease', source: 'Investing',
+        summary: 'Crude prices fell as concerns about supply disruptions faded, easing pressure on inflation expectations.' }
     ]
   });
 });

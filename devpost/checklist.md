@@ -82,3 +82,4 @@ Activity mode:
 
 ## Revisions
 
+- Market strip became a running tape of 12 major quotes with expandable market news; paper got grain, a faint printed chart and torn edges - Dima's design feedback at the slice 1 checkpoint ("all known quotes as a running line", "news short, click to open", "background not monotone, edges like a newspaper"). PRD Look and Feel, Market strip and spec Market Strip Service, Look and Feel updated.

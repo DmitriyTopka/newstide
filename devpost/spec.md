@@ -55,7 +55,8 @@ Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 - **Verdict tints:** the paper washes light green (bullish), red (bearish), light yellowish (neutral). Gentle color, not bright.
 - **Arrow and traffic light** drawn in CSS/SVG in an ink style (no image credits needed).
 - **Bull, bear, hamster:** custom engraving-style illustrations generated with Higgsfield (smiling bull, cheerful bear, hamster). Plan: 3 images, plus at most one retry each.
-- **Few moving parts:** no animation except the countdown and one soft fade of the result.
+- **Paper:** newsprint grain and a faint market chart printed through (inline SVG backgrounds, no image files); torn, uneven page edges (CSS clip-path drawn once per load) on a darker "table" background.
+- **Few moving parts:** the market tape scrolls (Dima's request; pauses on hover, static when the system asks for reduced motion); otherwise only the countdown and one soft fade of the result.
 - **Disclaimer:** a "Not financial advice" line in the newspaper footer, always visible.
 - **Copy tone:** newspaper headline style, a few words: "GROWTH EXPECTED FOR ETH", "NEUTRAL FOR NOW", "CORRECTION".
 
@@ -76,7 +77,7 @@ Small line under the result: "This analysis: $0.02 · This session: $0.10". Sess
 PRD ref: learner decision in `4-spec` (see `Decisions and Open Issues`); supports the business model in `prd.md > Possible Later Enhancements`.
 
 ### Market Strip Service
-`server/market.js`, route `GET /api/market`. Bitcoin price from CoinGecko; Nasdaq Composite from Yahoo Finance; "Today": 3 newest crypto headlines from the last 24 hours (Cointelegraph, CoinDesk); "This week": 3 newest macro items from the last 7 days (Federal Reserve, Investing, MarketWatch). Cached for 5 minutes.
+`server/market.js`, route `GET /api/market`. A running tape of quotes: BTC, ETH, SOL, AAVE from CoinGecko; Nasdaq (^IXIC), S&P 500 (^GSPC), Dow Jones (^DJI), gold (GC=F), Brent oil (BZ=F), dollar index (DX-Y.NYB), EUR/USD (EURUSD=X), US 10-year yield (^TNX) from Yahoo Finance; each headline carries a short summary and link from its feed, opened on click; "Today": 3 newest crypto headlines from the last 24 hours (Cointelegraph, CoinDesk); "This week": 3 newest macro items from the last 7 days (Federal Reserve, Investing, MarketWatch). Cached for 5 minutes.
 PRD ref: `prd.md > Market strip`.
 
 ### Coin Registry

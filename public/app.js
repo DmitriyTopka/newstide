@@ -30,26 +30,40 @@ async function loadCoins() {
   $('coinList').innerHTML = coins.map(c => `<option value="${c.symbol}">${c.name}</option>`).join('');
 }
 
-// Market line and the two news columns
-function fmtChange(v) {
-  const cls = v >= 0 ? 'up-tick' : 'down-tick';
-  return `<span class="${cls}">${v >= 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
+// Market tape (running line) and the two news columns
+function quoteHtml(q) {
+  const up = q.change >= 0;
+  const ch = q.unit === 'pt' ? `${up ? '+' : ''}${q.change.toFixed(2)}` : `${up ? '+' : ''}${q.change.toFixed(1)}%`;
+  return `<span class="quote">${escapeHtml(q.name)} <b>${escapeHtml(q.value)}</b> <span class="${up ? 'up-tick' : 'down-tick'}">${up ? '\u25B2' : '\u25BC'} ${ch}</span></span>`;
 }
 function briefs(list) {
-  return list.map(n => `<li><b>${escapeHtml(n.title)}</b><small>${escapeHtml(n.source)}</small></li>`).join('');
+  return list.map(n => `<li><details><summary><b>${escapeHtml(n.title)}</b><small>${escapeHtml(n.source)}</small></summary><p>${escapeHtml(n.summary ?? '')}</p>${n.link ? `<a href="${escapeHtml(n.link)}" target="_blank" rel="noopener">Read the full story</a>` : ''}</details></li>`).join('');
 }
 async function loadMarket() {
   try {
     const m = await (await fetch('/api/market')).json();
-    $('mkBtc').innerHTML = m.btc ? `Bitcoin $${m.btc.usd.toLocaleString('en-US')} ${fmtChange(m.btc.change24h)}` : 'Bitcoin: no data';
-    $('mkNdq').innerHTML = m.nasdaq ? `Nasdaq ${m.nasdaq.value.toLocaleString('en-US')} ${fmtChange(m.nasdaq.change)}` : 'Nasdaq: no data';
+    const quotes = m.quotes ?? [];
+    const row = quotes.length ? quotes.map(quoteHtml).join('') : '<span class="quote">Quotes: no data</span>';
+    // Two copies side by side so the line can loop without a gap.
+    $('tapeTrack').innerHTML = `<div class="tape-run">${row}</div><div class="tape-run" aria-hidden="true">${row}</div>`;
+    $('tapeTrack').style.setProperty('--tape-seconds', `${Math.max(30, quotes.length * 5)}s`);
     $('mkSample').hidden = !m.sample;
     $('today').innerHTML = briefs(m.today ?? []);
     $('week').innerHTML = briefs(m.week ?? []);
   } catch {
-    $('mkBtc').textContent = 'Bitcoin: no data';
-    $('mkNdq').textContent = 'Nasdaq: no data';
+    $('tapeTrack').innerHTML = '<div class="tape-run"><span class="quote">Quotes: no data</span></div>';
   }
+}
+
+// Torn newspaper edges: a slightly uneven outline, drawn once per page load.
+function tearEdges() {
+  const pts = [];
+  const jag = (n, f) => { for (let i = 0; i <= n; i++) pts.push(f(i / n, Math.random())); };
+  jag(60, (t, r) => `${(t * 100).toFixed(2)}% ${(r * 0.9).toFixed(2)}%`);
+  jag(90, (t, r) => `${(100 - r * 0.8).toFixed(2)}% ${(t * 100).toFixed(2)}%`);
+  jag(60, (t, r) => `${(100 - t * 100).toFixed(2)}% ${(100 - r * 0.7).toFixed(2)}%`);
+  jag(90, (t, r) => `${(r * 0.8).toFixed(2)}% ${(100 - t * 100).toFixed(2)}%`);
+  $('paper').style.clipPath = `polygon(${pts.join(',')})`;
 }
 
 function escapeHtml(s) {
@@ -151,5 +165,6 @@ $('askForm').addEventListener('submit', async e => {
 
 $('coin').addEventListener('input', () => { $('formError').textContent = ''; });
 
+tearEdges();
 loadCoins();
 loadMarket();
