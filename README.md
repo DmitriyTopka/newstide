@@ -4,7 +4,7 @@ A one-page news background indicator for crypto traders, printed as an old newsp
 
 Before a trade you pick a coin, Long or Short, and your timeframe. NewsTide reads the news behind the chart (the coin's own official blog and forum, crypto news, the Federal Reserve and macro headlines) and prints one verdict: which way the news background points, and whether it favours your plan or goes against it.
 
-![The NewsTide front page with a verdict for Solana](docs/screenshot-verdict.jpg)
+![The NewsTide front page: Bull Edition, "Growth expected for SOL", the stamp favours a Long plan, editor's notes open](docs/screenshot-verdict.jpg)
 
 Built for Devpost's **Build With AI: Basics** hackathon with the Devpost Learn Skill Pack. The planning documents live in [`devpost/`](devpost): [scope](devpost/scope.md), [PRD](devpost/prd.md), [technical spec](devpost/spec.md) and the [build checklist](devpost/checklist.md).
 
@@ -73,7 +73,7 @@ npm run check:live   # read every feed now and test what happens when feeds fail
 
 - NewsTide reads the news background. It does not know the future, and it is not financial advice.
 - The model is not deterministic. The same request on the same news can come back with a different verdict. That is one more reason the editor's notes are there: you can see what the verdict rests on.
-- On a quiet weekend most verdicts are "Neutral for now". That is the honest answer when the news says little about a coin.
+- On a quiet weekend many verdicts are "Neutral for now". When the wider picture is mixed, the coin's own official news decides: on the saved Sunday snapshot Solana came out "Growth expected" (strong ecosystem news), while Ethereum and Aave stayed neutral.
 - It runs only on your own machine. A public version would need accounts, limits and a server, so nobody else can spend the key's balance.
 - Three coins for now. Adding a coin is one entry in `config/coins.json` with its official feeds.
 

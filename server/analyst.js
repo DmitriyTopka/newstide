@@ -40,7 +40,8 @@ direction: where the news background is likely to push the coin over the horizon
 plan_fit: supports if the direction matches the plan, against if it opposes it, mixed when sideways or unclear.
 verdict: a newspaper headline of at most 6 words, such as "Growth expected for ETH", "Correction for SOL" or "Neutral for now". No numbers, no percent signs.
 spot_futures_note: one short sentence; futures react faster and amplify moves, spot is calmer.
-If the dispatches say little about the coin, lean to sideways and say so in the chain.`;
+When the wider picture is mixed but the coin's own official news is clearly positive or clearly negative, let that news decide the direction and say so in the chain.
+Choose sideways only when the coin's own news is thin or balanced and the wider picture gives no clear push either way.`;
 
 export function buildPrompt({ coin, plan, horizon, items }) {
   const window = horizon === 'intraday' ? 'the next hours (intraday, today\'s news)' : 'the next days (medium term, last two weeks of news)';

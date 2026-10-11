@@ -193,6 +193,10 @@ All free unless marked. Checked from Dima's Mac on 2026-10-11.
 **One genuine uncertainty: how do we check that the model did what we meant?**
 Dima's learning goal is to check the model's work precisely. Nobody can check in advance that a forecast is right. What we can check, and will, is that the model followed our intent: (1) the answer has the right shape and no percentages; (2) the light agrees with the arrow and the plan by a fixed rule; (3) every step of the hidden chain points to a real collected item, so it is not invented. These are automatic checks in `test/check.test.js` and in the Answer Checker. During the build, Dima opens one run log in `runs/` and reads the chain himself to judge whether the reasoning makes sense.
 
+**Prompt decision (Dima, after the pre-ship council)**
+- When the wider picture is mixed but the coin's own official news is clearly positive or negative, that news decides the direction; sideways only when the coin's news is thin or balanced. Effect on the Sunday snapshot with Sonnet: SOL up, ETH and AAVE sideways.
+- The video is recorded on a weekday with live news.
+
 **Still open**
 - Higgsfield cost per image: measure on the first image, show Dima before the rest.
 - Library versions: pin at install.
