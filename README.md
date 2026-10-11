@@ -89,3 +89,7 @@ npm run check:live   # read every feed now and test what happens when feeds fail
 Node.js 24, Express 5, fast-xml-parser, the Anthropic SDK (Claude Haiku 5.5 and Claude Sonnet 5.5, structured outputs), plain HTML, CSS and JavaScript. The paper texture and the engravings (bull, bear, hamster, pointing hand) were generated with Higgsfield. Fonts: UnifrakturMaguntia and Old Standard TT from Google Fonts.
 
 Built with Claude Code following the Devpost Learn Skill Pack: start, scope, PRD, spec, build, ship.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
