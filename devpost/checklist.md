@@ -49,7 +49,7 @@ Build mode: fast
   Learner check: Open the page and compare BTC with your exchange. Say whether the strip reads easily.
   Commit: `Live market strip`
 
-- [ ] **5. Illustrations, final model and demo readiness**
+- [x] **5. Illustrations, final model and demo readiness**
   Becomes usable: The smiling bull, cheerful bear and hamster are real engraving-style illustrations from Higgsfield; `MODEL=claude-sonnet-5-5` gives the final-quality verdict; the README explains how to run it, the sources and the limits.
   Why now: Images cost credits, so they come once the design is settled; Sonnet costs more, so it is switched on only for the finished app.
   PRD ref: `prd.md > Look and Feel`, `prd.md > What We're Building`
@@ -89,3 +89,4 @@ Activity mode:
 - Feed titles carried HTML entities and long dashes; the collector now decodes entities and turns long dashes into a hyphen.
 - Market news is now taken in turns from each source (one busy feed, MarketWatch, was filling all macro slots). On Sunday 11.10 the 24-hour window holds only MarketWatch, Cointelegraph and CoinDesk; Fed and Investing appear in the 2-week window.
 - Live check: 3 of 3 live analyses on Haiku 5.5 came back "Neutral for now" (CoinDesk dropped once, the fallback worked). Haiku leans neutral on a quiet weekend; to compare with Sonnet 5.5 in slice 5 before recording.
+- Sonnet 5.5 on the same quiet Sunday news also gave 3 of 3 sideways/mixed, with a richer chain (about $0.011 and 5-6 s per analysis). So the neutral verdicts come from the news, not the model; the README says so. MODEL switched to claude-sonnet-5-5 in .env.
