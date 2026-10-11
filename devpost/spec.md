@@ -44,7 +44,9 @@ PRD ref: `prd.md > The Core Journey`.
 - Needs: Node.js 24, a `.env` file with `ANTHROPIC_API_KEY`, `MODEL`, `DATA_MODE`. A secret-free `.env.example` is committed; `.env` is in `.gitignore`.
 - Start: `npm install` once, then `npm start`.
 - Demo recording: `DATA_MODE=live`, `MODEL=claude-sonnet-5-5`, record the screen while running ETH Long 1h, SOL Short 4h, AAVE Long 1d.
-- Submission: public GitHub repository plus a 1-3 minute video. No deployment. A server for other people is deferred (`What Was Simplified and Why`).
+- Submission: public GitHub repository plus a 1-3 minute video. No deployment.
+- Public repository: https://github.com/DmitriyTopka/newstide (published 2026-10-11, checked without login).
+- Demo video: to be recorded on a weekday with live news; link added here when uploaded. A server for other people is deferred (`What Was Simplified and Why`).
 
 ## Look and Feel
 Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
