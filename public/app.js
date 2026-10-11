@@ -32,6 +32,7 @@ async function loadCoins() {
 
 // Market tape (running line) and the two news columns
 function quoteHtml(q) {
+  if (q.change == null) return `<span class="quote">${escapeHtml(q.name)} <b>no data</b></span>`;
   const up = q.change >= 0;
   const ch = q.unit === 'pt' ? `${up ? '+' : ''}${q.change.toFixed(2)}` : `${up ? '+' : ''}${q.change.toFixed(1)}%`;
   return `<span class="quote">${escapeHtml(q.name)} <b>${escapeHtml(q.value)}</b> <span class="${up ? 'up-tick' : 'down-tick'}">${up ? '\u25B2' : '\u25BC'} ${ch}</span></span>`;

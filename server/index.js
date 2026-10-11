@@ -6,6 +6,7 @@ import { collect } from './collect.js';
 import { analyze } from './analyst.js';
 import { check } from './check.js';
 import { saveRun } from './log.js';
+import { market } from './market.js';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const coins = JSON.parse(await readFile(path.join(root, 'config/coins.json'), 'utf8'));
@@ -23,33 +24,14 @@ app.get('/api/coins', (req, res) => {
   res.json(coins.map(({ symbol, name }) => ({ symbol, name })));
 });
 
-// SAMPLE ONLY (slice 1): fixed market strip until the live strip is built.
-app.get('/api/market', (req, res) => {
-  res.json({
-    sample: true,
-    quotes: [
-      { name: 'Bitcoin', value: '$82,978', change: -1.2 },
-      { name: 'Ether', value: '$2,500', change: 0.8 },
-      { name: 'S&P 500', value: '5,812.3', change: 0.2 },
-      { name: 'Dollar index', value: '103.1', change: 0.1 }
-    ],
-    today: [
-      { title: 'Spot ether ETFs see second day of inflows', source: 'CoinDesk',
-        summary: 'US spot ether funds took in fresh money for a second session, led by the largest issuers. Analysts read it as institutions returning after a quiet month.' },
-      { title: 'Solana validators approve fee change', source: 'Cointelegraph',
-        summary: 'A governance vote among Solana validators passed a change to how priority fees are shared. It takes effect at the next epoch boundary.' },
-      { title: 'Stablecoin supply reaches new high', source: 'CoinDesk',
-        summary: 'The combined supply of the largest dollar stablecoins rose to a record, often read as dry powder waiting on the sidelines of the crypto market.' }
-    ],
-    week: [
-      { title: 'Fed holds rates, signals patience on cuts', source: 'Federal Reserve',
-        summary: 'The Federal Reserve kept its policy rate unchanged and said it wants more evidence that inflation is cooling before cutting.' },
-      { title: 'US inflation cools slightly in September', source: 'MarketWatch',
-        summary: 'Consumer prices rose a little less than expected last month, giving markets some hope for a rate cut later this year.' },
-      { title: 'Oil slips as supply worries ease', source: 'Investing',
-        summary: 'Crude prices fell as concerns about supply disruptions faded, easing pressure on inflation expectations.' }
-    ]
-  });
+// The market strip: live quotes and headlines, cached for 5 minutes.
+app.get('/api/market', async (req, res) => {
+  try {
+    res.json(await market(marketFeeds));
+  } catch (err) {
+    console.error('[market]', err);
+    res.json({ sample: false, quotes: [], today: [], week: [] });
+  }
 });
 
 const TIMEFRAMES = ['15m', '1h', '4h', '1d'];

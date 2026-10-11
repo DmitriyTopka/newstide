@@ -39,7 +39,7 @@ Build mode: fast
   Learner check: Switch to live, run SOL Long 4h. Compare the verdict with what you know about Solana news this week.
   Commit: `Live news gathering with source fallbacks`
 
-- [ ] **4. Live market strip**
+- [x] **4. Live market strip**
   Becomes usable: The strip under the masthead shows the real Bitcoin price, Nasdaq, "Today" crypto headlines and "This week" macro items, refreshed every 5 minutes. A failed source shows "no data" in its cell only.
   Why now: It is visible context, not the kernel, and depends on the feed code from slice 3.
   PRD ref: `prd.md > Market strip`
