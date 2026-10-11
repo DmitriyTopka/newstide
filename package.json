@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node --env-file-if-exists=.env server/index.js",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "check:live": "node scripts/check-live.js",
+    "snapshot": "node scripts/snapshot.js"
   },
   "engines": {
     "node": ">=24"

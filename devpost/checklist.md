@@ -29,7 +29,7 @@ Build mode: fast
   Learner check: Run ETH Long 1h and AAVE Short 1d. Then open the newest file in `runs/` and read the chain: does the reasoning from the news to the coin make sense to you as a trader?
   Commit: `Real verdict from saved news with checker and cost`
 
-- [ ] **3. Live news from the official and market feeds**
+- [x] **3. Live news from the official and market feeds**
   Becomes usable: With `DATA_MODE=live`, Get data reads the live feeds (official project blogs and forums, Cointelegraph, CoinDesk, Federal Reserve, Investing, MarketWatch) for the chosen coin and horizon. A source that fails is skipped with a small note; if nothing usable is found, the page says so and the model is not called.
   Why now: Live data is the second risk (feeds change shape, go down). Doing it after the kernel means the model part is already proven on known input.
   PRD ref: `prd.md > Background gathering (hidden from the user)`, `prd.md > States and Boundaries`
@@ -87,3 +87,5 @@ Activity mode:
 - Council (5 advisors + peer review) on design and contest fit; Dima agreed: stamp replaces the traffic light, 4 quotes instead of 12, a closed "Show the editor's notes" with cited dispatches. Also: result moved above the fold (ask form became one line), engraved manicule replaces the arrow, bull/bear/hamster engravings generated now (moved from slice 5), edition name in the masthead, paper texture without the chart (Dima). Higgsfield spent 4 credits in total so far (663 -> 659).
 - The same request can get a different verdict on a second run (SOL Short 4h: once up/against, once sideways/mixed, same saved news) - the model is not deterministic. For the video, record from one saved run and show its editor's notes; mention it honestly in the README.
 - Feed titles carried HTML entities and long dashes; the collector now decodes entities and turns long dashes into a hyphen.
+- Market news is now taken in turns from each source (one busy feed, MarketWatch, was filling all macro slots). On Sunday 11.10 the 24-hour window holds only MarketWatch, Cointelegraph and CoinDesk; Fed and Investing appear in the 2-week window.
+- Live check: 3 of 3 live analyses on Haiku 5.5 came back "Neutral for now" (CoinDesk dropped once, the fallback worked). Haiku leans neutral on a quiet weekend; to compare with Sonnet 5.5 in slice 5 before recording.

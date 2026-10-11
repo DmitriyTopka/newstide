@@ -76,7 +76,18 @@ export function select(items, { horizon, now = Date.now() }) {
     .sort((a, b) => (a.kind === 'project') - (b.kind === 'project') || Date.parse(b.date) - Date.parse(a.date));
   // Project items are rare and matter most: keep up to 10 of them, fill the rest with market news.
   const project = kept.filter(it => it.kind === 'project').slice(0, 10);
-  const market = kept.filter(it => it.kind !== 'project').slice(0, MAX_ITEMS - project.length);
+  // Take market news in turns from each source, so one busy feed cannot crowd out the others.
+  const bySource = new Map();
+  for (const it of kept.filter(it => it.kind !== 'project')) {
+    if (!bySource.has(it.source)) bySource.set(it.source, []);
+    bySource.get(it.source).push(it);
+  }
+  const market = [];
+  for (let round = 0; market.length < MAX_ITEMS - project.length; round++) {
+    const before = market.length;
+    for (const list of bySource.values()) if (list[round] && market.length < MAX_ITEMS - project.length) market.push(list[round]);
+    if (market.length === before) break;
+  }
   return [...project, ...market].map((it, i) => ({ n: i + 1, ...it }));
 }
 
