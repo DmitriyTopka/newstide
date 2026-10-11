@@ -111,9 +111,9 @@ function showResult(r, plan) {
   $('notes').open = false;
   $('notes').hidden = !notes.chain.length;
   $('chain').innerHTML = notes.chain
-    .map(c => `<li>${escapeHtml(c.step)} <span class="cites">${c.cites.map(n => `[${n}]`).join(' ')}</span></li>`).join('');
+    .map(c => `<li>${escapeHtml(c.step)} <span class="cites">${(c.cites ?? []).map(n => `[${Number(n) | 0}]`).join(' ')}</span></li>`).join('');
   $('cited').innerHTML = notes.dispatches
-    .map(d => `<li><span class="cites">[${d.n}]</span> ${escapeHtml(d.title)} <small>${escapeHtml(d.source)}</small></li>`).join('');
+    .map(d => `<li><span class="cites">[${Number(d.n) | 0}]</span> ${escapeHtml(d.title)} <small>${escapeHtml(d.source)}</small></li>`).join('');
 
   $('paper').dataset.mood = moods[r.direction];
   const cost = r.cost?.usd ?? 0;
