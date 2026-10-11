@@ -40,7 +40,7 @@ export function check(answer, { plan, items }) {
     const bad = cites.filter(n => !numbers.has(n));
     if (!cites.length) problems.push(`step ${i + 1} cites nothing`);
     if (bad.length) problems.push(`step ${i + 1} cites dispatches that do not exist: ${bad.join(', ')}`);
-    c.cites = cites.filter(n => numbers.has(n));
+    c.cites = [...new Set(cites.filter(n => numbers.has(n)))].sort((a, b) => a - b);
   });
   fixed.chain = chain;
   const citesOk = chain.length > 0 && chain.every(c => c.cites.length > 0);

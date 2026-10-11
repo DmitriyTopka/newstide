@@ -9,7 +9,7 @@ status: approved
 NewsTide is two small pieces running on Dima's Mac.
 
 1. **The page** is what you see in the browser: a newspaper-style front page with the market strip on top, the coin field, Long/Short, the timeframe, the **Get data** button and the indicator at the bottom. It is plain HTML, CSS and JavaScript, no framework (a framework is "a pile of decisions already made for you"; one page does not need it).
-2. **The little server** is a program on the same Mac. When you press Get data, the page asks the server. The server reads the news feeds (official project blogs and forums, crypto news, Investing, the US Federal Reserve), cuts them down to what matters for your coin and timeframe, and sends them to the AI model with one question: "given this background, where does the tide carry this coin, and is it with or against this plan?" The model answers in a fixed shape (arrow, light, a few words). The server passes that back to the page, together with what the answer cost.
+2. **The little server** is a program on the same Mac. When you press Get data, the page asks the server. The server reads the news feeds (official project blogs and forums, crypto news, Investing, the US Federal Reserve), cuts them down to what matters for your coin and timeframe, and sends them to the AI model with one question: "given this background, where does the tide carry this coin, and is it with or against this plan?" The model answers in a fixed shape (direction, whether it fits the plan, a few words, and the reasoning with citations). The server passes that back to the page, together with what the answer cost.
 
 Why a server at all: the Anthropic key must never be inside the page (anyone could read it), and many sites do not hand their feeds directly to a browser. Why nothing bigger: one person, one Mac, one video. No accounts, no database, no hosting.
 
@@ -18,7 +18,7 @@ You start it with one command, `npm start`, and open `http://localhost:3000`. No
 ## The Core Journey Through the System
 PRD ref: `prd.md > The Core Journey`.
 
-1. You open `localhost:3000` → the page asks the server for `/api/market` → the server fetches Bitcoin price (CoinGecko), Nasdaq (Yahoo Finance) and the newest headlines → the strip fills in.
+1. You open `localhost:3000` → the page asks the server for `/api/market` → the server fetches Bitcoin and Ether (CoinGecko), the S&P 500 and the dollar index (Yahoo Finance) and the newest headlines → the strip fills in.
 2. The page shows the X connection notice → in this version X is not built, so the notice says X is not connected and why it matters (see `What Was Simplified and Why`).
 3. You type a coin → the page suggests from the coin list it got from `/api/coins` (ETH, SOL, AAVE) → only a listed coin can be submitted.
 4. You choose Long or Short → kept in the page.
@@ -27,7 +27,7 @@ PRD ref: `prd.md > The Core Journey`.
 7. The server gathers: the coin's official feeds plus market-wide feeds, keeps items from the last 24 hours (intraday) or the last 14 days (medium-term), numbers them, and sends them to the model.
 8. The model returns `direction`, `plan_fit`, `verdict`, `spot_futures_note` and a hidden `chain` of cause and effect that cites item numbers.
 9. The server checks the answer against the rules (see `Answer Checker`), computes the cost from the token counts, saves the full run to a log file, and returns the visible parts plus the cost.
-10. The page shows the arrow, the traffic light, the verdict, the bull, bear or hamster, tints the page, and updates the cost counter.
+10. The page shows the pointing hand, the stamp, the verdict, the bull, bear or hamster, tints the page, and updates the cost counter.
 
 ## Stack
 - **Node.js 24** (installed: v24.14.1) runs the server. Its built-in `fetch` reads feeds; built-in `--env-file` loads `.env`, so no extra library for that. Docs: https://nodejs.org/docs/latest-v24.x/api/
@@ -50,7 +50,7 @@ PRD ref: `prd.md > The Core Journey`.
 Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 - **An old printed newspaper being opened.** Off-white newsprint background, black ink, thin column rules, a masthead "NewsTide" at the top like a newspaper title, date line under it.
 - **Typography:** a classic newspaper serif for the masthead and headlines (for example Old Standard TT or Playfair Display from Google Fonts), a readable serif for small text. Uppercase small labels like section names.
-- **Market strip** as a ticker line under the masthead: BTC, Nasdaq, then "Today" and "This week" headlines in narrow columns.
+- **Market strip** as a running tape under the masthead: Bitcoin, Ether, S&P 500, dollar index, then "Today" and "This week" headlines in narrow columns.
 - **Dark theme** as a "night edition": dark paper, light ink. A small switch in the masthead corner.
 - **Verdict tints:** the paper washes light green (bullish), red (bearish), light yellowish (neutral). Gentle color, not bright.
 - **Pointing hand** (engraved manicule, `public/img/hand.jpg`, rotated by CSS) and **round ink stamp** (inline SVG with a rough-edge filter) replace the arrow and the traffic light.
@@ -68,8 +68,8 @@ Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 PRD ref: `prd.md > Screens and Layout`, `prd.md > Coin input`, `prd.md > Plan and timeframe`, `prd.md > Waiting for the result`.
 
 ### Indicator View
-Part of `public/app.js`: turns the answer into arrow, light, verdict, animal, page tint, spot/futures note and the "X not connected" note.
-- direction `up` → arrow up, bull, green tint; `down` → arrow down, bear, red tint; `sideways` → arrow sideways, hamster, yellowish tint.
+Part of `public/app.js`: turns the answer into pointing hand, stamp, verdict, animal, page tint, spot/futures note and the "X not connected" note.
+- direction `up` → hand points up, bull, green tint; `down` → hand points down, bear, red tint; `sideways` → hand points sideways, hamster, yellowish tint.
 - plan_fit `supports` → green light; `mixed` → yellow; `against` → red.
 PRD ref: `prd.md > The indicator (result)`, `prd.md > States and Boundaries`.
 
@@ -78,7 +78,7 @@ Small line under the result: "This analysis: $0.02 · This session: $0.10". Sess
 PRD ref: learner decision in `4-spec` (see `Decisions and Open Issues`); supports the business model in `prd.md > Possible Later Enhancements`.
 
 ### Market Strip Service
-`server/market.js`, route `GET /api/market`. A running tape of quotes: BTC, ETH, SOL, AAVE from CoinGecko; Nasdaq (^IXIC), S&P 500 (^GSPC), Dow Jones (^DJI), gold (GC=F), Brent oil (BZ=F), dollar index (DX-Y.NYB), EUR/USD (EURUSD=X), US 10-year yield (^TNX) from Yahoo Finance; each headline carries a short summary and link from its feed, opened on click; "Today": 3 newest crypto headlines from the last 24 hours (Cointelegraph, CoinDesk); "This week": 3 newest macro items from the last 7 days (Federal Reserve, Investing, MarketWatch). Cached for 5 minutes.
+`server/market.js`, route `GET /api/market`. A running tape of 4 quotes (cut from 12 after the design council): Bitcoin and Ether from CoinGecko; S&P 500 (^GSPC) and dollar index (DX-Y.NYB) from Yahoo Finance; each headline carries a short summary and link from its feed, opened on click; "Today": 3 newest crypto headlines from the last 24 hours (Cointelegraph, CoinDesk); "This week": 3 newest macro items from the last 7 days (Federal Reserve, Investing, MarketWatch). Cached for 5 minutes.
 PRD ref: `prd.md > Market strip`.
 
 ### Coin Registry
@@ -196,5 +196,5 @@ Dima's learning goal is to check the model's work precisely. Nobody can check in
 **Still open**
 - Higgsfield cost per image: measure on the first image, show Dima before the rest.
 - Library versions: pin at install.
-- Yahoo Finance is unofficial; if it fails during recording, the Nasdaq cell shows "no data".
+- Yahoo Finance is unofficial; if it fails during recording, the S&P 500 and dollar index cells show "no data".
 - X official pricing page: verify before paying.

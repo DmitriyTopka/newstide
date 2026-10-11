@@ -47,7 +47,8 @@ export function parseFeed(xml, feed) {
       date: new Date(text(it.pubDate) || text(it.published) || text(it.updated) || text(it['dc:date']) || 0).toISOString(),
       summary: clean(text(it.description) || text(it.summary) || text(it['content:encoded'])).slice(0, 400)
     }))
-    .filter(it => it.title);
+    // Daily round-up pages carry no news of their own.
+    .filter(it => it.title && !/^here['\u2019]s what happened in crypto today$/i.test(it.title));
 }
 
 async function fetchFeed(feed, timeoutMs = 12000) {

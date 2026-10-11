@@ -44,10 +44,12 @@ function costOf(usage, model) {
 }
 
 app.post('/api/analyze', async (req, res) => {
-  const { coin: symbol, plan, timeframe } = req.body ?? {};
+  const { plan, timeframe } = req.body ?? {};
+  const symbol = String(req.body?.coin ?? '').trim().toUpperCase();
   const coin = coins.find(c => c.symbol === symbol);
   if (!coin || !['long', 'short'].includes(plan) || !TIMEFRAMES.includes(timeframe)) {
-    return res.status(400).json({ error: 'Pick a coin from the list, Long or Short, and a timeframe.' });
+    const what = !coin ? 'Pick ETH, SOL or AAVE.' : !['long', 'short'].includes(plan) ? 'Choose Long or Short.' : 'Choose a timeframe: 15m, 1h, 4h or 1d.';
+    return res.status(400).json({ error: what });
   }
   const at = new Date().toISOString();
   try {
@@ -86,8 +88,14 @@ app.post('/api/analyze', async (req, res) => {
   } catch (err) {
     console.error('[analyze]', err);
     const timeout = err?.name === 'APIConnectionTimeoutError' || /timed? ?out/i.test(String(err?.message));
-    res.status(502).json({ error: timeout ? 'Took too long. Try again in a moment.' : 'The paper could not be printed: ' + (err?.message ?? 'unknown error') });
+    res.status(502).json({ error: timeout ? 'Took too long. Try again in a moment.' : 'The paper could not be printed this time. Try again in a moment.' });
   }
+});
+
+// Broken requests (for example invalid JSON) get a short JSON answer, never a stack trace.
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  res.status(err.status && err.status < 500 ? err.status : 500).json({ error: 'Bad request.' });
 });
 
 const port = Number(process.env.PORT) || 3000;

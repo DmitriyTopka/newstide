@@ -50,3 +50,8 @@ test('only http and https links survive', () => {
   assert.equal(safeLink('data:text/html,x'), '');
   assert.equal(safeLink('not a url'), '');
 });
+
+test('citations are de-duplicated and sorted', () => {
+  const r = check({ ...base, chain: [{ step: 's', cites: [3, 1, 3, 2] }] }, { plan: 'long', items });
+  assert.deepEqual(r.answer.chain[0].cites, [1, 2, 3]);
+});

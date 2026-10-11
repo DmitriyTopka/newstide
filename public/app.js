@@ -106,7 +106,6 @@ function showResult(r, plan) {
   $('missing').textContent = r.missing_sources?.length ? `Unavailable today: ${r.missing_sources.join(', ')}.` : '';
   $('xNote').hidden = r.x_connected;
   $('resultSample').hidden = !r.sample;
-  $('resultSample').textContent = 'Built from a saved snapshot of the news, not live news.';
 
   // Editor's notes: the reasoning chain, closed by default
   const notes = r.notes ?? { chain: [], dispatches: [] };
