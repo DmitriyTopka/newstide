@@ -61,7 +61,7 @@ Build mode: fast
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored - after slice 1: Dima judges the newspaper design before the rest is built on it
+- [x] Early usable behavior explored - after slice 1: Dima judges the newspaper design before the rest is built on it
 - [ ] Final kick-the-tires exploration and feedback completed
 
 ## Final Review
