@@ -57,12 +57,19 @@ async function loadMarket() {
 
 // Torn newspaper edges: a slightly uneven outline, drawn once per page load.
 function tearEdges() {
+  // Gentle deckle: small, smooth irregularities, like newsprint torn along a fold.
   const pts = [];
-  const jag = (n, f) => { for (let i = 0; i <= n; i++) pts.push(f(i / n, Math.random())); };
-  jag(60, (t, r) => `${(t * 100).toFixed(2)}% ${(r * 0.9).toFixed(2)}%`);
-  jag(90, (t, r) => `${(100 - r * 0.8).toFixed(2)}% ${(t * 100).toFixed(2)}%`);
-  jag(60, (t, r) => `${(100 - t * 100).toFixed(2)}% ${(100 - r * 0.7).toFixed(2)}%`);
-  jag(90, (t, r) => `${(r * 0.8).toFixed(2)}% ${(100 - t * 100).toFixed(2)}%`);
+  const edge = (n, depth, f) => {
+    let prev = Math.random();
+    for (let i = 0; i <= n; i++) {
+      prev = prev * 0.6 + Math.random() * 0.4;
+      pts.push(f(i / n, prev * depth));
+    }
+  };
+  edge(70, 0.35, (t, d) => `${(t * 100).toFixed(2)}% ${d.toFixed(2)}%`);
+  edge(90, 0.25, (t, d) => `${(100 - d).toFixed(2)}% ${(t * 100).toFixed(2)}%`);
+  edge(70, 0.3, (t, d) => `${(100 - t * 100).toFixed(2)}% ${(100 - d).toFixed(2)}%`);
+  edge(90, 0.25, (t, d) => `${d.toFixed(2)}% ${(100 - t * 100).toFixed(2)}%`);
   $('paper').style.clipPath = `polygon(${pts.join(',')})`;
 }
 

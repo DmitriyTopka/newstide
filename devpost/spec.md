@@ -55,7 +55,7 @@ Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 - **Verdict tints:** the paper washes light green (bullish), red (bearish), light yellowish (neutral). Gentle color, not bright.
 - **Arrow and traffic light** drawn in CSS/SVG in an ink style (no image credits needed).
 - **Bull, bear, hamster:** custom engraving-style illustrations generated with Higgsfield (smiling bull, cheerful bear, hamster). Plan: 3 images, plus at most one retry each.
-- **Paper:** newsprint grain and a faint market chart printed through (inline SVG backgrounds, no image files); torn, uneven page edges (CSS clip-path drawn once per load) on a darker "table" background.
+- **Paper:** a newsprint texture with a faint printed market chart, generated with Higgsfield (`public/img/paper.jpg`, gpt_image_2_5, 0.25 credits per image), tinted by the verdict with a multiply blend; torn, uneven page edges (CSS clip-path drawn once per load) on a darker "table" background.
 - **Few moving parts:** the market tape scrolls (Dima's request; pauses on hover, static when the system asks for reduced motion); otherwise only the countdown and one soft fade of the result.
 - **Disclaimer:** a "Not financial advice" line in the newspaper footer, always visible.
 - **Copy tone:** newspaper headline style, a few words: "GROWTH EXPECTED FOR ETH", "NEUTRAL FOR NOW", "CORRECTION".

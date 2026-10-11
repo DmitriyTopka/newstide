@@ -6,12 +6,12 @@
   --ink: #23211c;          /* warm printing ink */
   --ink-faded: #625e53;    /* worn type */
   --rule: #3a372f;
-  --wash-up: #d3e3c9;      /* bullish paper */
-  --wash-down: #e9c4bb;    /* bearish paper */
-  --wash-flat: #ece0ae;    /* neutral paper */
+  --tint: #f7f6f2;         /* multiplied over the paper texture */
+  --wash-up: #e2f0d8;      /* bullish paper */
+  --wash-down: #f6d2c9;    /* bearish paper */
+  --wash-flat: #f7eabf;    /* neutral paper */
   --lamp-off: #4a463c;
   --desk: #8f897c;          /* the table the paper lies on */
-  --print: rgba(35, 33, 28, 0.07);  /* faint print showing through */
   --lamp-red: #b8382a;
   --lamp-yellow: #d9a922;
   --lamp-green: #3f8a4a;
@@ -24,12 +24,12 @@
   --ink: #e4e0d3;
   --ink-faded: #a7a294;
   --rule: #cfcab9;
-  --wash-up: #22352a;
-  --wash-down: #3e2622;
-  --wash-flat: #3a3420;
+  --tint: #2c2f34;
+  --wash-up: #2a3f31;
+  --wash-down: #4a2c27;
+  --wash-flat: #463d24;
   --lamp-off: #2b2a25;
   --desk: #121416;
-  --print: rgba(228, 224, 211, 0.06);
 }
 
 * { box-sizing: border-box; }
@@ -53,17 +53,17 @@ body {
   position: relative;
   padding: 26px 34px 40px;
   min-height: calc(100vh - 48px);
-  background-color: var(--paper);
-  /* newsprint grain + a faint market chart and column lines printed through from the other side */
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420'%3E%3Cg fill='none' stroke='%23231f1a' stroke-opacity='.05'%3E%3Cpath d='M20 330 L80 300 L120 312 L170 250 L220 268 L270 210 L320 232 L370 160 L420 188 L470 120 L520 150 L600 90' stroke-width='3'/%3E%3Cpath d='M20 380 H620 M20 60 V380' stroke-width='1.5'/%3E%3Cpath d='M60 340 v-30 M100 320 v-40 M140 330 v-22 M180 280 v-50 M220 290 v-28 M260 240 v-44 M300 250 v-30 M340 200 v-52 M380 190 v-30 M420 210 v-40 M460 150 v-48 M500 170 v-30 M540 140 v-40 M580 120 v-36' stroke-width='7'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 220px 220px, 640px 420px;
+  /* newsprint texture generated with Higgsfield (gpt_image_2_5), tinted by the verdict */
+  background-color: var(--tint);
+  background-image: url("img/paper.jpg");
+  background-size: cover;
+  background-position: center top;
+  background-blend-mode: multiply;
   transition: background-color 600ms ease;
 }
-.paper[data-mood="up"]   { background-color: var(--wash-up); }
-.paper[data-mood="down"] { background-color: var(--wash-down); }
-.paper[data-mood="flat"] { background-color: var(--wash-flat); }
+.paper[data-mood="up"]   { --tint: var(--wash-up); }
+.paper[data-mood="down"] { --tint: var(--wash-down); }
+.paper[data-mood="flat"] { --tint: var(--wash-flat); }
 
 /* Masthead */
 .masthead {
@@ -173,8 +173,8 @@ body {
 .briefs summary { cursor: pointer; list-style: none; }
 .briefs summary::-webkit-details-marker { display: none; }
 .briefs summary b { font-weight: 700; display: block; }
-.briefs summary b::after { content: " +"; font-weight: 400; color: var(--ink-faded); }
-.briefs details[open] summary b::after { content: " \2212"; }
+.briefs summary small::after { content: " \00B7  read more"; font-style: italic; }
+.briefs details[open] summary small::after { content: " \00B7  close"; }
 .briefs small { color: var(--ink-faded); font-style: italic; font-size: 13px; }
 .briefs details p { margin: 6px 0 2px; font-size: 15px; text-align: justify; hyphens: auto; }
 .briefs a { color: var(--ink); font-size: 14px; font-style: italic; }
