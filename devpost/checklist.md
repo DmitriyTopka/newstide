@@ -54,7 +54,7 @@ Build mode: fast
   Why now: Images cost credits, so they come once the design is settled; Sonnet costs more, so it is switched on only for the finished app.
   PRD ref: `prd.md > Look and Feel`, `prd.md > What We're Building`
   Spec ref: `spec.md > Look and Feel`, `spec.md > Stack`, `spec.md > External Services and Dependencies`, `spec.md > Where It Runs and How Someone Tries It`
-  Build: Generate one image, show Dima the credit cost, then generate the rest with his yes; place them in `public/img/`; switch to Sonnet 5.5 with the refusal fallback; write README.
+  Build: (Illustrations already done in slice 1 after the council.) Switch to Sonnet 5.5 with the refusal fallback; write README with screenshots.
   Verify (mechanical): Images load (HTTP 200) in all three states; one live Sonnet run per coin returns a valid answer with cost about $0.02; `git ls-files` shows no `.env` and no learner profile.
   Learner check: Run the three demo cases from the spec (ETH Long 1h, SOL Short 4h, AAVE Long 1d) as if recording the video.
   Commit: `Illustrations, Sonnet verdicts and README`
@@ -84,3 +84,4 @@ Activity mode:
 
 - Market strip became a running tape of 12 major quotes with expandable market news; paper got grain, a faint printed chart and torn edges - Dima's design feedback at the slice 1 checkpoint ("all known quotes as a running line", "news short, click to open", "background not monotone, edges like a newspaper"). PRD Look and Feel, Market strip and spec Market Strip Service, Look and Feel updated.
 - Paper texture is now a Higgsfield image instead of a CSS-drawn chart; "+" became a small "read more"; torn edges made gentler - Dima's second design feedback ("plus too big", "edges too ragged", "background charts look ugly, use design skills or generate images"). Higgsfield cost measured: 0.25 credits per image on gpt_image_2_5.
+- Council (5 advisors + peer review) on design and contest fit; Dima agreed: stamp replaces the traffic light, 4 quotes instead of 12, a closed "Show the editor's notes" with cited dispatches. Also: result moved above the fold (ask form became one line), engraved manicule replaces the arrow, bull/bear/hamster engravings generated now (moved from slice 5), edition name in the masthead, paper texture without the chart (Dima). Higgsfield spent 5 credits in total so far.

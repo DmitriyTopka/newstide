@@ -88,6 +88,7 @@ body {
   color: var(--ink-faded);
 }
 .ear p { margin: 2px 0; }
+.edition { font-style: italic; color: var(--ink); }
 .ear-left { text-align: left; }
 .ear-right { text-align: right; }
 .edition-switch {
@@ -180,98 +181,113 @@ body {
 .briefs a { color: var(--ink); font-size: 14px; font-style: italic; }
 .briefs summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
-/* The ask form, set like a classified notice */
+/* The ask bar: one line under the market tape, set like a classified notice */
 .ask {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 26px;
+  margin: 10px 0 0;
+  padding: 10px 14px 8px;
   border: 1px solid var(--rule);
   outline: 1px solid var(--rule);
   outline-offset: 3px;
-  padding: 14px 18px 16px;
-  margin: 6px 3px 0;
 }
-.field { border: 0; margin: 0 0 12px; padding: 0; }
-.field > label, .field > legend { display: block; font-style: italic; margin-bottom: 4px; padding: 0; }
+.field { border: 0; margin: 0; padding: 0; }
+.field > label, .field > legend { display: block; font-style: italic; font-size: 15px; margin-bottom: 3px; padding: 0; }
+.coin-field { flex: 1 1 180px; }
 .ask input[list] {
   width: 100%;
-  font: 20px var(--serif);
+  font: 19px var(--serif);
   color: var(--ink);
   background: transparent;
   border: 0;
   border-bottom: 1px solid var(--rule);
-  padding: 4px 2px;
+  padding: 3px 2px;
 }
 .ask input[list]::placeholder { color: var(--ink-faded); font-style: italic; }
-.choices { display: flex; flex-wrap: wrap; gap: 6px; }
-.choices label { position: relative; cursor: pointer; }
+.choices { display: flex; flex-wrap: wrap; gap: 5px; }
+.choices label { position: relative; cursor: pointer; border: 1px solid var(--rule); padding: 2px 12px; font-size: 16px; }
 .choices input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-.choices label {
-  border: 1px solid var(--rule);
-  padding: 3px 14px;
-  font-size: 17px;
-}
 .choices label:has(input:checked) { background: var(--ink); color: var(--paper); }
 .choices label:has(input:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
-.hint { margin: 6px 0 0; font-size: 14px; color: var(--ink-faded); }
 .press {
-  font: 700 19px var(--serif);
+  font: 700 18px var(--serif);
   color: var(--paper);
   background: var(--ink);
   border: 0;
-  padding: 8px 26px;
+  padding: 7px 24px;
   cursor: pointer;
 }
 .press:disabled { opacity: 0.55; cursor: progress; }
-.form-error { color: var(--lamp-red); margin: 8px 0 0; font-size: 15px; min-height: 1em; }
-.x-note { font-size: 14px; color: var(--ink-faded); font-style: italic; margin: 12px 3px 0; }
+.hint { flex-basis: 100%; margin: 0; font-size: 13px; color: var(--ink-faded); }
+.form-error { flex-basis: 100%; color: var(--lamp-red); margin: 0; font-size: 15px; }
+.form-error:empty { display: none; }
+.x-note { font-size: 13px; color: var(--ink-faded); font-style: italic; margin: 14px 0 0; }
 
-/* The story: the one loud thing on the page */
-.story { margin-top: 18px; border-top: 3px solid var(--rule); padding-top: 14px; }
-.waiting { font-style: italic; font-size: 18px; }
-.result { animation: print 500ms ease-out; }
+/* The lead story: the one loud thing on the page */
+.welcome .headline { margin-top: 4px; }
+.waiting { font-style: italic; font-size: 19px; margin: 6px 0; }
+.story { animation: print 500ms ease-out; }
 @keyframes print { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .result { animation: none; }
+  .story { animation: none; }
   .paper { transition: none; }
 }
 .plate {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: minmax(0, 1fr) 170px;
   align-items: center;
-  gap: 22px;
-  padding-bottom: 12px;
+  gap: 14px;
+  padding-bottom: 6px;
   border-bottom: 1px solid var(--rule);
 }
-.engraving {
-  aspect-ratio: 4 / 3;
-  border: 1px solid var(--rule);
-  background-size: cover;
-  background-position: center;
-  display: grid;
-  place-items: center;
-  font-style: italic;
-  font-size: 14px;
-  color: var(--ink-faded);
-  text-align: center;
-  padding: 8px;
+/* Engravings are black ink on white; multiply lets the paper show through. */
+.engraving, .hand {
+  display: block;
+  width: 100%;
+  height: auto;
+  mix-blend-mode: multiply;
 }
-.arrow { width: 96px; height: 96px; fill: var(--ink); transition: transform 400ms ease; }
-.arrow[data-dir="down"] { transform: rotate(180deg); }
-.arrow[data-dir="sideways"] { transform: rotate(90deg); }
-.signal { width: 46px; height: 116px; }
-.housing { fill: var(--ink); }
-.lamp { fill: var(--lamp-off); stroke: var(--paper); stroke-width: 1.5; }
-.signal[data-light="against"] .red { fill: var(--lamp-red); }
-.signal[data-light="mixed"] .yellow { fill: var(--lamp-yellow); }
-.signal[data-light="supports"] .green { fill: var(--lamp-green); }
+.engraving { max-height: 300px; object-fit: contain; }
+:root[data-theme="night"] .engraving,
+:root[data-theme="night"] .hand { filter: invert(1); mix-blend-mode: screen; }
+.signs { display: grid; gap: 44px; justify-items: center; padding: 18px 0; }
+.hand { width: 150px; transition: transform 500ms ease; }
+.hand[data-dir="up"] { transform: rotate(-90deg) scale(0.9); }
+.hand[data-dir="down"] { transform: rotate(90deg) scale(0.9); }
+.hand[data-dir="sideways"] { transform: none; }
+.stamp { width: 150px; height: 150px; transform: rotate(-9deg); opacity: 0.88; mix-blend-mode: multiply; }
+:root[data-theme="night"] .stamp { mix-blend-mode: normal; }
+.stamp circle { stroke: var(--stamp); }
+.stamp text { fill: var(--stamp); font-family: var(--serif); font-weight: 700; }
+.stamp .ring { font-size: 15px; letter-spacing: 2px; }
+.stamp .word { font-size: 31px; letter-spacing: 1px; }
+.stamp[data-fit="supports"] { --stamp: var(--lamp-green); }
+.stamp[data-fit="mixed"] { --stamp: #a8801a; }
+.stamp[data-fit="against"] { --stamp: var(--lamp-red); }
 
 .headline {
-  margin: 14px 0 4px;
-  font-size: clamp(34px, 5vw, 58px);
+  margin: 12px 0 4px;
+  font-size: clamp(34px, 4.6vw, 56px);
   line-height: 1.02;
   font-weight: 700;
   letter-spacing: -0.5px;
 }
 .deck { margin: 0 0 8px; font-size: 20px; font-style: italic; }
 .note { margin: 4px 0; font-size: 16px; }
+.muted { color: var(--ink-faded); }
+
+/* Editor's notes: closed by default */
+.notes { margin-top: 10px; border-top: 1px dotted var(--ink-faded); padding-top: 6px; font-size: 15px; }
+.notes summary { cursor: pointer; font-style: italic; }
+.notes summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.notes ol, .notes ul { margin: 6px 0; padding-left: 20px; }
+.notes ul { list-style: none; padding-left: 0; }
+.notes li { margin: 3px 0; }
+.cites { font-variant-numeric: tabular-nums; color: var(--ink-faded); }
+.cited-head { margin: 8px 0 2px; font-style: italic; font-variant: small-caps; }
+.notes small { color: var(--ink-faded); font-style: italic; }
 
 /* Footer */
 .colophon {
@@ -300,6 +316,6 @@ body {
   .front { grid-template-columns: 1fr; }
   .lead { order: -1; padding: 0; }
   .column, .column:first-child, .column:last-child { border: 0; padding: 14px 0 0; }
-  .plate { grid-template-columns: 1fr auto; }
-  .engraving { grid-column: 1 / -1; }
+  .plate { grid-template-columns: 1fr; }
+  .signs { grid-auto-flow: column; }
 }

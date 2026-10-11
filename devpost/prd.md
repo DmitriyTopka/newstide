@@ -35,7 +35,10 @@ One page, top to bottom:
 - Dark and light themes.
 - The whole page reacts to the verdict: light green when the background is bullish, red when it is bearish, light yellowish when neutral.
 - A smiling bull next to the arrow when bullish; a cheerful bear when bearish ("if the mood is bearish, the bear is happy"); a hamster when neutral.
-- Traffic light colors: green, yellow, red.
+- **Stamp instead of a traffic light** (council, Dima agreed): a round ink stamp "The background FAVOURS / MIXED ON / AGAINST your plan", green, ochre or red. The word also helps colour-blind readers.
+- **Pointing hand instead of a plain arrow:** an engraved printer's manicule that turns up, down or sideways.
+- **Edition name** in the masthead: Bull Edition, Bear Edition, Hamster Edition.
+- **Result on the first screen:** the ask form is one line under the market tape, the verdict is the lead story above the fold.
 - **Newspaper style:** the site should look like an old printed newspaper being opened: news columns, a newspaper feel, clearly about crypto and news. It must not look like a typical AI-generated website.
 - **Illustrations:** the bull, the bear, the hamster, the arrows and similar elements are custom images in the newspaper style, generated with the learner's Higgsfield account (credit cost to be checked in `4-spec` before generating).
 
@@ -53,8 +56,9 @@ One page, top to bottom:
 
 ### The indicator (result)
 Develops `scope.md > The Unique Kernel`.
-- **Arrow:** where the background points: up, down, or sideways when neutral.
-- **Traffic light:** whether the background supports the plan: green supports, yellow mixed, red against.
+- **Pointing hand:** where the background points: up, down, or sideways when neutral.
+- **Stamp:** whether the background supports the plan: FAVOURS (green), MIXED ON (ochre), AGAINST (red).
+- **Editor's notes:** closed by default; open on click to show the cause-and-effect chain with cited dispatch numbers and titles.
 - **Verdict text:** a few words only, for example "growth expected for this coin", "neutral for now", or "correction".
 - **Bull, bear or hamster** next to the arrow, and the page tint.
 - **Spot/futures note:** a short note where it may play out differently on spot vs futures (`scope.md > The POC Boundary`).
@@ -82,7 +86,7 @@ Inside, the indicator builds a logical chain: one factor affects another, that a
 - [ ] For each of ETH, SOL, AAVE the gathering uses the coin's Telegram channel and the other sources above.
 
 ### Market strip
-- [ ] The top of the page shows a running line of major quotes (crypto: BTC, ETH, SOL, AAVE; stocks: Nasdaq, S&P 500, Dow Jones; gold, Brent oil, dollar index, EUR/USD, US 10-year yield). It scrolls, fades out at the edge and repeats.
+- [ ] The top of the page shows a running line of 4 quotes: Bitcoin, Ether, S&P 500, dollar index. It scrolls, fades out at the edge and repeats.
 - [ ] Main news of the day and the week are short headlines; clicking one opens a short summary and a link to the full story. These are market-wide news, not tied to one coin.
 
 ### X connection
@@ -100,7 +104,7 @@ Inside, the indicator builds a logical chain: one factor affects another, that a
 ## Product Decisions
 - No percentages: a model would invent the number; the learner called them "a bad idea" and chose a graphical direction.
 - Arrow plus traffic light together: the arrow shows direction, the light shows support for the plan.
-- News list is not shown: "the main thing is that a person sees just the conclusion"; the gathering is hidden.
+- News list is not shown: "the main thing is that a person sees just the conclusion"; the gathering is hidden. Exception agreed after the council: a closed "Show the editor's notes" line under the verdict opens the reasoning chain with the numbers of the cited dispatches, so a judge can see the verdict is not invented.
 - Name NewsTide: chosen from checked candidates; CoinPulse was rejected as heavily used (535 GitHub repos, an App Store crypto tracker, a Coinpulse token platform), and three-letter acronyms as mostly taken.
 - Neutral is a light yellowish page with a hamster.
 - Waiting shows the time remaining, up to one minute.

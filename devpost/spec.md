@@ -53,8 +53,9 @@ Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 - **Market strip** as a ticker line under the masthead: BTC, Nasdaq, then "Today" and "This week" headlines in narrow columns.
 - **Dark theme** as a "night edition": dark paper, light ink. A small switch in the masthead corner.
 - **Verdict tints:** the paper washes light green (bullish), red (bearish), light yellowish (neutral). Gentle color, not bright.
-- **Arrow and traffic light** drawn in CSS/SVG in an ink style (no image credits needed).
-- **Bull, bear, hamster:** custom engraving-style illustrations generated with Higgsfield (smiling bull, cheerful bear, hamster). Plan: 3 images, plus at most one retry each.
+- **Pointing hand** (engraved manicule, `public/img/hand.jpg`, rotated by CSS) and **round ink stamp** (inline SVG with a rough-edge filter) replace the arrow and the traffic light.
+- **Engravings** are black ink on white, blended into the paper with `mix-blend-mode: multiply`; in the night edition they are inverted.
+- **Bull, bear, hamster:** engravings generated with Higgsfield (gpt_image_2_5, bear and hamster from the chosen bull as a style reference). Done in slice 1 after the council; cost 3.5 credits for all variants.
 - **Paper:** a newsprint texture with faint ghost text columns (no chart, per Dima), generated with Higgsfield (`public/img/paper.jpg`, gpt_image_2_5, 0.25 credits per image), tinted by the verdict with a multiply blend; torn, uneven page edges (CSS clip-path drawn once per load) on a darker "table" background.
 - **Few moving parts:** the market tape scrolls (Dima's request; pauses on hover, static when the system asks for reduced motion); otherwise only the countdown and one soft fade of the result.
 - **Disclaimer:** a "Not financial advice" line in the newspaper footer, always visible.
@@ -111,7 +112,7 @@ PRD ref: `prd.md > Background gathering (hidden from the user)`.
 - **Item** (inside the server): `{ "n": 1, "source": "Federal Reserve", "kind": "macro|crypto|project", "title": "...", "date": "ISO", "link": "...", "summary": "..." }`.
 - **Model answer** (structured output):
   `{ "direction": "up|down|sideways", "plan_fit": "supports|mixed|against", "verdict": "...", "spot_futures_note": "...", "chain": [ { "step": "...", "cites": [3, 7] } ] }`.
-- **Response to page**: `{ "direction", "plan_fit", "verdict", "spot_futures_note", "x_connected": false, "missing_sources": [], "cost": { "usd": 0.018, "input_tokens": 0, "output_tokens": 0, "model": "..." } }`. No chain.
+- **Response to page**: `{ "direction", "plan_fit", "verdict", "spot_futures_note", "notes": { "chain": [{ "step", "cites" }], "dispatches": [{ "n", "title", "source" }] }, "x_connected": false, "missing_sources": [], "cost": { ... } }`. The chain is sent for the closed editor's notes.
 - **Where data lives:** feeds are fetched fresh each time (market strip cached 5 minutes in server memory); runs are files in `runs/`; session cost and the three choices live in the page and disappear on reload; theme choice lives in `localStorage`. Nothing else persists.
 
 ## File Structure

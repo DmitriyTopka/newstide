@@ -22,16 +22,8 @@ app.get('/api/market', (req, res) => {
     quotes: [
       { name: 'Bitcoin', value: '$82,978', change: -1.2 },
       { name: 'Ether', value: '$2,500', change: 0.8 },
-      { name: 'Solana', value: '$109.40', change: -2.1 },
-      { name: 'Aave', value: '$167.40', change: 1.5 },
-      { name: 'Nasdaq', value: '18,342.6', change: 0.4 },
       { name: 'S&P 500', value: '5,812.3', change: 0.2 },
-      { name: 'Dow Jones', value: '42,310', change: -0.1 },
-      { name: 'Gold', value: '$2,664', change: 0.6 },
-      { name: 'Brent oil', value: '$74.20', change: -1.4 },
-      { name: 'Dollar index', value: '103.1', change: 0.1 },
-      { name: 'EUR/USD', value: '1.0921', change: -0.2 },
-      { name: 'US 10-year yield', value: '4.08%', change: 0.03, unit: 'pt' }
+      { name: 'Dollar index', value: '103.1', change: 0.1 }
     ],
     today: [
       { title: 'Spot ether ETFs see second day of inflows', source: 'CoinDesk',
@@ -54,9 +46,43 @@ app.get('/api/market', (req, res) => {
 
 // SAMPLE ONLY (slice 1): one fixed answer per coin so all three looks can be seen.
 const samples = {
-  ETH: { direction: 'up', verdict: 'Growth expected for ETH', spot_futures_note: 'Spot and futures point the same way.' },
-  SOL: { direction: 'down', verdict: 'Correction for SOL', spot_futures_note: 'Futures may feel it faster than spot.' },
-  AAVE: { direction: 'sideways', verdict: 'Neutral for now', spot_futures_note: 'No clear push on spot or futures.' }
+  ETH: {
+    direction: 'up', verdict: 'Growth expected for ETH', spot_futures_note: 'Spot and futures point the same way.',
+    notes: {
+      chain: [
+        { step: 'The Fed held rates and US inflation cooled, so risk appetite holds.', cites: [1, 2] },
+        { step: 'Money keeps flowing into spot ether funds for a second day.', cites: [3] },
+        { step: 'A calmer macro week plus fresh inflows lean the background up for ETH.', cites: [1, 3] }
+      ],
+      dispatches: [
+        { n: 1, title: 'Fed holds rates, signals patience on cuts', source: 'Federal Reserve' },
+        { n: 2, title: 'US inflation cools slightly in September', source: 'MarketWatch' },
+        { n: 3, title: 'Spot ether ETFs see second day of inflows', source: 'CoinDesk' }
+      ]
+    }
+  },
+  SOL: {
+    direction: 'down', verdict: 'Correction for SOL', spot_futures_note: 'Futures may feel it faster than spot.',
+    notes: {
+      chain: [
+        { step: 'A fee change vote on Solana unsettles validators and traders.', cites: [4] },
+        { step: 'Cooling inflation helps the market, but not enough to offset the coin news.', cites: [2, 4] }
+      ],
+      dispatches: [
+        { n: 2, title: 'US inflation cools slightly in September', source: 'MarketWatch' },
+        { n: 4, title: 'Solana validators approve fee change', source: 'Cointelegraph' }
+      ]
+    }
+  },
+  AAVE: {
+    direction: 'sideways', verdict: 'Neutral for now', spot_futures_note: 'No clear push on spot or futures.',
+    notes: {
+      chain: [
+        { step: 'Record stablecoin supply is good for lending, but no Aave news moves it today.', cites: [5] }
+      ],
+      dispatches: [{ n: 5, title: 'Stablecoin supply reaches new high', source: 'CoinDesk' }]
+    }
+  }
 };
 const fit = (plan, direction) =>
   direction === 'sideways' ? 'mixed' : (plan === 'long') === (direction === 'up') ? 'supports' : 'against';

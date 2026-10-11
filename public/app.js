@@ -77,42 +77,51 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 }
 
-// Indicator View: arrow, signal, animal, page tint
+// Indicator View: pointing hand, stamp, engraving, edition name, page tint
 const animals = {
-  up: { file: 'img/bull.png', label: 'A smiling bull' },
-  down: { file: 'img/bear.png', label: 'A cheerful bear' },
-  sideways: { file: 'img/hamster.png', label: 'A hamster' }
+  up: { file: 'img/bull.jpg', label: 'A smiling bull', edition: 'Bull Edition' },
+  down: { file: 'img/bear.jpg', label: 'A cheerful bear', edition: 'Bear Edition' },
+  sideways: { file: 'img/hamster.jpg', label: 'A hamster', edition: 'Hamster Edition' }
 };
 const moods = { up: 'up', down: 'down', sideways: 'flat' };
+const stampWords = { supports: 'FAVOURS', mixed: 'MIXED ON', against: 'AGAINST' };
 const fitWords = { supports: 'The background supports your plan.', mixed: 'The background is mixed for your plan.', against: 'The background goes against your plan.' };
 
 function showResult(r, plan) {
   $('verdict').textContent = r.verdict;
   $('deck').textContent = `Your plan: ${plan === 'long' ? 'Long' : 'Short'}. ${fitWords[r.plan_fit]}`;
   $('sfNote').textContent = r.spot_futures_note;
-  $('arrow').dataset.dir = r.direction;
-  $('signal').dataset.light = r.plan_fit;
-  $('signal').setAttribute('aria-label', `Signal: ${r.plan_fit}`);
+  $('hand').dataset.dir = r.direction;
+  $('hand').alt = `A hand pointing ${r.direction === 'sideways' ? 'sideways' : r.direction}`;
+  $('stamp').dataset.fit = r.plan_fit;
+  $('stampWord').textContent = stampWords[r.plan_fit];
+  $('stamp').setAttribute('aria-label', `Stamp: the background ${stampWords[r.plan_fit].toLowerCase()} your plan`);
   const a = animals[r.direction];
-  const plate = $('animal');
-  plate.setAttribute('aria-label', a.label);
-  plate.textContent = '';
-  const img = new Image();
-  img.onload = () => { plate.style.backgroundImage = `url(${a.file})`; };
-  img.onerror = () => { plate.style.backgroundImage = ''; plate.textContent = `${a.label}, engraving to come`; };
-  img.src = a.file;
+  $('animal').src = a.file;
+  $('animal').alt = a.label;
+  $('edition').textContent = a.edition;
+
   $('missing').hidden = !r.missing_sources?.length;
   $('missing').textContent = r.missing_sources?.length ? `Unavailable today: ${r.missing_sources.join(', ')}.` : '';
   $('xNote').hidden = r.x_connected;
   $('resultSample').hidden = !r.sample;
-  $('paper').dataset.mood = moods[r.direction];
 
+  // Editor's notes: the reasoning chain, closed by default
+  const notes = r.notes ?? { chain: [], dispatches: [] };
+  $('notes').open = false;
+  $('notes').hidden = !notes.chain.length;
+  $('chain').innerHTML = notes.chain
+    .map(c => `<li>${escapeHtml(c.step)} <span class="cites">${c.cites.map(n => `[${n}]`).join(' ')}</span></li>`).join('');
+  $('cited').innerHTML = notes.dispatches
+    .map(d => `<li><span class="cites">[${d.n}]</span> ${escapeHtml(d.title)} <small>${escapeHtml(d.source)}</small></li>`).join('');
+
+  $('paper').dataset.mood = moods[r.direction];
   const cost = r.cost?.usd ?? 0;
   sessionSpend += cost;
   $('price').textContent = `Price of this edition: ${money(cost)}. Spent this session: ${money(sessionSpend)}.`;
 
+  $('welcome').hidden = true;
   $('result').hidden = false;
-  $('story').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
 }
 
 // Countdown while the background is gathered (up to one minute)
@@ -143,10 +152,11 @@ $('askForm').addEventListener('submit', async e => {
   if (!timeframe) return ($('formError').textContent = 'Choose a timeframe.');
 
   $('getData').disabled = true;
-  $('story').hidden = false;
+  $('welcome').hidden = true;
   $('result').hidden = true;
   $('resultError').hidden = true;
   $('paper').dataset.mood = 'none';
+  $('edition').textContent = 'Late Edition';
   startCountdown();
   try {
     const ctrl = new AbortController();
