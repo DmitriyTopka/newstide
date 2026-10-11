@@ -55,7 +55,7 @@ Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 - **Verdict tints:** the paper washes light green (bullish), red (bearish), light yellowish (neutral). Gentle color, not bright.
 - **Pointing hand** (engraved manicule, `public/img/hand.jpg`, rotated by CSS) and **round ink stamp** (inline SVG with a rough-edge filter) replace the arrow and the traffic light.
 - **Engravings** are black ink on white, blended into the paper with `mix-blend-mode: multiply`; in the night edition they are inverted.
-- **Bull, bear, hamster:** engravings generated with Higgsfield (gpt_image_2_5, bear and hamster from the chosen bull as a style reference). Done in slice 1 after the council; cost 3.5 credits for all variants.
+- **Bull, bear, hamster:** engravings generated with Higgsfield (gpt_image_2_5, bear and hamster from the chosen bull as a style reference). Done in slice 1 after the council; cost 3 credits for all 12 variants.
 - **Paper:** a newsprint texture with faint ghost text columns (no chart, per Dima), generated with Higgsfield (`public/img/paper.jpg`, gpt_image_2_5, 0.25 credits per image), tinted by the verdict with a multiply blend; torn, uneven page edges (CSS clip-path drawn once per load) on a darker "table" background.
 - **Few moving parts:** the market tape scrolls (Dima's request; pauses on hover, static when the system asks for reduced motion); otherwise only the countdown and one soft fade of the result.
 - **Disclaimer:** a "Not financial advice" line in the newspaper footer, always visible.
