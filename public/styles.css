@@ -3,8 +3,8 @@
 
 :root {
   --paper: #e6e4dc;        /* cool grey newsprint */
-  --ink: #23211c;          /* warm printing ink */
-  --ink-faded: #625e53;    /* worn type */
+  --ink: #12110e;          /* deep printing ink */
+  --ink-faded: #4a463d;    /* worn type */
   --rule: #3a372f;
   --tint: #f7f6f2;         /* multiplied over the paper texture */
   --wash-up: #e2f0d8;      /* bullish paper */
