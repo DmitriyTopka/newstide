@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NewsTide PRD Review</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1f23;--muted:#61656d;--line:#dcdad3;--accent:#2f6f5e;--soft:#e9f1ee;--g:#cfe8d6;--r:#f2c9c4;--y:#f4e8bf;--gk:#2e8b57;--rk:#c0392b;--yk:#c9a227;}
+@media (prefers-color-scheme: dark){:root{--bg:#15171a;--card:#1e2125;--ink:#e8e6e1;--muted:#9a9ea6;--line:#33373d;--accent:#6fbfa6;--soft:#1f2e2a;--g:#1d3a2a;--r:#432420;--y:#3d3519;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:900px;margin:0 auto;padding:32px 16px 64px}
+.tag{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+h1{font-size:30px;margin:12px 0 6px;line-height:1.2}
+.lede{color:var(--muted);font-size:18px;margin:0 0 24px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:0 0 16px}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin:0 0 10px}
+.expand{border-left:4px solid var(--accent);background:var(--soft);padding:10px 14px;border-radius:0 10px 10px 0}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+.steps button,.states button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 11px;cursor:pointer}
+.steps button[aria-pressed=true],.states button[aria-pressed=true]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.phone{border:1px solid var(--line);border-radius:14px;overflow:hidden;max-width:420px;margin:0 auto;transition:background .3s}
+.strip{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--card)}
+.strip span{white-space:nowrap}
+.inputs{padding:14px 12px;display:grid;gap:8px}
+.field{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px;background:var(--card);opacity:.45;transition:opacity .2s}
+.field.on{opacity:1;border-color:var(--accent)}
+.btn{text-align:center;background:var(--accent);color:var(--bg);border-radius:8px;padding:8px;font-weight:600;opacity:.45}
+.btn.on{opacity:1}
+.result{padding:16px 12px 20px;text-align:center;min-height:150px}
+.big{font-size:44px;line-height:1}
+.light{display:inline-flex;gap:6px;margin:8px 0;padding:6px 8px;border-radius:20px;background:var(--ink)}
+.light i{width:14px;height:14px;border-radius:50%;background:#555;display:block}
+.verdict{font-weight:700;font-size:18px}
+.note{font-size:12px;color:var(--muted);margin-top:6px}
+.wait{font-size:15px;color:var(--muted)}
+.cap{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+details{border-top:1px solid var(--line);padding:10px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:600}
+summary span{font-weight:400;color:var(--muted);margin-left:6px}
+ul{margin:8px 0 0;padding-left:20px}
+.crit li{list-style:none;margin-left:-20px}
+.crit li::before{content:"\2610  ";color:var(--accent)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:620px){.grid{grid-template-columns:1fr}h1{font-size:25px}}
+footer{color:var(--muted);font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<main>
+<span class="tag">PRD · approved · companion to prd.md</span>
+<h1>NewsTide</h1>
+<p class="lede">Before a trade: pick a coin, long or short, a timeframe. Get one simple verdict on where the tide of news is carrying the coin.</p>
+
+<section>
+<h2>What the scope became</h2>
+<p class="expand">Scope said "one short conclusion, simple as an RSI". Now we know exactly what that means: an arrow for direction, a traffic light for "with your plan or against it", a few words, a bull, a bear or a hamster, and the whole page changes color.</p>
+</section>
+
+<section>
+<h2>The core journey · click through</h2>
+<div class="steps" role="group" aria-label="Journey steps">
+<button data-s="0" aria-pressed="true">1 · Open</button><button data-s="1">2 · Connect X</button><button data-s="2">3 · Coin</button><button data-s="3">4 · Long/Short</button><button data-s="4">5 · Timeframe</button><button data-s="5">6 · Get data</button><button data-s="6">7 · Result</button>
+</div>
+<p id="stepText"></p>
+<div class="phone" id="phone">
+<div class="strip"><span>BTC $ ···</span><span>Nasdaq ···</span><span>Top news today ···</span><span>Top news this week ···</span></div>
+<div class="inputs">
+<div class="field" id="fX">Connect X (why: news from X appears first) · Skip</div>
+<div class="field" id="f1">Coin: <b>ETH</b> ▾ (suggestions: ETH, SOL, AAVE)</div>
+<div class="field" id="f2">Plan: <b>Long</b> / Short</div>
+<div class="field" id="f3">Timeframe: <b>1h</b> → intraday analysis</div>
+<div class="btn" id="go">Get data</div>
+</div>
+<div class="result" id="res"></div>
+</div>
+<p class="cap">Illustration of the requirements, not the final design.</p>
+</section>
+
+<section>
+<h2>Result states · try them</h2>
+<div class="states steps" role="group" aria-label="Result states">
+<button data-r="bull" aria-pressed="true">Bullish</button><button data-r="bear">Bearish</button><button data-r="neutral">Neutral</button><button data-r="nox">Without X</button>
+</div>
+<div class="phone" id="phone2"><div class="result" id="res2"></div></div>
+<p class="cap" id="stateText"></p>
+</section>
+
+<section>
+<h2>Behaviors and how we'll know they work</h2>
+<details open><summary>Coin input <span>3 coins, with suggestions</span></summary>
+<ul class="crit"><li>Typing "et", "so" or "aa" suggests ETH, SOL or AAVE</li><li>Only coins from the list can be submitted</li></ul></details>
+<details><summary>Plan and timeframe <span>below 4h intraday, 4h+ medium-term</span></summary>
+<ul class="crit"><li>Long/Short and a timeframe can be chosen after the coin</li><li>Below 4h gives an intraday analysis; 4h and above gives a medium-term analysis</li></ul></details>
+<details><summary>Waiting <span>time remaining, up to a minute</span></summary>
+<ul class="crit"><li>After Get data, the page shows the time remaining</li><li>The result appears within one minute</li></ul></details>
+<details><summary>The indicator <span>arrow · light · few words · animal · page tint</span></summary>
+<ul class="crit"><li>Result shows an arrow, a traffic light and a verdict of a few words</li><li>Long + bearish background: arrow down, red light, cheerful bear, red page</li><li>Long + bullish background: arrow up, green light, smiling bull, light green page</li><li>Neutral: arrow sideways, yellow light, hamster, light yellowish page</li><li>No percent anywhere</li></ul></details>
+<details><summary>Hidden gathering <span>the engine nobody sees</span></summary>
+<ul><li>Coin's official open Telegram channel</li><li>Coin's X, through the user's connected X</li><li>Macro sites (for example Investing)</li><li>General crypto news</li><li>A logical chain inside: factor to factor, down to the coin, plus the coin's own plans and news</li></ul></details>
+<details><summary>Market strip and X connection</summary>
+<ul class="crit"><li>Top of the page shows Bitcoin price, Nasdaq, top news of the day and week</li><li>First use offers to connect X and explains why</li><li>Without X: verdict from the other sources plus a note that X is one of the main sources</li></ul></details>
+</section>
+
+<section class="grid">
+<div><h2>Building now</h2><ul><li>One page: strip, coin input, Long/Short, timeframe, Get data, result</li><li>Dark and light themes</li><li>Page tint and bull / bear / hamster</li><li>Gathering from Telegram, X, macro sites, crypto news</li><li>X offer and "without X" fallback</li></ul></div>
+<div><h2>Deferred</h2><ul><li>Full CoinMarketCap list (list must be extendable)</li><li>Discord</li><li>Geopolitics, stocks, BTC dominance, gold, oil</li><li>TradingView indicator</li></ul></div>
+</section>
+
+<section>
+<h2>Look and feel</h2>
+<p class="expand">An old printed newspaper being opened: news columns, a newspaper feel, clearly about crypto and news, not a typical AI-generated site. The bull, bear, hamster and arrows are custom newspaper-style illustrations made with Higgsfield (credit cost checked in the spec first).</p>
+</section>
+
+<section>
+<h2>Still open</h2>
+<ul><li>Timeframe options in the picker</li><li>Whether X can be read for free through the user's account (check in spec)</li><li>Which macro and news sites can be read freely and fairly (check in spec)</li><li>A "not financial advice" line: learner decides</li></ul>
+</section>
+
+<footer>prd.md is the canonical document; this page is a visual companion for review.</footer>
+</main>
+<script>
+const R={
+ bull:{tint:'var(--g)',arrow:'⬆',animal:'🐂',lamp:2,text:'Growth expected for ETH',note:'Spot and futures: same direction',cap:'Long + bullish background'},
+ bear:{tint:'var(--r)',arrow:'⬇',animal:'🐻',lamp:0,text:'Correction',note:'Futures may feel it faster than spot',cap:'Long + bearish background: the light is red because the plan goes against the tide'},
+ neutral:{tint:'var(--y)',arrow:'➡',animal:'🐹',lamp:1,text:'Neutral for now',note:'',cap:'Neutral background'},
+ nox:{tint:'var(--g)',arrow:'⬆',animal:'🐂',lamp:2,text:'Growth expected for ETH',note:'X is not connected. X is one of the main sources, news appears there first.',cap:'Same verdict logic, plus the "X not connected" note'}
+};
+function lamp(n){const c=['var(--rk)','var(--yk)','var(--gk)'];return '<div class="light">'+[0,1,2].map(i=>'<i style="background:'+(i===n?c[i]:'#555')+'"></i>').join('')+'</div>';}
+function result(k){const r=R[k];return '<div class="big">'+r.arrow+' '+r.animal+'</div>'+lamp(r.lamp)+'<div class="verdict">'+r.text+'</div>'+(r.note?'<div class="note">'+r.note+'</div>':'');}
+const steps=["He opens the page. The market strip at the top shows Bitcoin, Nasdaq and the main news.","First use: he is offered to connect X, with the reason. He can skip.","He types a coin; suggestions keep it exact. This version: ETH, SOL, AAVE.","He chooses Long or Short.","He chooses the timeframe. Below 4h is intraday, 4h and above is medium-term.","He presses Get data. The page shows how much time is left, up to one minute.","The result: arrow, traffic light, a few words, the animal, and the page changes color."];
+function step(s){s=+s;document.querySelectorAll('[data-s]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s==s));
+document.getElementById('stepText').textContent=steps[s];
+document.getElementById('fX').classList.toggle('on',s===1);
+['f1','f2','f3'].forEach((id,i)=>document.getElementById(id).classList.toggle('on',s>=i+2));
+document.getElementById('go').classList.toggle('on',s>=5);
+const res=document.getElementById('res'),ph=document.getElementById('phone');
+if(s===5){res.innerHTML='<div class="wait">Gathering the background… about 40 s left</div>';ph.style.background='';}
+else if(s===6){res.innerHTML=result('bull');ph.style.background=R.bull.tint;}
+else{res.innerHTML='';ph.style.background='';}}
+function state(k){document.querySelectorAll('[data-r]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.r==k));
+document.getElementById('res2').innerHTML=result(k);document.getElementById('phone2').style.background=R[k].tint;document.getElementById('stateText').textContent=R[k].cap;}
+document.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>step(b.dataset.s)));
+document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>state(b.dataset.r)));
+step(0);state('bull');
+</script>
+</body>
+</html>

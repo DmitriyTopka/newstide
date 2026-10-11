@@ -1,0 +1,28 @@
+[
+  {
+    "symbol": "ETH",
+    "name": "Ethereum",
+    "coingecko": "ethereum",
+    "feeds": [
+      { "name": "Ethereum Foundation Blog", "url": "https://blog.ethereum.org/feed.xml" },
+      { "name": "Ethereum Magicians forum", "url": "https://ethereum-magicians.org/latest.rss" }
+    ]
+  },
+  {
+    "symbol": "SOL",
+    "name": "Solana",
+    "coingecko": "solana",
+    "feeds": [
+      { "name": "Solana News", "url": "https://solana.com/news/rss.xml" },
+      { "name": "Solana forum", "url": "https://forum.solana.com/latest.rss" }
+    ]
+  },
+  {
+    "symbol": "AAVE",
+    "name": "Aave",
+    "coingecko": "aave",
+    "feeds": [
+      { "name": "Aave governance forum", "url": "https://governance.aave.com/latest.rss" }
+    ]
+  }
+]

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NewsTide Spec Review</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1f23;--muted:#61656d;--line:#dcdad3;--accent:#2f6f5e;--soft:#e9f1ee;--hi:#fbe9b7;--pay:#a5532a;}
+@media (prefers-color-scheme: dark){:root{--bg:#15171a;--card:#1e2125;--ink:#e8e6e1;--muted:#9a9ea6;--line:#33373d;--accent:#6fbfa6;--soft:#1f2e2a;--hi:#4a3f1c;--pay:#e19566;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:920px;margin:0 auto;padding:32px 16px 64px}
+.tag{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+h1{font-size:30px;margin:12px 0 6px;line-height:1.2}
+.lede{color:var(--muted);font-size:18px;margin:0 0 24px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:0 0 16px}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin:0 0 10px}
+svg{width:100%;height:auto;display:block}
+svg text{fill:var(--ink);font:13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+svg .sm{font-size:11px;fill:var(--muted)}
+svg .box{fill:var(--soft);stroke:var(--accent);stroke-width:1.5;transition:fill .2s}
+svg .ext{fill:var(--card);stroke:var(--line);stroke-width:1.5;transition:fill .2s}
+svg .pay{stroke:var(--pay)}
+svg .on{fill:var(--hi)}
+svg .ar{stroke:var(--muted);stroke-width:1.5;fill:none;marker-end:url(#m)}
+svg .zone{fill:none;stroke:var(--accent);stroke-dasharray:5 4;stroke-width:1.2}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 8px}
+.steps button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 11px;cursor:pointer}
+.steps button[aria-pressed=true]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+#st{min-height:3.2em}
+.files{font:13px/1.5 ui-monospace,Menlo,monospace;color:var(--muted)}
+details{border-top:1px solid var(--line);padding:10px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:600}
+summary span{font-weight:400;color:var(--muted);margin-left:6px}
+code{font:13px ui-monospace,Menlo,monospace;background:var(--soft);padding:1px 5px;border-radius:5px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{border-top:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:620px){.grid{grid-template-columns:1fr}h1{font-size:25px}}
+.legend{font-size:13px;color:var(--muted)}
+footer{color:var(--muted);font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<main>
+<span class="tag">Spec · approved · companion to spec.md</span>
+<h1>NewsTide · how it is built</h1>
+<p class="lede">Two small pieces on Dima's Mac: a newspaper page in the browser and a little server that reads the news and asks the AI. Start with <code>npm start</code>, open <code>localhost:3000</code>.</p>
+
+<section>
+<h2>Architecture · click a step to trace it</h2>
+<svg viewBox="0 0 860 330" role="img" aria-label="Architecture: the page talks to a local server on the Mac; the server reads free feeds and price APIs, calls the Anthropic model, checks the answer and logs the run.">
+<defs><marker id="m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted)"/></marker></defs>
+<rect class="zone" x="10" y="10" width="520" height="310" rx="14"/><text class="sm" x="24" y="30">Dima's Mac · nobody outside can reach it</text>
+<g><rect id="b-page" class="box" x="30" y="50" width="170" height="80" rx="10"/><text x="115" y="80" text-anchor="middle">Page</text><text class="sm" x="115" y="98" text-anchor="middle">newspaper front page</text><text class="sm" x="115" y="114" text-anchor="middle">public/</text></g>
+<g><rect id="b-server" class="box" x="270" y="50" width="240" height="80" rx="10"/><text x="390" y="80" text-anchor="middle">Little server (Node.js)</text><text class="sm" x="390" y="98" text-anchor="middle">/api/market · /api/coins · /api/analyze</text><text class="sm" x="390" y="114" text-anchor="middle">server/index.js</text></g>
+<g><rect id="b-collect" class="box" x="270" y="150" width="110" height="60" rx="10"/><text x="325" y="176" text-anchor="middle">Collector</text><text class="sm" x="325" y="194" text-anchor="middle">feeds → items</text></g>
+<g><rect id="b-check" class="box" x="400" y="150" width="110" height="60" rx="10"/><text x="455" y="176" text-anchor="middle">Checker</text><text class="sm" x="455" y="194" text-anchor="middle">rules on answer</text></g>
+<g><rect id="b-log" class="box" x="270" y="235" width="240" height="60" rx="10"/><text x="390" y="261" text-anchor="middle">Run log + sample data</text><text class="sm" x="390" y="279" text-anchor="middle">runs/ · data/sample/</text></g>
+<path class="ar" d="M202 90 H268"/><path class="ar" d="M268 100 H202"/>
+<path class="ar" d="M325 132 V148"/><path class="ar" d="M455 132 V148"/><path class="ar" d="M390 212 V233"/>
+<g><rect id="b-feeds" class="ext" x="580" y="30" width="260" height="90" rx="10"/><text x="710" y="54" text-anchor="middle">Free feeds (RSS)</text><text class="sm" x="710" y="74" text-anchor="middle">Ethereum · Solana · Aave official</text><text class="sm" x="710" y="90" text-anchor="middle">Cointelegraph · CoinDesk</text><text class="sm" x="710" y="106" text-anchor="middle">Fed · Investing · MarketWatch</text></g>
+<g><rect id="b-prices" class="ext" x="580" y="135" width="260" height="55" rx="10"/><text x="710" y="158" text-anchor="middle">Prices</text><text class="sm" x="710" y="176" text-anchor="middle">CoinGecko · Yahoo (Nasdaq)</text></g>
+<g><rect id="b-ai" class="ext pay" x="580" y="205" width="260" height="55" rx="10"/><text x="710" y="228" text-anchor="middle">Anthropic model (paid)</text><text class="sm" x="710" y="246" text-anchor="middle">Haiku 5.5 tests · Sonnet 5.5 final</text></g>
+<g><rect id="b-x" class="ext" x="580" y="272" width="260" height="42" rx="10" style="stroke-dasharray:4 4"/><text class="sm" x="710" y="298" text-anchor="middle">X · later, paid, not built now</text></g>
+<path class="ar" d="M382 170 C470 120 520 80 578 75"/><path class="ar" d="M512 90 C540 120 560 160 578 162"/><path class="ar" d="M512 120 C540 180 560 220 578 232"/>
+</svg>
+<div class="steps" role="group" aria-label="Journey steps">
+<button data-s="0" aria-pressed="true">1 · Open page</button><button data-s="1">2 · Pick coin</button><button data-s="2">3 · Get data</button><button data-s="3">4 · Gather</button><button data-s="4">5 · Ask AI</button><button data-s="5">6 · Check</button><button data-s="6">7 · Show</button>
+</div>
+<p id="st"></p>
+<p class="files" id="sf"></p>
+<p class="legend">Green boxes run on the Mac. White boxes are outside services. The orange border costs money.</p>
+</section>
+
+<section>
+<h2>Components · where each PRD behavior lives</h2>
+<details open><summary>Page and Indicator View <span>public/</span></summary><p>Masthead, market strip, coin field, Long/Short, timeframe, Get data with a 60 s countdown, result. Arrow up/down/sideways with bull/bear/hamster and green/red/yellowish paper; light green/yellow/red from plan_fit. PRD: Screens and Layout, The indicator (result), Waiting for the result.</p></details>
+<details><summary>Cost Counter <span>public/app.js</span></summary><p>"This analysis: $0.02 · This session: $0.10". Computed from the token counts the model reports and <code>config/prices.json</code>. Resets on reload. Shows the business idea of a visible balance.</p></details>
+<details><summary>Market Strip Service <span>server/market.js</span></summary><p>BTC from CoinGecko, Nasdaq from Yahoo, 3 crypto headlines from the last 24 h, 3 macro items from the last 7 days. Cached 5 minutes. PRD: Market strip.</p></details>
+<details><summary>Coin Registry <span>config/coins.json</span></summary><p>ETH, SOL, AAVE with their official feeds. A new coin is one new entry. PRD: Coin input.</p></details>
+<details><summary>Feed Collector <span>server/collect.js</span></summary><p>Reads official + market feeds, keeps 24 h (below 4h) or 14 days (4h and above), removes duplicates, about 30 numbered items. <b>Sample mode</b> reads a saved, labelled snapshot so tests are free and repeatable. PRD: Background gathering.</p></details>
+<details><summary>Analyst <span>server/analyst.js</span></summary><p>Sends the numbered items, coin, plan and horizon to the model with a fixed answer shape: direction, plan_fit, verdict, spot/futures note, hidden chain citing item numbers.</p></details>
+<details><summary>Answer Checker <span>server/check.js · test/check.test.js</span></summary><p>Fields valid, verdict ≤ 6 words and no percent, light agrees with arrow and plan, every chain step cites a real item. This is how we check the model did what we meant.</p></details>
+<details><summary>Run Log <span>runs/</span></summary><p>Each run saved as a file with the full hidden chain and cost, so Dima can read why the indicator said what it said.</p></details>
+</section>
+
+<section>
+<h2>The light rule</h2>
+<table><tr><th>Plan</th><th>Arrow up</th><th>Arrow sideways</th><th>Arrow down</th></tr>
+<tr><td>Long</td><td>green · supports</td><td>yellow · mixed</td><td>red · against</td></tr>
+<tr><td>Short</td><td>red · against</td><td>yellow · mixed</td><td>green · supports</td></tr></table>
+</section>
+
+<section class="grid">
+<div><h2>Simplified, and why</h2><ul><li>Official blogs/forums instead of Telegram: no open official channels for ETH, SOL, AAVE</li><li>No X now: paid reads, riskiest part; connect before shipping</li><li>3 coins in a config file</li><li>Model in settings + cost counter instead of picker and payments</li><li>Mac instead of a server</li><li>Sample data for most of the build</li></ul></div>
+<div><h2>Money</h2><ul><li>Anthropic: ~$0.001 per analysis on Haiku, ~$0.02 on Sonnet (measured on first run)</li><li>Higgsfield: 3 images, cost per image measured on the first one and shown before the rest (balance 663 credits)</li><li>X: $0 now</li><li>Feeds, prices, hosting: $0</li></ul></div>
+</section>
+
+<section>
+<h2>Still open</h2>
+<ul><li>Decided: timeframes 15m, 1h, 4h, 1d; "Not financial advice" line mandatory; stack confirmed</li></ul>
+</section>
+
+<footer>spec.md is the canonical document; this page is a visual companion for review.</footer>
+</main>
+<script>
+const S=[
+ ["You open localhost:3000. The page asks the server for the market strip; the server fetches BTC, Nasdaq and fresh headlines.",["b-page","b-server","b-prices","b-feeds"],"public/index.html · server/market.js"],
+ ["You type a coin; suggestions come from the coin list (ETH, SOL, AAVE). Then Long/Short and the timeframe.",["b-page"],"public/app.js · config/coins.json"],
+ ["You press Get data. The page sends coin, plan, timeframe to /api/analyze and starts a 60 s countdown.",["b-page","b-server"],"public/app.js · server/index.js"],
+ ["The collector reads the coin's official feeds and the market feeds, keeps the right time window, numbers about 30 items.",["b-collect","b-feeds"],"server/collect.js · config/feeds.json"],
+ ["The analyst sends the items to the model and gets back arrow, light, a few words and a hidden chain.",["b-server","b-ai"],"server/analyst.js"],
+ ["The checker tests the answer against the rules, computes the cost, and the run is saved to a log file.",["b-check","b-log"],"server/check.js · server/log.js"],
+ ["The page shows the arrow, light, verdict and animal, tints the paper, and updates the cost counter.",["b-page"],"public/app.js · public/styles.css"]];
+const all=["b-page","b-server","b-collect","b-check","b-log","b-feeds","b-prices","b-ai","b-x"];
+function go(i){i=+i;document.querySelectorAll('[data-s]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s==i));
+document.getElementById('st').textContent=S[i][0];document.getElementById('sf').textContent='Files: '+S[i][2];
+all.forEach(id=>document.getElementById(id).classList.toggle('on',S[i][1].includes(id)));}
+document.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.s)));go(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scope Review</title>
+<style>
+:root{--bg:#f6f5f1;--card:#ffffff;--ink:#1d1f23;--muted:#61656d;--line:#dcdad3;--accent:#2f6f5e;--warn:#a5532a;--soft:#e9f1ee;}
+@media (prefers-color-scheme: dark){:root{--bg:#15171a;--card:#1e2125;--ink:#e8e6e1;--muted:#9a9ea6;--line:#33373d;--accent:#6fbfa6;--warn:#e19566;--soft:#1f2e2a;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:880px;margin:0 auto;padding:32px 16px 64px}
+.tag{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+h1{font-size:30px;line-height:1.2;margin:12px 0 6px}
+.lede{color:var(--muted);font-size:18px;margin:0 0 28px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:0 0 16px}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin:0 0 10px}
+.kernel{font-size:19px;line-height:1.5}
+svg{width:100%;height:auto;display:block}
+svg text{fill:var(--ink);font:13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+svg .box{fill:var(--soft);stroke:var(--accent);stroke-width:1.5}
+svg .hi{fill:var(--accent)}
+svg .hi + text, svg text.on{fill:var(--bg)}
+svg .arrow{stroke:var(--muted);stroke-width:1.5;fill:none;marker-end:url(#a)}
+svg .small{font-size:11px;fill:var(--muted)}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+.steps button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+.steps button[aria-pressed=true]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.stepnote{margin:12px 0 0;min-height:3em;color:var(--ink)}
+.tf{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tf div{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.tf b{display:block;margin-bottom:4px}
+details{border-top:1px solid var(--line);padding:10px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:600}
+summary span{font-weight:400;color:var(--muted);margin-left:6px}
+ul{margin:8px 0 0;padding-left:20px}
+.warn{color:var(--warn)}
+.demo{border-left:4px solid var(--accent);padding:10px 14px;background:var(--soft);border-radius:0 10px 10px 0;font-size:17px}
+footer{color:var(--muted);font-size:13px;margin-top:24px}
+@media (max-width:560px){.tf{grid-template-columns:1fr}h1{font-size:25px}}
+</style>
+</head>
+<body>
+<main>
+<span class="tag">Scope · approved · companion to scope.md</span>
+<h1>NewsTide</h1>
+<p class="lede">Before a trade, a crypto trader states their plan, and the assistant pulls the whole news background into one short conclusion: does it support the plan or work against it, and why.</p>
+
+<section>
+<h2>The unique kernel</h2>
+<p class="kernel">A news background indicator as simple to read as RSI is for anyone (simplicity only, it need not look like RSI), with as few moving parts as possible. News, macro data, statements, geopolitics and the coin's own project news, all reduced to <b>one short, concrete conclusion</b> tailored to how you trade, and checked against the trade you are about to make.</p>
+</section>
+
+<section>
+<h2>User · core loop · proof</h2>
+<svg viewBox="0 0 820 200" role="img" aria-label="Core loop: trader enters coin, long or short and timeframe; assistant gathers about 20 news and data items; compresses them; shows a short conclusion versus the plan; trader decides and returns before the next trade.">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="fill:var(--muted)"/></marker></defs>
+<g id="n1"><rect class="box" x="10" y="40" width="160" height="70" rx="10"/><text x="90" y="68" text-anchor="middle">Trader</text><text class="small" x="90" y="88" text-anchor="middle">coin · long/short · TF</text></g>
+<path class="arrow" d="M172 75 H208"/>
+<g id="n2"><rect class="box" x="210" y="40" width="180" height="70" rx="10"/><text x="300" y="68" text-anchor="middle">Gather</text><text class="small" x="300" y="88" text-anchor="middle">~20 news and data items</text></g>
+<path class="arrow" d="M392 75 H428"/>
+<g id="n3"><rect class="box" x="430" y="40" width="160" height="70" rx="10"/><text x="510" y="68" text-anchor="middle">Compress</text><text class="small" x="510" y="88" text-anchor="middle">into one line</text></g>
+<path class="arrow" d="M592 75 H628"/>
+<g id="n4"><rect class="box" x="630" y="40" width="180" height="70" rx="10"/><text x="720" y="68" text-anchor="middle">Conclusion</text><text class="small" x="720" y="88" text-anchor="middle">direction · vs plan · why</text></g>
+<path class="arrow" d="M720 112 V160 H90 V114"/>
+<text class="small" x="405" y="180" text-anchor="middle">he decides, and comes back before the next trade</text>
+</svg>
+<div class="steps" role="group" aria-label="Walk through the loop">
+<button data-s="1" aria-pressed="true">1 · Plan</button><button data-s="2">2 · Gather</button><button data-s="3">3 · Compress</button><button data-s="4">4 · Decide</button>
+</div>
+<p class="stepnote" id="note"></p>
+</section>
+
+<section>
+<h2>The timeframe decides the analysis</h2>
+<div class="tf">
+<div><b>Below 4h · intraday</b>News and statements of the day, and those expected later today, that could move the price.</div>
+<div><b>4h and above · medium-term</b>Project data, community, macro, geopolitics and the wider background, plus what may happen next.</div>
+</div>
+</section>
+
+<section>
+<h2>What "working" looks like</h2>
+<p>He picks ETH, SOL or AAVE, enters long or short and the timeframe, and within a minute sees a short conclusion, whether the background supports or contradicts his plan, and a short spot vs futures note.</p>
+<p class="demo">The "oh, that's cool" beat: about twenty scattered headlines collapse into one line anyone gets at a glance. <i>"Your plan is long, the background says down, because of X."</i></p>
+</section>
+
+<section>
+<h2>Boundary</h2>
+<details open><summary>Now <span>in the proof of concept</span></summary>
+<ul><li>Coins: ETH, SOL, AAVE</li><li>Both horizons, chosen by timeframe</li><li>One view for spot and futures, with a note where they may differ</li><li>A separate simple web page</li><li>Input: coin, long/short, timeframe. Output: short conclusion, verdict vs plan, spot/futures note</li></ul></details>
+<details><summary>Later <span>worth doing, not now</span></summary>
+<ul><li>Any coin from the top 100</li><li>A TradingView indicator: reads the coin and timeframe on the chart, may show arrows and an RSI-like line. Needs an outside service, because Pine Script cannot fetch news or call an AI model (to verify in the spec)</li></ul></details>
+<details><summary>Cut <span>with reasons</span></summary>
+<ul><li>Separate spot and futures analyses: one view with a note is enough</li><li>Long explanations: the learner wants a few words, not reading</li><li>A guaranteed correct forecast: no tool can promise it, and a video cannot prove it</li></ul></details>
+<details><summary class="warn">Open for the PRD <span>decide next</span></summary>
+<ul><li>Probability in percent: a model would invent the number. Remove it, replace with words, or show both with a label</li><li>Visual form of the indicator: simple, clear for anyone, not necessarily RSI-like</li><li>Whether the ~20 collected items are visible at all</li></ul></details>
+</section>
+
+<section>
+<h2>Why it matters to the learner</h2>
+<p>It targets his weakest spot as a trader: how news, geopolitics, macro data and the stock market move crypto. "It often goes completely differently from how you plan." And he wants to build something other people will use and enjoy.</p>
+</section>
+
+<footer>scope.md is the canonical document; this page is a visual companion for review.</footer>
+</main>
+<script>
+const notes={1:"He is about to enter a trade: picks a coin, says long or short, and picks the timeframe he trades.",2:"The assistant gathers about twenty relevant news and data items for that coin and that horizon.",3:"It compresses them into one short conclusion: direction, whether it supports or contradicts the plan, and the reason in a few words.",4:"He decides with the background in view, and comes back before the next trade."};
+const ids={1:"n1",2:"n2",3:"n3",4:"n4"};
+function show(s){document.querySelectorAll('.steps button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s==s));
+document.getElementById('note').textContent=notes[s];
+for(const k in ids){const r=document.querySelector('#'+ids[k]+' rect');r.setAttribute('class',k==s?'box hi':'box');document.querySelectorAll('#'+ids[k]+' text').forEach(t=>t.classList.toggle('on',k==s));}}
+document.querySelectorAll('.steps button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.s)));show(1);
+</script>
+</body>
+</html>

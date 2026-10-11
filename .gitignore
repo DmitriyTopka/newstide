@@ -1,0 +1,8 @@
+/devpost/learner-profile.md
+.env
+.env.*
+!.env.example
+node_modules/
+runs/*
+!runs/example-run.json
+.DS_Store

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NewsTide</title>
+<meta name="description" content="Where the tide of news is carrying your coin, before you trade.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="paper" id="paper" data-mood="none">
+
+  <header class="masthead">
+    <div class="ear ear-left">
+      <p id="dateline">Saturday, October 11, 2026</p>
+      <p>Edition for ETH, SOL and AAVE</p>
+    </div>
+    <h1 class="nameplate">NewsTide</h1>
+    <div class="ear ear-right">
+      <button type="button" id="themeToggle" class="edition-switch" aria-pressed="false">Night edition</button>
+      <p>Where the news is carrying your coin</p>
+    </div>
+  </header>
+
+  <div class="markets" id="markets" aria-live="polite">
+    <span class="markets-title">Markets</span>
+    <span id="mkBtc">Bitcoin ...</span>
+    <span id="mkNdq">Nasdaq ...</span>
+    <span class="sample-tag" id="mkSample" hidden>sample figures</span>
+  </div>
+
+  <main class="front">
+    <aside class="column" aria-labelledby="todayHead">
+      <h2 class="section-head" id="todayHead">Today's dispatches</h2>
+      <ol class="briefs" id="today"></ol>
+    </aside>
+
+    <section class="lead" aria-labelledby="askHead">
+      <h2 class="section-head" id="askHead">Ask the paper before you trade</h2>
+
+      <form id="askForm" class="ask" novalidate>
+        <div class="field">
+          <label for="coin">Coin</label>
+          <input id="coin" name="coin" list="coinList" autocomplete="off" placeholder="ETH, SOL or AAVE" required>
+          <datalist id="coinList"></datalist>
+        </div>
+
+        <fieldset class="field">
+          <legend>Your plan</legend>
+          <div class="choices">
+            <label><input type="radio" name="plan" value="long" required> Long</label>
+            <label><input type="radio" name="plan" value="short"> Short</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>Timeframe</legend>
+          <div class="choices">
+            <label><input type="radio" name="timeframe" value="15m" required> 15m</label>
+            <label><input type="radio" name="timeframe" value="1h"> 1h</label>
+            <label><input type="radio" name="timeframe" value="4h"> 4h</label>
+            <label><input type="radio" name="timeframe" value="1d"> 1d</label>
+          </div>
+          <p class="hint" id="horizonHint">Below 4h we read today's news. From 4h we read the last two weeks.</p>
+        </fieldset>
+
+        <button type="submit" class="press" id="getData">Get data</button>
+        <p class="form-error" id="formError" role="alert"></p>
+      </form>
+
+      <p class="x-note" id="xNote">X is not connected. X is one of the main sources: news often appears there first. This edition is built from the other sources.</p>
+
+      <article class="story" id="story" aria-live="polite" hidden>
+        <p class="waiting" id="waiting" hidden>Gathering the background. About <span id="secs">60</span> seconds left.</p>
+        <div class="result" id="result" hidden>
+          <div class="plate">
+            <div class="engraving" id="animal" role="img" aria-label=""></div>
+            <svg class="arrow" id="arrow" viewBox="0 0 120 120" aria-hidden="true">
+              <path d="M60 10 L100 58 L74 58 L74 110 L46 110 L46 58 L20 58 Z"/>
+            </svg>
+            <svg class="signal" viewBox="0 0 60 150" role="img" id="signal" aria-label="">
+              <rect class="housing" x="6" y="4" width="48" height="142" rx="8"/>
+              <circle class="lamp red" cx="30" cy="32" r="15"/>
+              <circle class="lamp yellow" cx="30" cy="75" r="15"/>
+              <circle class="lamp green" cx="30" cy="118" r="15"/>
+            </svg>
+          </div>
+          <h3 class="headline" id="verdict"></h3>
+          <p class="deck" id="deck"></p>
+          <p class="note" id="sfNote"></p>
+          <p class="note" id="missing" hidden></p>
+          <p class="sample-tag" id="resultSample" hidden>Sample answer for the design check. No AI and no live news yet.</p>
+        </div>
+        <p class="form-error" id="resultError" hidden></p>
+      </article>
+    </section>
+
+    <aside class="column" aria-labelledby="weekHead">
+      <h2 class="section-head" id="weekHead">This week in the wider world</h2>
+      <ol class="briefs" id="week"></ol>
+    </aside>
+  </main>
+
+  <footer class="colophon">
+    <p class="disclaimer">Not financial advice. NewsTide reads the news background; it does not know the future. Trade on your own judgment.</p>
+    <p class="price" id="price">Price of this edition: $0.000. Spent this session: $0.000.</p>
+  </footer>
+</div>
+<script src="app.js" type="module"></script>
+</body>
+</html>
