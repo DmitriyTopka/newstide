@@ -23,6 +23,16 @@ const clean = s =>
     .replace(/\s+/g, ' ')
     .trim();
 
+// Keep only ordinary web links; anything else (javascript:, data:) is dropped.
+export function safeLink(link) {
+  try {
+    const u = new URL(String(link).trim());
+    return u.protocol === 'http:' || u.protocol === 'https:' ? u.href : '';
+  } catch {
+    return '';
+  }
+}
+
 // Turn one RSS or Atom document into plain items.
 export function parseFeed(xml, feed) {
   const doc = parser.parse(xml);
@@ -33,7 +43,7 @@ export function parseFeed(xml, feed) {
       source: feed.name,
       kind: feed.kind,
       title: clean(text(it.title)),
-      link: typeof it.link === 'object' ? it.link.href ?? text(it.link) : text(it.link),
+      link: safeLink(typeof it.link === 'object' ? it.link.href ?? text(it.link) : text(it.link)),
       date: new Date(text(it.pubDate) || text(it.published) || text(it.updated) || text(it['dc:date']) || 0).toISOString(),
       summary: clean(text(it.description) || text(it.summary) || text(it['content:encoded'])).slice(0, 400)
     }))

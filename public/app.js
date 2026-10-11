@@ -38,7 +38,7 @@ function quoteHtml(q) {
   return `<span class="quote">${escapeHtml(q.name)} <b>${escapeHtml(q.value)}</b> <span class="${up ? 'up-tick' : 'down-tick'}">${up ? '\u25B2' : '\u25BC'} ${ch}</span></span>`;
 }
 function briefs(list) {
-  return list.map(n => `<li><details><summary><b>${escapeHtml(n.title)}</b><small>${escapeHtml(n.source)}</small></summary><p>${escapeHtml(n.summary ?? '')}</p>${n.link ? `<a href="${escapeHtml(n.link)}" target="_blank" rel="noopener">Read the full story</a>` : ''}</details></li>`).join('');
+  return list.map(n => `<li><details><summary><b>${escapeHtml(n.title)}</b><small>${escapeHtml(n.source)}</small></summary><p>${escapeHtml(n.summary ?? '')}</p>${/^https?:\/\//i.test(n.link ?? '') ? `<a href="${escapeHtml(n.link)}" target="_blank" rel="noopener">Read the full story</a>` : ''}</details></li>`).join('');
 }
 async function loadMarket() {
   try {

@@ -42,3 +42,11 @@ test('a clean answer passes untouched', () => {
   assert.deepEqual(r.problems, []);
   assert.equal(r.citesOk, true);
 });
+
+import { safeLink } from '../server/collect.js';
+test('only http and https links survive', () => {
+  assert.equal(safeLink('https://cointelegraph.com/a'), 'https://cointelegraph.com/a');
+  assert.equal(safeLink('javascript:alert(1)'), '');
+  assert.equal(safeLink('data:text/html,x'), '');
+  assert.equal(safeLink('not a url'), '');
+});
