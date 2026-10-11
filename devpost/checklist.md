@@ -19,7 +19,7 @@ Build mode: fast
   Learner check: Run `npm start`, open `localhost:3000`, pick ETH, Long, 1h, press Get data, switch the theme. Say whether it feels like a newspaper and what you would change in the look.
   Commit: `Newspaper front page with sample result`
 
-- [ ] **2. A real verdict from a saved batch of news (the kernel)**
+- [x] **2. A real verdict from a saved batch of news (the kernel)**
   Becomes usable: Get data sends the saved sample batch of news for the chosen coin and horizon to the model (Haiku 5.5) and shows its real answer: arrow, light, a few words, spot/futures note. The cost of the analysis and of the session appears under the result. Each run is saved to `runs/` with the hidden cause-and-effect chain.
   Why now: This is the unique kernel and the biggest risk (does the model return the fixed answer shape and a sensible chain?). It runs on saved data, so it costs about $0.001 per try and gives the same input every time.
   PRD ref: `prd.md > The indicator (result)`, `prd.md > Background gathering (hidden from the user)`, `prd.md > Waiting for the result`
@@ -85,3 +85,5 @@ Activity mode:
 - Market strip became a running tape of 12 major quotes with expandable market news; paper got grain, a faint printed chart and torn edges - Dima's design feedback at the slice 1 checkpoint ("all known quotes as a running line", "news short, click to open", "background not monotone, edges like a newspaper"). PRD Look and Feel, Market strip and spec Market Strip Service, Look and Feel updated.
 - Paper texture is now a Higgsfield image instead of a CSS-drawn chart; "+" became a small "read more"; torn edges made gentler - Dima's second design feedback ("plus too big", "edges too ragged", "background charts look ugly, use design skills or generate images"). Higgsfield cost measured: 0.25 credits per image on gpt_image_2_5.
 - Council (5 advisors + peer review) on design and contest fit; Dima agreed: stamp replaces the traffic light, 4 quotes instead of 12, a closed "Show the editor's notes" with cited dispatches. Also: result moved above the fold (ask form became one line), engraved manicule replaces the arrow, bull/bear/hamster engravings generated now (moved from slice 5), edition name in the masthead, paper texture without the chart (Dima). Higgsfield spent 4 credits in total so far (663 -> 659).
+- The same request can get a different verdict on a second run (SOL Short 4h: once up/against, once sideways/mixed, same saved news) - the model is not deterministic. For the video, record from one saved run and show its editor's notes; mention it honestly in the README.
+- Feed titles carried HTML entities and long dashes; the collector now decodes entities and turns long dashes into a hyphen.

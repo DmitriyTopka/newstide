@@ -1,0 +1,7 @@
+[
+  { "name": "Cointelegraph", "kind": "crypto", "url": "https://cointelegraph.com/rss" },
+  { "name": "CoinDesk", "kind": "crypto", "url": "https://www.coindesk.com/arc/outboundfeeds/rss/" },
+  { "name": "Federal Reserve", "kind": "macro", "url": "https://www.federalreserve.gov/feeds/press_all.xml" },
+  { "name": "Investing", "kind": "macro", "url": "https://www.investing.com/rss/news_95.rss" },
+  { "name": "MarketWatch", "kind": "macro", "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories" }
+]

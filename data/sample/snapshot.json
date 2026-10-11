@@ -1,0 +1,1415 @@
+{
+  "SAMPLE": "Saved snapshot of public feeds for repeatable tests. Not live news.",
+  "taken_at": "2026-10-11T13:17:19.193Z",
+  "missing": [],
+  "items": [
+    {
+      "source": "Ethereum Foundation Blog",
+      "kind": "project",
+      "title": "How native transaction assertions could enforce a transaction's final outcome",
+      "link": "https://blog.ethereum.org/en/2026/10/05/transaction-assertions",
+      "date": "2026-10-05T00:00:00.000Z",
+      "summary": "The Ethereum Foundation's Trillion Dollar Security initiative has identified blind signing and transaction uncertainty as a user experience risk, and is exploring native transaction assertions as a next step to enforce a transaction’s final outcome, alongside Clear Signing. This post covers why a valid signature doesn't always guarantee the..."
+    },
+    {
+      "source": "Ethereum Foundation Blog",
+      "kind": "project",
+      "title": "Introducing zkAPI: private usage credits for any API",
+      "link": "https://blog.ethereum.org/en/2026/10/01/introducing-zkapi",
+      "date": "2026-10-01T00:00:00.000Z",
+      "summary": "tl;dr: zkAPI lets you pay for a metered API without being known. Deposit credits into an Ethereum vault once, then authorize bounded usage with zero-knowledge proofs instead of an identity. The provider sees the requests, and the payment layer sees the spend. Neither learns the link between them. The..."
+    },
+    {
+      "source": "Ethereum Foundation Blog",
+      "kind": "project",
+      "title": "Glamsterdam Testnet Announcement",
+      "link": "https://blog.ethereum.org/en/2026/09/17/glamsterdam-testnet-announcement",
+      "date": "2026-09-28T00:00:00.000Z",
+      "summary": "Glamsterdam follows the Fusaka upgrade, advancing Ethereum's L1 scaling roadmap with enshrined proposer-builder separation, block-level access lists, and changes to gas pricing that better reflect the cost of execution and state growth. The Glamsterdam network upgrade is scheduled to activate on Sepolia at epoch 353,024, slot 11,296,768 (October 6,..."
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "All Core Devs - Execution (ACDE) #248, October 22, 2026",
+      "link": "https://ethereum-magicians.org/t/all-core-devs-execution-acde-248-october-22-2026/29937",
+      "date": "2026-10-10T09:18:40.000Z",
+      "summary": "Agenda Glamsterdam Hegotá Misc Meeting Time: Thursday, October 22, 2026 at 14:00 UTC (90 minutes) GitHub Issue 1 post - 1 participant Read full topic"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "[Pre-ERC Discussion] Agent Service Order Amendments",
+      "link": "https://ethereum-magicians.org/t/pre-erc-discussion-agent-service-order-amendments/29936",
+      "date": "2026-10-10T09:14:31.000Z",
+      "summary": "I would like feedback on a narrow interoperability problem: after a buyer and an agent service provider have agreed to an order, how can they consent to changing its scope, price, deadline, or acceptance criteria without losing the previous agreement or accidentally authorizing additional spending? This is an exploratory discussion, not an assigned ERC. Existing work or a suitable extension point "
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP-8437: Proof Object Transport over devp2p",
+      "link": "https://ethereum-magicians.org/t/eip-8437-proof-object-transport-over-devp2p/29934",
+      "date": "2026-10-10T00:18:39.000Z",
+      "summary": "Discussion thread for Add EIP: Proof Object Transport over devp2p by Marchhill · Pull Request #12423 · ethereum/EIPs · GitHub 1 post - 1 participant Read full topic"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP-8440: Execution Chain Proofs",
+      "link": "https://ethereum-magicians.org/t/eip-8440-execution-chain-proofs/29930",
+      "date": "2026-10-09T16:50:11.000Z",
+      "summary": "Discussion topic for EIP-8440, Execution Chain Proofs . Consensus-layer specification: ethereum/consensus-specs#5725 . Execution chain proofs make execution-layer chain sync constant time: a node verifies one recursive proof and thereby establishes valid execution of every payload from the head beacon block back to the proof’s origin, and their binding to the beacon chain. Syncing from a weak subj"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP-8247: Ancestor-Indexed BALs",
+      "link": "https://ethereum-magicians.org/t/eip-8247-ancestor-indexed-bals/29926",
+      "date": "2026-10-09T09:46:40.000Z",
+      "summary": "Discussion topic for EIP-8247 Update Log 2026-05-03: initial draft External Reviews None as of 2026-10-09 Outstanding Issues None as of 2026-10-09 1 post - 1 participant Read full topic"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "ERC-8441: Hybrid post-quantum stealth address scheme",
+      "link": "https://ethereum-magicians.org/t/erc-8441-hybrid-post-quantum-stealth-address-scheme/29923",
+      "date": "2026-10-09T04:18:09.000Z",
+      "summary": "Hi all, We’d like feedback on a draft ERC that adds a post-quantum scheme to ERC-5564 stealth addresses. Draft: pq-stealth-scheme3-public/spec/ERC-VVVV-schemeid3.md at main · namnc/pq-stealth-scheme3-public · GitHub Reference implementation, test vectors and gas harness: GitHub - namnc/pq-stealth-scheme3-public: pq-stealth-scheme3-public · GitHub Summary ERC-5564 defines stealth addresses and a sc"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP-8301: MATMUL Opcode - Sharded Tensor State Transition Engine",
+      "link": "https://ethereum-magicians.org/t/eip-8301-matmul-opcode-sharded-tensor-state-transition-engine/29920",
+      "date": "2026-10-08T15:26:53.000Z",
+      "summary": "Native Matrix Multiplication for the EVM and Sharded Tensor State Transition Engine Category: Execution Layer Core / EVM Architecture Status: Open Discussion & Request for Comments Simple Summary This EIP introduces a native MATMUL ( 0x0C ) instruction to the EVM, collapses memory and stack structures into a high-performance tensor cache and pointer map, and establishes a sharded global validator "
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "ERC-8439: Settlement-Decoupled Nanopayment Ledger",
+      "link": "https://ethereum-magicians.org/t/erc-8439-settlement-decoupled-nanopayment-ledger/29919",
+      "date": "2026-10-08T04:02:06.000Z",
+      "summary": "Hi Ethereum Magicians, I would like to gather feedback on a proposed ERC, Settlement-Decoupled Nanopayment Ledger , for recording fiat-denominated nanopayments on-chain while handling fiat settlement through existing off-chain payment systems. The proposal defines a shared accounting interface for a payment network, payer institutions, and payee institutions. It covers payments, refunds, independe"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "ERC-8438: Storage-Aware Beacon Proxies",
+      "link": "https://ethereum-magicians.org/t/erc-8438-storage-aware-beacon-proxies/29905",
+      "date": "2026-10-07T17:29:33.000Z",
+      "summary": "Beacon proxies make it possible to upgrade a fleet of contracts through a single beacon, but existing patterns generally assume that every new implementation remains compatible with the proxies’ existing storage layout. This becomes limiting when a fleet needs to upgrade between implementations that organize storage differently. github.com/ethereum/ERCs Add ERC: Storage-Aware Beacon Proxies (#2047"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "All Core Devs - Testing (ACDT) #100, October 12, 2026",
+      "link": "https://ethereum-magicians.org/t/all-core-devs-testing-acdt-100-october-12-2026/29903",
+      "date": "2026-10-07T15:20:01.000Z",
+      "summary": "Agenda Discussions Network updates. Led by Protocol Devops EL breakout TBD CL breakout Plans for the next Hegota devnet for CL features. All Core Devs - Testing (ACDT) #100, October 12, 2026 · Issue #2264 · ethereum/pm · GitHub Led by @jihoonsong & @jtraglia Meeting Time: Monday, October 12, 2026 at 14:00 UTC (60 minutes) GitHub Issue 2 posts - 2 participants Read full topic"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "P2P networking #9 October 07, 2026",
+      "link": "https://ethereum-magicians.org/t/p2p-networking-9-october-07-2026/29902",
+      "date": "2026-10-07T14:32:12.000Z",
+      "summary": "Agenda - Clients updates - Gloas Sepolia bandwidth profile - Service discovery by Felix - DC simulations by Sukun - 8411 discussions (tentatively) Meeting Time: Wednesday, October 07, 2026 at 15:30 UTC (60 minutes) GitHub Issue 3 posts - 1 participant Read full topic"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "Ownership Module",
+      "link": "https://ethereum-magicians.org/t/ownership-module/29894",
+      "date": "2026-10-06T15:01:12.000Z",
+      "summary": "ARCOS → Module → Ownership Module Developer Overview ARCOS ARCOS is infrastructure that makes NFTs programmable and operational - not just a pointer to an owner, but a governed system for what can be done with a digital asset, by whom, and under what rules. It’s organized as a set of Modules , each governing one domain of an asset’s behavior. Module - The Generic Infrastructure A Module is a gover"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "The Invariant Boundary Theorem",
+      "link": "https://ethereum-magicians.org/t/the-invariant-boundary-theorem/29893",
+      "date": "2026-10-06T12:54:06.000Z",
+      "summary": "Definition 1 (Perfect Indistinguishability): A protocol achieves Perfect Indistinguishability if, to any external observer (e.g., a censor), the transit data stream is statistically or computationally indistinguishable from true white noise (Uniform Randomness). This implies the complete mathematical absence of easily computable invariants in the observed data, regardless of the observer’s knowled"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP Editing Office Hour (EIP + ERC ) Meeting #115, October 07, 2026",
+      "link": "https://ethereum-magicians.org/t/eip-editing-office-hour-eip-erc-meeting-115-october-07-2026/29876",
+      "date": "2026-10-05T12:39:00.000Z",
+      "summary": "Agenda Editor - @jochem-brouwer Live analytics: EIP Editing Office Hours · EIPsInsight Zoom: Link Note for Authors - Please Review (click for more details) 1. Author Questions (Live Q&A) (PRs where authors are joining with a specific question) 2. ACD related Update EIP-7773: Add EIP-7495 and EIP-7916 to Glamsterdam by etan-status · Pull Request #12449 · ethereum/EIPs · GitHub (No editor action req"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "RPC Standards # 36, October 05, 2026",
+      "link": "https://ethereum-magicians.org/t/rpc-standards-36-october-05-2026/29875",
+      "date": "2026-10-05T12:22:25.000Z",
+      "summary": "Agenda Agenda meta: tracking v1 release · Issue #887 · ethereum/execution-apis · GitHub Standardizing the Parity trace_* APIs and their output formats · Issue #890 · ethereum/execution-apis · GitHub feat(trace): Parity trace methods and output schemas by banteg · Pull Request #895 · ethereum/execution-apis · GitHub getLogs improvements · Issue #876 · ethereum/execution-apis · GitHub add eth_getLog"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "Bend-SSZ: Formally proving SSZ",
+      "link": "https://ethereum-magicians.org/t/bend-ssz-formally-proving-ssz/29861",
+      "date": "2026-10-04T21:57:25.000Z",
+      "summary": "Disclosure: this is an AI generated report. if you are not okay with it. don’t read it, I wont bother giving it a human touch. I think it is good enough. SSZ is one of those things in Ethereum that everybody uses and nobody thinks about. Every consensus client has to serialize the same objects into the exact same bytes and compute the exact same Merkle roots , and if two clients disagree on a sing"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP-8435: Last-Written Block in PBT Leaves",
+      "link": "https://ethereum-magicians.org/t/eip-8435-last-written-block-in-pbt-leaves/29860",
+      "date": "2026-10-04T18:20:38.000Z",
+      "summary": "Carrying EIP-8188’s write-age signal into the Partitioned Binary Tree EIP-8188 records, for every account and storage slot, the block at which it was last written. That gives clients a consensus-level signal for separating recently written state from state that has not been written in a long time, and the tiering proposals EIP-8295 and EIP-8296 build their pricing on it. EIP-8188 defines the field"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "ERC-8436: Agent Collective Decision Framework",
+      "link": "https://ethereum-magicians.org/t/erc-8436-agent-collective-decision-framework/29850",
+      "date": "2026-10-04T00:55:45.000Z",
+      "summary": "Hi all, This is a draft ERC for an Agent Collective Decision Framework (ACDF) : two co-deployable registries through which qualified participants - agents, humans or contracts - form collective decisions with a defined effect, within explicit authorization, under rules that are frozen as the very parameters the registry executes. Repository (design memo, reference implementation, tests, vectors): "
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "[Research] Steganographic Point Obfuscation via Inverse 2-Isogenies for BLS12 Curves (DPI Censorship Resistance)",
+      "link": "https://ethereum-magicians.org/t/research-steganographic-point-obfuscation-via-inverse-2-isogenies-for-bls12-curves-dpi-censorship-resistance/29849",
+      "date": "2026-10-03T16:53:09.000Z",
+      "summary": "TL;DR Public keys and signatures on standard BLS12 curves are deterministically structured, making them vulnerable to Deep Packet Inspection (DPI) censorship at the networking layer. Point-to-Uniform obfuscation (like Elligator Squared) mitigates this, but applying it to BLS12-381 creates a massive computational bottleneck for receiving validators due to its heavy 11-isogeny bridge. By utilizing a"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "All Core Devs - Consensus (ACDC) #189, October 15, 2026",
+      "link": "https://ethereum-magicians.org/t/all-core-devs-consensus-acdc-189-october-15-2026/29847",
+      "date": "2026-10-03T09:18:22.000Z",
+      "summary": "Agenda Glamsterdam Hegotá mascot Misc hard fork process, agility Meeting Time: Thursday, October 15, 2026 at 14:00 UTC (90 minutes) GitHub Issue 2 posts - 2 participants Read full topic"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP-TBD: Resolution - Non-Self-Authorizing State Transitions",
+      "link": "https://ethereum-magicians.org/t/eip-tbd-resolution-non-self-authorizing-state-transitions/29846",
+      "date": "2026-10-03T04:37:43.000Z",
+      "summary": "There is a common authority boundary showing up across recovery, agents, provenance, adjudication, and cross-standard composition that is worth defining directly. Anything Ethereum can define, it can put behind Resolution. Resolution is the transition between something being produced or proven and that thing acquiring authority to change consequential state. The minimum distinction is: COMPUTATION"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "Sealed-Bid Award Mechanism for Task Tenders (companion to ERC-8183 / 8195 / 8414)",
+      "link": "https://ethereum-magicians.org/t/sealed-bid-award-mechanism-for-task-tenders-companion-to-erc-8183-8195-8414/29814",
+      "date": "2026-09-30T19:14:52.000Z",
+      "summary": "The gap The agent task stack now has three ways to post and settle a task. ERC-8183 escrows a single job and lets an evaluator release it. ERC-8195 defines five procurement modes. ERC-8414 makes the task itself an ERC-721 with a vault inside it. All three leave the same question outside the standard: when several agents want one task, who is awarded, and at what price? ERC-8183 runs bidding throug"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP-8430: AA Transaction Type (Split out from 8130)",
+      "link": "https://ethereum-magicians.org/t/eip-8430-aa-transaction-type-split-out-from-8130/29810",
+      "date": "2026-09-30T12:00:45.000Z",
+      "summary": "EIP-8430 splits the transaction type out of [EIP-8130]( EIP-8130: Keystore Accounts ) into its own EIP, with no Keystore dependency. EIP-8130 keeps the Keystore. - EIP-8430 PR: Add EIP: AA Transaction Type by chunter-cb · Pull Request #12385 · ethereum/EIPs · GitHub - EIP-8130 update PR: Update EIP-8130: scope to the Keystore, move the transaction type to a new EIP by chunter-cb · Pull Request #12"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP-8433: Retire 0x00 validators",
+      "link": "https://ethereum-magicians.org/t/eip-8433-retire-0x00-validators/29808",
+      "date": "2026-09-30T10:26:53.000Z",
+      "summary": "Discussion topic for EIP-8433: Add EIP: Retire 0x00 validators by ensi321 · Pull Request #12390 · ethereum/EIPs · GitHub Second stage of the 0x00 withdrawal credential deprecation. EIP-8365 ( EIP-8365: Disallow new 0x00 validators ) closes the inflow by rejecting deposits that would create new 0x00 validators. This EIP exits the remaining 0x00 validators through the standard exit churn, at a cappe"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "ERC-8434: Agent Identity (AID)",
+      "link": "https://ethereum-magicians.org/t/erc-8434-agent-identity-aid/29805",
+      "date": "2026-09-30T03:43:47.000Z",
+      "summary": "Assigned ERC-8434 (2026-09-30). PR: ethereum/ERCs#2044 · Draft: erc-aid.md · Repo / reference implementation: garyyang-finchip/aid-standard One paragraph Agent Identity (AID) is an identity for autonomous agents whose anchor is a blockchain address. Every address is a dormant AID. It becomes active when a live agent demonstrably operates behind it: an ERC-8004 agent bound one-to-one to the address"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "All Core Devs - Testing (ACDT) #99, October 5, 2026",
+      "link": "https://ethereum-magicians.org/t/all-core-devs-testing-acdt-99-october-5-2026/29802",
+      "date": "2026-09-29T16:37:58.000Z",
+      "summary": "Agenda Discussions Devnet updates. Led by Protocol Devops Sepolia upgrade. Hardfork scheduled on Tuesday, 6 October 2026 13:53:36 UTC Led by @marioevz EL breakout Execution gas limit for eth_call after EIP-8037: All Core Devs - Testing (ACDT) #99, October 5, 2026 · Issue #2242 · ethereum/pm · GitHub Led by @misilva73 CL breakout produceBlockV4WithBid Beacon API endpoint, beacon-APIs#627 Led by @et"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "Frame Transaction Breakout #6, Oct 6, 2026",
+      "link": "https://ethereum-magicians.org/t/frame-transaction-breakout-6-oct-6-2026/29801",
+      "date": "2026-09-29T13:46:19.000Z",
+      "summary": "Agenda Note: starting 30 mins later, so not overlapping with Glamsterdam Sepolia activation & watch party spec changes, test releases, if any devnet updates frames-devnet-0 status next devnet planning client team updates new/existing proposal discussions FOCIL + Frames strategy community feedback, e.g., wallet, tooling, app devs Meeting Time: Tuesday, October 06, 2026 at 14:30 UTC (60 minutes) Git"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "ERC-8421: Frame Transaction Alternative Mempools",
+      "link": "https://ethereum-magicians.org/t/erc-8421-frame-transaction-alternative-mempools/29800",
+      "date": "2026-09-29T11:51:48.000Z",
+      "summary": "A Frame Transaction specific definitions for alternative mempool rules, similar in structure and mostly backward compatible with the ERC-7562 validation rules for ERC-4337 UserOperations. In the context of EIP-8141 serves as a more permissive, reputation-based system compared to the ‘canonical mempool’ defined as part of the core protocol. Conceptually, the “reputation” system of ERC-8421/ERC-7562"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "EIP-8429: Escalating gas for repeated calls",
+      "link": "https://ethereum-magicians.org/t/eip-8429-escalating-gas-for-repeated-calls/29798",
+      "date": "2026-09-29T08:27:32.000Z",
+      "summary": "Discussion topic for EIP-8429 Repetition is underpriced. The k-th call into an opted-in contract within a block pays G_REF * k^2 extra gas. Half of that is deposited as stake with no withdrawer. Half is staked where the opted-in contract points. The block producer gets nothing, so nobody has a reason to farm it. Update Log 2026-09-28: initial draft, PR 12384 2026-09-28: two ratchets, fast per bloc"
+    },
+    {
+      "source": "Ethereum Magicians forum",
+      "kind": "project",
+      "title": "\"Module: Making Governed-State Discipline (State/Authority/Transitions/Invariants) Reusable Across NFT Capabilities, Instead of Reinvented Per-ERC\"",
+      "link": "https://ethereum-magicians.org/t/module-making-governed-state-discipline-state-authority-transitions-invariants-reusable-across-nft-capabilities-instead-of-reinvented-per-erc/29797",
+      "date": "2026-09-29T07:36:05.000Z",
+      "summary": "ARCOS Module - Why this exists, briefly ERC-721’s ownerOf() answers a static question - who owns this - with one address. Capabilities beyond that (delegation, custody, rental, verification) get solved piecemeal, as separate ERC extensions and custom per-project code, with nothing coordinating them once a project adopts more than one. The ERCs themselves are sound; the gap is coordination. That’s "
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Samsung Partners with Solana to Natively Deliver Stablecoins in Samsung Wallet to 82 Million U.S. Galaxy Devices",
+      "link": "https://solana.com/news/samsung-wallet",
+      "date": "2026-10-07T23:30:00.000Z",
+      "summary": "Beginning the last week of October 2026, Samsung Wallet will support USDC cross-border transfers on Solana across 82 million U.S. Galaxy devices."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Solana Ecosystem Roundup: September 2026",
+      "link": "https://solana.com/news/solana-ecosystem-roundup-september-2026",
+      "date": "2026-10-06T19:38:00.000Z",
+      "summary": "September saw growth across tokenized stocks, stablecoins, payments, and DeFi. Tokenized equity supply reached $684 million, stablecoins hit $17.51 billion, and the network processed 3.18 billion non-vote transactions."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Solana Foundation Launches Solana DvP, an Atomic Settlement Program Built for Financial Institutions",
+      "link": "https://solana.com/news/solana-foundation-launches-solana-dv-p-an-atomic-settlement-program-built-for-financial-institutions",
+      "date": "2026-10-06T02:00:00.000Z",
+      "summary": "Onchain open-source delivery-versus-payment infrastructure, tailored for the world’s leading financial institutions"
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Introducing Solana Microscope: Program Monitoring and Alerts",
+      "link": "https://solana.com/news/solana-microscope",
+      "date": "2026-10-05T00:00:00.000Z",
+      "summary": "Microscope decodes Solana program and Squads multisig activity into Grafana dashboards and alerts for Slack, Telegram, and PagerDuty."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Solana x AI: The Democratization Layer",
+      "link": "https://solana.com/news/solana-ai-the-democratization-layer",
+      "date": "2026-10-02T19:30:00.000Z",
+      "summary": "Solana can give AI agents permissionless access to compute, training, identity, memory, and machine-native payments."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Solana Changelog: October 1, 2026",
+      "link": "https://solana.com/news/solana-changelog-october-1-2026",
+      "date": "2026-10-01T09:30:00.000Z",
+      "summary": "Devnet lists Alpenglow as a notable feature gate alongside new Agave, Firedancer, Superbank, Web3.js, Kit, and program SDK releases."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Open USD Is Live on Solana",
+      "link": "https://solana.com/news/open-usd-is-live-on-solana",
+      "date": "2026-09-30T19:17:00.000Z",
+      "summary": "Open USD is live on Solana, letting businesses mint and burn 1:1 for dollars at no cost, with over $1 billion committed to liquidity."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Slot Time Reduction Effects",
+      "link": "https://solana.com/news/slot-time-reduction-effects",
+      "date": "2026-09-28T15:00:00.000Z",
+      "summary": "Solana is now producing slots with a 250ms target, going down from 400ms. In this article we study the effects of this reduction based on direct on-chain measures."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Solana Changelog: September 24, 2026",
+      "link": "https://solana.com/news/solana-changelog-september-24-2026",
+      "date": "2026-09-24T19:24:00.000Z",
+      "summary": "Agave v4.3.0 and Firedancer v26.09.4 ship alongside proposals for 4,096-byte transactions, deterministic ordering, and BN254 support."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Solana Foundation Appoints Rachel Conlan as Chief Strategy Officer and Jamal Raees as General Manager of Payments",
+      "link": "https://solana.com/news/solana-foundation-appoints-2026",
+      "date": "2026-09-24T13:20:00.000Z",
+      "summary": "The Solana Foundation appointed Rachel Conlan to lead strategy and Jamal Raees to expand global payments adoption."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Stocks Go Onchain: What the SEC's Innovation Exemption Means for Solana",
+      "link": "https://solana.com/news/stocks-sec-innovation-exemption",
+      "date": "2026-09-23T14:06:00.000Z",
+      "summary": "A five-year SEC order lets tokenized shares with full rights trade on public blockchains without stock-exchange registration; Solana's architecture is live."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Solana Changelog: September 18, 2026",
+      "link": "https://solana.com/news/solana-changelog-september-18-2026",
+      "date": "2026-09-19T11:28:00.000Z",
+      "summary": "Transaction V1 reaches mainnet as Solana targets 250ms slots, lower rent, and program deployments with four times lower fees."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "How AI Is Reshaping Crypto Security, with Michael Coates",
+      "link": "https://solana.com/news/bits-to-bricks-crypto-security-michael-coates",
+      "date": "2026-09-19T10:00:00.000Z",
+      "summary": "A ~$116 million Coldcard exploit shows why crypto security must eliminate single points of failure and automate defenses for AI-speed threats."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Breakpoint 2026: A guide to getting oriented (Part 1)",
+      "link": "https://solana.com/news/breakpoint-guide-part1",
+      "date": "2026-09-18T10:00:00.000Z",
+      "summary": "Your Solana Events guide to thriving (and surviving) at Breakpoint London 2026"
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Project Harmonia Brings Institutional Tokenized Funds to Solana",
+      "link": "https://solana.com/news/project-harmonia-brings-institutional-tokenized-funds-to-solana",
+      "date": "2026-09-16T00:56:00.000Z",
+      "summary": "Project Harmonia connects Allfunds, with about €1.9 trillion under administration, to tokenized funds on Solana; submissions close October 24, 2026."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Solana Summer School 2026: From first program to demo day",
+      "link": "https://solana.com/news/solana-summer-school-2026",
+      "date": "2026-09-14T12:00:00.000Z",
+      "summary": "A look back at Solana Summer School 2026: 1,164 applicants from 69 countries, five weeks of live classes, four weeks of capstone building, and one demo day."
+    },
+    {
+      "source": "Solana News",
+      "kind": "project",
+      "title": "Solana: Building, Proving and Earning Trust in Public",
+      "link": "https://solana.com/news/solana-building-trust-in-public",
+      "date": "2026-09-14T11:00:00.000Z",
+      "summary": "Solana has maintained 100% uptime since February 2024, including when a routing failure took nearly 29% of network stake offline."
+    },
+    {
+      "source": "Solana forum",
+      "kind": "project",
+      "title": "A Solana Program Change Can Be Compatible with One Consumer but Not Another",
+      "link": "https://forum.solana.com/t/a-solana-program-change-can-be-compatible-with-one-consumer-but-not-another/5098",
+      "date": "2026-10-08T23:52:50.000Z",
+      "summary": "Testing Provider Changes Against Consumer-Declared Requirements Two compiled implementations accepted the same CPI. Both transactions and both CPIs succeeded. One left post-state 3 ; the other left 6 . That result is not yet a compatibility verdict. It becomes one only after the post-state is compared with a consumer’s declared requirement. In these local LiteSVM fixtures, Caller A requires an exa"
+    },
+    {
+      "source": "Solana forum",
+      "kind": "project",
+      "title": "http://Bets.io withheld $15,148 USDC - how can I trace and recover it?",
+      "link": "https://forum.solana.com/t/http-bets-io-withheld-15-148-usdc-how-can-i-trace-and-recover-it/5068",
+      "date": "2026-09-18T21:50:44.000Z",
+      "summary": "Hi all, I need help. I sent about $20,000 USDC to http://Bets.io . I won $1,148 playing blackjack, so I had $21,148 total. When I tried to withdraw, they only sent me $6,000. They kept $15,148. First they said I used a banned strategy. Then they said I’m from a banned country. But I’m from Czech Republic and Czech Republic is allowed on their website. They won’t show me any proof. They just said t"
+    },
+    {
+      "source": "Solana forum",
+      "kind": "project",
+      "title": "Testing Compatibility Across Solana Program Changes",
+      "link": "https://forum.solana.com/t/testing-compatibility-across-solana-program-changes/5066",
+      "date": "2026-09-18T00:12:19.000Z",
+      "summary": "Two compiled Solana implementations accepted the same call. Both transactions succeeded; only one preserved the caller’s fixed postcondition. Compatibility here means preservation of an explicit caller-level postcondition . This is a differential execution test across two fresh LiteSVM instances, not an observed loader upgrade. Compiled execution experiment I sent byte-identical instruction data t"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Risk Stewards: Cap and IRM Changes on Aave V4 / 2026.10.09",
+      "link": "https://governance.aave.com/t/risk-stewards-cap-and-irm-changes-on-aave-v4-2026-10-09/25820",
+      "date": "2026-10-09T18:51:52.000Z",
+      "summary": "Summary LlamaRisk recommends the following parameter changes based on user behavior, on-chain liquidity, and position health observed in the latest review of Aave V4 reserves. Aave V4 Arc: Increase the draw cap for USDC on the Core Hub USDC Maple Spoke from 23M to 46M. Increase the add cap for syrupUSDC on the Core Hub USDC Maple Spoke from 25M to 50M. Aave V4 Ethereum: Increase the add cap for US"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Enable General Collaterals for POL Borrowing on Polygon v3",
+      "link": "https://governance.aave.com/t/enable-general-collaterals-for-pol-borrowing-on-polygon-v3/25819",
+      "date": "2026-10-09T17:25:13.000Z",
+      "summary": "Regarding POL on the Polygon v3 market: currently, borrowing POL is only enabled within the MaticX/POL eMode. Since MaticX has been sunset, it is currently impossible to borrow POL against other general collaterals like ETH, WBTC, or USDC. Could this restriction be lifted? Additionally, what was the original rationale behind this parameter configuration? Thanks! 1 post - 1 participant Read full to"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Risk Stewards: Supply Cap Increases on Aave V3 / 2026.10.09",
+      "link": "https://governance.aave.com/t/risk-stewards-supply-cap-increases-on-aave-v3-2026-10-09/25818",
+      "date": "2026-10-09T16:21:48.000Z",
+      "summary": "Summary LlamaRisk recommends the following parameter changes based on user behavior, on-chain liquidity, and position health observed in the latest review of Aave V3 reserves. Increase supply cap for PT-AUSD-17DEC2026 from 30M to 60M on Monad. PT-AUSD-17DEC2026 (Aave V3 Monad) PT-AUSD-17DEC2026 has reached 100.0% supply cap utilization on the Aave V3 Monad instance. Supply Distribution Source: Lla"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[ARFC] Onboard USAT to Aave V3 Core Instance and Aave V4 Core Hub on Ethereum",
+      "link": "https://governance.aave.com/t/arfc-onboard-usat-to-aave-v3-core-instance-and-aave-v4-core-hub-on-ethereum/25817",
+      "date": "2026-10-09T16:13:55.000Z",
+      "summary": "Summary This proposal seeks to onboard USAT to the Aave V3 Core Instance and the Aave V4 Core Hub on Ethereum. Final asset configuration will be determined by the Risk Service Providers. Motivation USAT (Tether America USD) is a dollar stablecoin issued by Anchorage Digital Bank, N.A., a federally chartered national trust bank supervised by the Office of the Comptroller of the Currency (OCC). USAT"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Risk Stewards: Supply and Borrow Cap Changes on Aave V3 / 2026.10.08",
+      "link": "https://governance.aave.com/t/risk-stewards-supply-and-borrow-cap-changes-on-aave-v3-2026-10-08/25813",
+      "date": "2026-10-08T16:17:09.000Z",
+      "summary": "Summary LlamaRisk recommends the following parameter changes based on user behavior, on-chain liquidity, and position health observed in the latest review of Aave V3 reserves. Aave V3 Monad: Increase supply cap for USDe from 100,000,000 to 150,000,000. Increase supply cap for AUSD from 20,000,000 to 40,000,000. Increase borrow cap for AUSD from 18,000,000 to 32,000,000. Increase borrow cap for mUS"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[Direct-to-AIP] Asset Listing - USDG Arbitrum",
+      "link": "https://governance.aave.com/t/direct-to-aip-asset-listing-usdg-arbitrum/25811",
+      "date": "2026-10-08T06:17:23.000Z",
+      "summary": "title: [Direct-to-AIP] Asset Listing - USDG Arbitrum author: @TokenLogic created: 2026-10-08 Summary This publication proposes to onboard USDG as a supported asset on the Aave V3 Arbitrum Instance. USDG would join the instance as a borrowable stablecoin, giving Arbitrum users another option to supply and borrow. Motivation USDG is a stablecoin issued by Paxos. According to Paxos documentation, USD"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Risk Stewards: Supply and Borrow Cap Changes on Aave V3 / 2026.10.07",
+      "link": "https://governance.aave.com/t/risk-stewards-supply-and-borrow-cap-changes-on-aave-v3-2026-10-07/25806",
+      "date": "2026-10-07T14:26:13.000Z",
+      "summary": "Summary LlamaRisk recommends the following parameter changes based on user behavior, on-chain liquidity, and position health observed in the latest review of Aave V3 reserves. Aave V3 Core: Increase supply cap for PT-srUSDe-22OCT2026 from 10,000,000 to 20,000,000. Aave V3 Polygon: Increase supply cap for WETH from 15,000 to 20,000. Aave V3 Mantle: Increase supply cap for USDe from 40,000,000 to 80"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Aave Labs. Request for Bounty Payout - October 2026",
+      "link": "https://governance.aave.com/t/aave-labs-request-for-bounty-payout-october-2026/25804",
+      "date": "2026-10-07T11:07:41.000Z",
+      "summary": "Summary This post requests the release of a bounty payment for one valid submission received through the Aave bug bounty process, together with the corresponding Immunefi platform fee. Motivation A valid submission was received through the Aave Bug Bounty process. The submission relates to GHO and was classified as low severity. It has been validated and is ready for payout. Specification We recom"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Risk Stewards: Cap and IRM Changes on Aave V4 / 2026.10.06",
+      "link": "https://governance.aave.com/t/risk-stewards-cap-and-irm-changes-on-aave-v4-2026-10-06/25791",
+      "date": "2026-10-06T14:59:21.000Z",
+      "summary": "Summary LlamaRisk recommends the following parameter changes based on user behavior, on-chain liquidity, and position health observed in the latest review of Aave V4 reserves. Aave V4 Ethereum: Increase the draw cap for USDT on the Core Hub Ethena Ecosystem Spoke from 1.5M to 3M. Increase the add cap for USDT on the Core Hub Main Spoke from 28M to 40M. Increase the draw cap for USDT on the Core Hu"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[Discussion] A second, issuer-controlled verifier for cross-chain GHO on CCIP 2.0",
+      "link": "https://governance.aave.com/t/discussion-a-second-issuer-controlled-verifier-for-cross-chain-gho-on-ccip-2-0/25771",
+      "date": "2026-10-04T12:26:31.000Z",
+      "summary": "Hi everyone, Cross-chain GHO runs on Chainlink CCIP: GHO is locked on Ethereum and minted through facilitators on other chains. CCIP 2.0, live since September 28, now lets a token pool require additional verifiers on top of Chainlink’s committee. We built Countersign. Countersign is an issuer-operated Cross-Chain Verifier (CCV) for Chainlink CCIP 2.0 that runs as a CRE workflow, so there are no se"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[ARFC] The Aave Foundation, Phase 1",
+      "link": "https://governance.aave.com/t/arfc-the-aave-foundation-phase-1/25756",
+      "date": "2026-10-02T16:10:53.000Z",
+      "summary": "Summary This ARFC seeks to establish the Aave Foundation, a memberless Cayman Islands foundation company created to hold title to the Aave trademark and related intellectual property for the benefit of the Aave Protocol. Formation is the first of several phases. This proposal covers Phase 1 only, which provides for the incorporation of the entity and the appointment of its initial independent dire"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[GHO Stewards] October 2026 - GHO Borrow Rate Update",
+      "link": "https://governance.aave.com/t/gho-stewards-october-2026-gho-borrow-rate-update/25754",
+      "date": "2026-10-02T15:21:26.000Z",
+      "summary": "title: [GHO Stewards] October 2026 - GHO Borrow Rate Update author: @TokenLogic created: 2026-10-02 Summary We propose increasing the GHO borrow rate on Aave V3 Ethereum Core from 4.25% to 4.50% APR and the GHO base rate on Ethereum Prime from 2.75% to 3.00%. The Core rate will match the Aave Savings Rate, while Prime will retain the 25 bps discount to Core at optimal utilization established in Au"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Risk Stewards: Cap and IRM Changes on Aave V3 / 2026.10.01",
+      "link": "https://governance.aave.com/t/risk-stewards-cap-and-irm-changes-on-aave-v3-2026-10-01/25747",
+      "date": "2026-10-01T20:12:26.000Z",
+      "summary": "Summary LlamaRisk recommends the following parameter changes based on user behavior, on-chain liquidity, and position health observed in the latest review of Aave V3 reserves. Aave V3 X Layer: Decrease Slope 2 for USDC from 40.00% to 20.00%. Aave V3 Gnosis: Reduce supply cap for sDAI from 20M to 5M. Reduce supply cap for WXDAI from 4M to 1M. Reduce borrow cap for WXDAI from 3.7M to 500K. USDC Inte"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "AL Development Update | September 2026",
+      "link": "https://governance.aave.com/t/al-development-update-september-2026/25744",
+      "date": "2026-10-01T13:33:00.000Z",
+      "summary": "Greetings, Aave community! Aave Labs has continued to make steady progress across multiple protocol initiatives in line with its service provider scope. During September, Aave V4 expanded to two new networks and surpassed $1B in deposits, while work advanced across risk management, integrations, technical assessments, governance, and product development. The update below reflects Aave Labs’ transp"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[ARFC] Onboard OUSD to Aave V3 Core Instance and Aave V4 Core Hub",
+      "link": "https://governance.aave.com/t/arfc-onboard-ousd-to-aave-v3-core-instance-and-aave-v4-core-hub/25735",
+      "date": "2026-09-30T15:11:10.000Z",
+      "summary": "Author: Aave Labs Date: 9/30/26 Summary This ARFC proposes onboarding Open USD (OUSD), a USD-backed stablecoin issued by Open Standard, to the Aave V3 Core Instance on Ethereum and to the Aave V4 Core Hub on Ethereum. At launch, OUSD is proposed as a supply and borrow asset only, with collateral usage disabled on both deployments. Collateral enablement, higher caps, and E-Mode or additional Spoke "
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[Direct-to-AIP] Onboard PT-USDG-25FEB2027 on X Layer",
+      "link": "https://governance.aave.com/t/direct-to-aip-onboard-pt-usdg-25feb2027-on-x-layer/25733",
+      "date": "2026-09-30T11:29:39.000Z",
+      "summary": "title: [Direct-To-AIP] Onboard PT-USDG-25FEB2027 on X Layer author: @TokenLogic created: 2026-09-26 Summary We propose listing PT-USDG-25FEB2027 on Aave V3 X Layer and adding it as collateral to E-Mode #7 , alongside PT-USDG-29OCT2026. Both maturities would be available in the same E-Mode so OKX can build a rollover flow that lets users move to the new PT in a single transaction while keeping thei"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[Question] Any idea what happened here?",
+      "link": "https://governance.aave.com/t/question-any-idea-what-happened-here/25730",
+      "date": "2026-09-30T05:18:09.000Z",
+      "summary": "[Question] Any idea what happened here? Why the service provider expense rose sharply almost 3X from previous Quarters? 5 posts - 2 participants Read full topic"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Syrup USDC (syrupUSDC) on Aave Arc Assessments",
+      "link": "https://governance.aave.com/t/syrup-usdc-syrupusdc-on-aave-arc-assessments/25729",
+      "date": "2026-09-29T16:08:53.000Z",
+      "summary": "This thread is the home for all risk and technical assessments of Syrup USDC (syrupUSDC) on Aave Arc. It collects, in one place: The pre-listing asset risk assessment, under the Aave Risk Framework. The pre-listing technical asset assessment, under the Technical Asset Listing Framework. All post-listing monitoring reports, periodic refresh assessments, and any re-evaluations triggered by material "
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[Discussion] A risk framework for tokenized equities on Aave V3 X Layer, with wTCENTx as the worked example",
+      "link": "https://governance.aave.com/t/discussion-a-risk-framework-for-tokenized-equities-on-aave-v3-x-layer-with-wtcentx-as-the-worked-example/25724",
+      "date": "2026-09-28T22:02:01.000Z",
+      "summary": "Summary Aave V3 on X Layer holds no tokenized equities, and as far as we can find, no xStock has been proposed on this instance. The tokenized-equity work in front of Aave governance is on another instance: the Coinbase B20 Equities Hub proposed for Aave V4 on Base ( ARFC ). Earlier, Backed’s bCSPX was proposed for Aave V3 Gnosis in 2025 ( ARFC ) and has not been listed. This post does not ask for"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[ARFC] Sentora Externally Curated Hub & Spoke Framework on Aave V4",
+      "link": "https://governance.aave.com/t/arfc-sentora-externally-curated-hub-spoke-framework-on-aave-v4/25723",
+      "date": "2026-09-28T20:26:30.000Z",
+      "summary": "[ARFC] Sentora Externally Curated Hub & Spoke Framework on Aave V4 Summary This ARFC establishes a framework for Sentora to operate Hub and Spoke instances on Aave V4, and authorises the first instance on Ethereum. Hub and Spoke instances deployed under this framework are externally curated instances, independently managed by Sentora, which holds curation over collateral selection, risk parameters"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[ARFC] Deploy Aave V4 on the Monad Network",
+      "link": "https://governance.aave.com/t/arfc-deploy-aave-v4-on-the-monad-network/25722",
+      "date": "2026-09-28T16:23:34.000Z",
+      "summary": "title: [ARFC] Deploy Aave V4 on the Monad Network author: @TokenLogic created: 2026-09-11 Summary This proposal recommends deploying an Aave V4 instance on the Monad Network, with an initial market structure designed to support tokenized equities and cash equivalent assets. The proposed instance would use a hub and spoke architecture to separate assets according to their underlying risk profiles w"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[ARFC] Onboard syrupUSDC to Aave V4 on Arc",
+      "link": "https://governance.aave.com/t/arfc-onboard-syrupusdc-to-aave-v4-on-arc/25721",
+      "date": "2026-09-28T16:15:48.000Z",
+      "summary": "Summary This proposal seeks to onboard syrupUSDC to Aave V4 on Arc. Final asset configuration will be determined by the Risk Service Providers. Motivation syrupUSDC is Maple Finance’s yield-bearing USDC token. It represents a deposit in Maple’s lending infrastructure while remaining transferable. Onboarding syrupUSDC would: Add a yield-bearing USDC asset to Aave V4 on Arc. Extend syrupUSDC’s avail"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Risk Stewards: Cap and IRM Changes on Aave V3 / 2026.09.28",
+      "link": "https://governance.aave.com/t/risk-stewards-cap-and-irm-changes-on-aave-v3-2026-09-28/25718",
+      "date": "2026-09-28T15:27:24.000Z",
+      "summary": "Summary LlamaRisk recommends the following parameter changes based on user behavior, on-chain liquidity, and position health observed in the latest review of Aave V3 reserves. Increase the supply cap for JAAA on Aave V3 Horizon from 50M to 60M. Increase the optimal utilization for USDT on Aave V3 Core from 93.00% to 94.00%. Increase the USDe base rate from 6.30% to 6.60% on Aave V3 Core, Avalanche"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[RECOVERY REQUEST] Accidental transfer of 83.71815 UNI to AAVE Token contract on BNB Chain",
+      "link": "https://governance.aave.com/t/recovery-request-accidental-transfer-of-83-71815-uni-to-aave-token-contract-on-bnb-chain/25702",
+      "date": "2026-09-25T11:33:33.000Z",
+      "summary": "Hello Aave Governance, Following the guidance received from Aave Labs Support, I would like to register my case for consideration in a future Aave Rescue Mission. On December 10, 2024, I accidentally transferred 83.71815 UNI directly to the Aave Token contract on BNB Smart Chain. Transaction details: Network: BNB Smart Chain Transaction Hash: 0x612b90c33aba21365d8c948d2ad91a6bf2ce14dd8297c1bca676e"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[Direct-To-AIP] Onboard PT-AUSD-17DEC2026 to Aave V3 Monad Instance",
+      "link": "https://governance.aave.com/t/direct-to-aip-onboard-pt-ausd-17dec2026-to-aave-v3-monad-instance/25701",
+      "date": "2026-09-25T10:10:13.000Z",
+      "summary": "title: [Direct-To-AIP] Onboard PT-AUSD-17DEC2026 to Aave V3 Monad Instance author: @TokenLogic created: 2026-09-25 Summary This proposal lists PT-AUSD-17DEC2026 on Aave V3 Monad ahead of the existing PT-AUSD maturity on 8 October 2026. The December PT would launch with the same risk parameters used for the October listing, with borrowing disabled and collateral use limited to a dedicated stablecoi"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[Direct-To-AIP] Umbrella - Renew Allowances",
+      "link": "https://governance.aave.com/t/direct-to-aip-umbrella-renew-allowances/25700",
+      "date": "2026-09-25T10:08:57.000Z",
+      "summary": "title: [Direct-To-AIP] Umbrella - Renew Allowances author: @TokenLogic created: 2026-09-25 Summary This proposal renews the Ethereum Collector’s allowances to the Umbrella RewardsController for the current reward period, ending on 2 December 2026. The proposed allowances are 500,000 aEthUSDT, 475,000 aEthUSDC and 160 aEthWETH, covering unclaimed rewards and the remaining emissions. Motivation Umbr"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[RECOVERY REQUEST] Accidental USDT Transfer to AAVE Address on Arbitrum",
+      "link": "https://governance.aave.com/t/recovery-request-accidental-usdt-transfer-to-aave-address-on-arbitrum/25693",
+      "date": "2026-09-24T14:59:58.000Z",
+      "summary": "Hello Aave Governance, I would like to register my case for consideration in a future Aave Rescue Mission. I accidentally transferred 1070.21 USDT on Arbitrum from my Bitget exchange account directly to the following address: Transaction Hash: 0x4486ddff52fe1c12976743a853b3470c08f0bb80d2ac8e1d5747905339fa6ba1 Network: Arbitrum One Token: USDT Amount: 10 USDT Recipient Address: 0x7fc66500c84a76ad7e"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "[ARFC] Aave Institutional",
+      "link": "https://governance.aave.com/t/arfc-aave-institutional/25692",
+      "date": "2026-09-24T13:21:20.000Z",
+      "summary": "Summary Aave Institutional is the DAO’s offchain over-collateralised lending business. It lends dollar stablecoins to institutional borrowers against BTC and ETH held at qualified custodians, at rates materially above what the same dollars earn onchain. Aave Labs asks the DAO to approve two funding sources for this new business, running in parallel: A new GHO facilitator with an initial bucket cap"
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "How Aave Stable Vaults work",
+      "link": "https://governance.aave.com/t/how-aave-stable-vaults-work/25691",
+      "date": "2026-09-24T09:42:45.000Z",
+      "summary": "Aave Labs open-sourced the Stable Vaults contracts at aave-dao/stable-vault after the July launch. I spent the last week reading the codebase and the architecture docs and wrote up how the system fits together, since there isn’t a single community-level explainer yet. Corrections welcome a few things below are inferences from the code, and I’ve marked them. Source: GitHub - aave-dao/stable-vault: "
+    },
+    {
+      "source": "Aave governance forum",
+      "kind": "project",
+      "title": "Coinbase B20 Equities on Base Assessments",
+      "link": "https://governance.aave.com/t/coinbase-b20-equities-on-base-assessments/25690",
+      "date": "2026-09-24T09:10:16.000Z",
+      "summary": "This thread is the home for all risk and technical assessments of Coinbase B20 tokenized equities on Aave V4 Base. It collects, in one place: The pre-listing asset risk assessment, under the Aave Risk Framework. The pre-listing technical asset assessment, under the Technical Asset Listing Framework. All post-listing monitoring reports, periodic refresh assessments, and any re-evaluations triggered"
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Here’s what happened in crypto today",
+      "link": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-11T12:45:00.000Z",
+      "summary": "Need to know what happened in crypto today? Here is the latest news on daily trends and events impacting Bitcoin price, blockchain, DeFi, Web3 and crypto regulation."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Coldcard says it’s investigating how phishing link appeared on its X account",
+      "link": "https://cointelegraph.com/news/coldcard-says-its-investigating-how-phishing-link-appeared-on-its-x-account?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-11T10:22:44.000Z",
+      "summary": "Company advised users not to visit or interact with the link in question and said it will share any further verified updates."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Ledger confirms unauthorized hardware implant; losses may exceed $86M",
+      "link": "https://cointelegraph.com/news/ledger-confirms-unauthorized-hardware-implant-losses-may-exceed-86m?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-11T09:01:51.000Z",
+      "summary": "Ledger said the incident appeared to be isolated to a single reseller and its Southeast Asian market."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "CFTC proposals aimed at separating prediction markets from casino gambling",
+      "link": "https://cointelegraph.com/news/cftc-proposals-aimed-at-separating-prediction-markets-from-casino-gambling?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-11T07:44:51.000Z",
+      "summary": "The two measures attempt to set the stage for a potential US Supreme Court battle over federal and state jurisdiction."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Justin Sun says Tron’s post-quantum cryptography has gone live on testnet",
+      "link": "https://cointelegraph.com/news/justin-sun-says-trons-post-quantum-cryptography-has-gone-live-on-testnet?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-10T11:52:14.000Z",
+      "summary": "“We’re ready to bring quantum resistance to mainnet at any time,” Sun said in a post on X."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Tech chief says EU can fend off rogue AI risk: Report",
+      "link": "https://cointelegraph.com/news/tech-chief-says-eu-can-fend-off-rogue-ai-risk-report?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-10T08:41:06.000Z",
+      "summary": "There are global concerns following incidents at OpenAI ‌and Anthropic, and fears have arisen that rogue AI agents may venture beyond human control."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Sam Altman-backed Bitcoin life insurer, Meanwhile, raises more funds",
+      "link": "https://cointelegraph.com/news/sam-altman-backed-bitcoin-life-insurer-meanwhile-raises-more-funds?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-10T07:10:43.000Z",
+      "summary": "The round follows increased international demand for Meanwhile’s Bitcoin life insurance policies amid broader macro instability."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "US plans to seize $1B in crypto linked to Iran this week: Scott Bessent",
+      "link": "https://cointelegraph.com/news/scott-bessent-us-seize-crypto-iran-sanctions?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T20:39:17.000Z",
+      "summary": "The Treasury Department has announced several digital asset seizures related to sanctions on Iran as part of US sanctions."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "New York permanently bars Celsius founder Mashinsky in $35M fraud settlement",
+      "link": "https://cointelegraph.com/news/celsius-founder-alex-mashinsky-permanently-banned-from-crypto-industry-in-ny-settlement?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T20:14:02.000Z",
+      "summary": "The agreement resolves a 2023 civil fraud lawsuit against the Celsius founder and permanently bars him from the cryptocurrency, securities and commodities industries."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "THORChain exec accuses Tether of temporarily freezing USDT vaults",
+      "link": "https://cointelegraph.com/news/thorchain-tether-freezing-usdt-addresses?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T19:04:03.000Z",
+      "summary": "Chad Barraford, technical co-founder of the network, said that the funds were frozen and then unfrozen without explanation."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "HSBC, Ant Digital test AI-agent payments using tokenized deposits",
+      "link": "https://cointelegraph.com/news/hsbc-ant-digital-test-ai-agent-payments-using-tokenized-deposits?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T17:21:07.000Z",
+      "summary": "The technical trial showed how AI agents could discover services and make micropayments using HSBC’s tokenized deposits, with real-time settlement and risk checks."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Ledger investigates fund losses linked to Southeast Asian reseller, warns users",
+      "link": "https://cointelegraph.com/news/ledger-investigates-fund-losses-linked-to-southeast-asian-reseller-warns-users?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T17:02:47.000Z",
+      "summary": "Hardware wallet maker Ledger probes losses tied to reseller CryptoBilis, as researchers separately estimate more than $72 million to $86 million in suspected crypto thefts."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Blockchain.com pursues CFTC approval for prediction markets: CNBC",
+      "link": "https://cointelegraph.com/news/blockchain-cftc-approval-derivatives-prediction-markets?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T16:22:45.000Z",
+      "summary": "The crypto company has reportedly applied for two licenses with the US commodities regulatory as the courts weigh prediction markets cases."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Crypto Biz: Wealthy investors are buying crypto, but their advisers aren’t sold",
+      "link": "https://cointelegraph.com/news/wealthy-investors-crypto-advisers-okx-strategy-buybacks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T15:51:53.000Z",
+      "summary": "Wealthy investors are embracing crypto faster than their advisers, while OKX attracts new funding and Strategy shifts more capital toward preferred stock buybacks."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Bitcoin consolidates near $82.5K as crypto weathers Ledger theft reports",
+      "link": "https://cointelegraph.com/markets/bitcoin-consolidates-crypto-weathers-ledger-theft-reports?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T15:20:36.000Z",
+      "summary": "Bitcoin and crypto markets eyed a recovery from Thursday’s drop despite concerns of another hardware wallet exploit."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Dragonfly partner rejects ‘bunker mode’ doomerism, calls for proactive blockchain measures",
+      "link": "https://cointelegraph.com/news/dragonfly-bunker-mode-doomerism-proactive-blockchain-measures?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T13:49:22.000Z",
+      "summary": "Dragonfly’s Qureshi argued that asset migration is not a real solution in case of AI models breaking cryptographic signatures, and urged blockchains to adopt proactive measures."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "France is world’s most dangerous place for Bitcoiners: 90 attacks in 7 months",
+      "link": "https://cointelegraph.com/magazine/france-is-worlds-most-dangerous-place-for-bitcoiners-90-attacks-in-7-months?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T13:30:00.000Z",
+      "summary": "French authorities recorded 90 crypto-related cases involving kidnapping, extortion, threats and violent theft in seven months. What makes France such a hotspot?"
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "ESMA seeks evidence tokenized collateral can be cashed out in crisis",
+      "link": "https://cointelegraph.com/news/esma-tokenized-collateral-eu-clearinghouses?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T10:49:24.000Z",
+      "summary": "ESMA is seeking industry feedback on the legal, liquidity and operational risks of tokenized collateral before deciding whether additional EU regulatory measures are necessary."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "UK sanctions three crypto exchanges tied to Russian illicit funds",
+      "link": "https://cointelegraph.com/news/uk-sanctions-crypto-exchanges-russian-illicit-funds?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T10:34:37.000Z",
+      "summary": "The UK sanctioned crypto exchanges and payment processors, some of which were tied to thousands of Russian entities and the sanctioned HTX exchange."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "French lawmakers back stablecoin swap tax in 2027 budget bill",
+      "link": "https://cointelegraph.com/news/france-crypto-stablecoin-swap-tax-2027-budget?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T10:16:48.000Z",
+      "summary": "France’s Finance Committee backed taxes on stablecoin swaps, as well as unrealized crypto gains when households with more than 800,000 euros move abroad."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Bitcoin speculators move 55K BTC to exchanges amid $1.1B liquidations",
+      "link": "https://cointelegraph.com/markets/bitcoin-speculators-btc-exchanges-crypto-liquidation?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T09:50:01.000Z",
+      "summary": "Bitcoin dipped below $81,000, sparking mass crypto liquidations as traders sent BTC to exchanges at a loss."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Bitcoin, Ether ETFs’ October outflows swell toward $1B",
+      "link": "https://cointelegraph.com/markets/bitcoin-ether-etfs-october-outflows-billion?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T07:34:44.000Z",
+      "summary": "Bitcoin ETFs lost $244 million on Thursday, while Ether funds extended their outflow streak to eight sessions, shedding $641 million."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Crypto projects apply for Anthropic’s new frontier AI security scanner",
+      "link": "https://cointelegraph.com/news/crypto-projects-apply-for-anthropics-new-frontier-ai-security-scanner?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T05:34:33.000Z",
+      "summary": "Anthropic’s new opt-in service promises vulnerability reports from its strongest AI models, including Claude Mythos."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Trump administration outlines quantum, AI initiatives in $6B science push",
+      "link": "https://cointelegraph.com/news/trump-administration-quantum-computing-ai-6-billion-science-push?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T05:25:27.000Z",
+      "summary": "The White House outlined a $215 million quantum computing competition and $2.4 billion in AI industry commitments as concerns grow over quantum threats to cryptocurrency security."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Thailand finalizes rules paving way for Bitcoin, Ether ETFs",
+      "link": "https://cointelegraph.com/news/thailand-finalizes-rules-paving-way-for-bitcoin-ether-etfs?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T03:08:51.000Z",
+      "summary": "The rules are set to take effect next week, allowing crypto ETFs to trade exclusively on the Stock Exchange of Thailand."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Cantor Fitzgerald faces Senate Democrat’s questions over Tether ties",
+      "link": "https://cointelegraph.com/news/cantor-fitzgerald-faces-senate-democrats-probe-over-tether-ties?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-09T00:46:27.000Z",
+      "summary": "The letter follows a report by the Democratic investigators last month alleging Tether’s USDT has become a key tool for Iran’s shadow banking network."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "China’s P2P stablecoin wallets surge 43x, Korea’s $450B crypto economy: Asia Express",
+      "link": "https://cointelegraph.com/magazine/chinas-p2p-stablecoin-wallets-surge-43x-koreas-450b-crypto-economy-asia-express?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-08T22:35:00.000Z",
+      "summary": "Despite ongoing bans, China has seen a big surge in peer-to-peer stablecoin use. New figures show South Korea’s $450B crypto economy is the largest in East Asia."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Securitize stock jumps over 10% after launching tokenized US equities on Solana",
+      "link": "https://cointelegraph.com/news/securitize-stock-jumps-launching-tokenized-us-equities-solana?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-08T19:31:38.000Z",
+      "summary": "Securitize’s new offering gives eligible investors access to tokenized shares of 12 US companies, with dividend and voting rights and plans for round-the-clock trading."
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "NFL backs New Jersey authorities in SCOTUS petition over Kalshi",
+      "link": "https://cointelegraph.com/news/nfl-new-jersey-supreme-court-kalshi?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-08T19:17:18.000Z",
+      "summary": "According to the league, Kalshi and other prediction markets “threaten game integrity” because many event contracts are “highly susceptible to manipulation.”"
+    },
+    {
+      "source": "Cointelegraph",
+      "kind": "crypto",
+      "title": "Netflix drops trailer for series based on FTX’s SBF and Caroline Ellison",
+      "link": "https://cointelegraph.com/news/netflix-series-ftx-sam-bankman-fried-caroline-ellison?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "date": "2026-10-08T18:17:35.000Z",
+      "summary": "Sam Bankman-Fried remains in federal prison following his 2023 conviction, while Caroline Ellison was released in January."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "IMF finds demand for tokenized stocks, says the market is still volatile, illiquid",
+      "link": "https://www.coindesk.com/business/2026/10/11/imf-finds-demand-for-tokenized-stocks-says-the-market-is-still-volatile-illiquid",
+      "date": "2026-10-11T13:00:00.000Z",
+      "summary": "Investors are using blockchain-based shares for smaller and after-hours trades. The IMF says liquidity, legal rules and settlement systems have not caught up."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "One year after 10/10 flash crash, bitcoin and ether liquidity have rebuilt, but altcoins still face risks",
+      "link": "https://www.coindesk.com/markets/2026/10/10/one-year-after-10-10-bitcoin-and-ether-liquidity-have-rebuilt-but-other-altcoins-still-face-risks",
+      "date": "2026-10-10T12:00:00.000Z",
+      "summary": "Bitcoin and ether order books are deeper than before the crash, while altcoin liquidity keeps eroding and spot trading remains well below its October 2025 peak."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Tokenized commodities look beyond gold as lending and oil open new markets",
+      "link": "https://www.coindesk.com/business/2026/10/05/tokenized-commodities-look-beyond-gold-as-lending-and-oil-open-new-markets",
+      "date": "2026-10-10T12:00:00.000Z",
+      "summary": "Paxos Labs, Theo and Energy Substantiation execs see growth coming from putting physical assets to work, with precious metals leading and energy presenting a tougher test."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Bitcoin's $19 billion wake-up call: One-year after flash crash, has crypto learned anything?",
+      "link": "https://www.coindesk.com/markets/2026/10/10/bitcoin-s-usd19-billion-wake-up-call-one-year-later-has-crypto-learned-anything",
+      "date": "2026-10-10T11:00:00.000Z",
+      "summary": "The Oct. 10, 2025 flash crash wiped out billions in leveraged crypto bets. Traders now have better tools to spot risks, but the forces behind the selloff remain."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Bitcoin's volatility has plunged, but extreme price swings are more frequent than in 2018",
+      "link": "https://www.coindesk.com/markets/2026/10/09/bitcoin-s-volatility-has-plunged-but-extreme-price-swings-are-more-frequent-than-in-2018",
+      "date": "2026-10-10T05:43:00.000Z",
+      "summary": "CoinDesk analysis finds 10 unusually large trading days in 2026, raising questions about how investors measure risk in an increasingly institutional crypto market."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Robinhood Chain slowdown spreads from fees to trading as transactions fall more than 40%",
+      "link": "https://www.coindesk.com/markets/2026/10/10/robinhood-chain-slowdown-spreads-from-fees-to-trading-as-transactions-fall-more-than-40",
+      "date": "2026-10-10T04:44:35.000Z",
+      "summary": "Daily activity has dropped from 10.8 million transactions to 6.2 million since mid-September even as Robinhood keeps paying network fees on customer swaps."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "XRP Ledger patched decade-old bug that could create billions of dollars in XRP from nothing",
+      "link": "https://www.coindesk.com/tech/2026/10/10/xrp-ledger-patched-decade-old-bug-that-could-create-billions-of-dollars-in-xrp-from-nothing",
+      "date": "2026-10-10T04:20:07.000Z",
+      "summary": "Researchers demonstrated how a payment could create spendable XRP without the sender funding it, prompting an emergency software release."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Visa survey says nearly half of APAC consumers open to using stablecoins by 2031",
+      "link": "https://www.coindesk.com/business/2026/10/05/1-2-billion-apac-consumers-could-adopt-stablecoins-by-2031-according-to-visa",
+      "date": "2026-10-10T03:00:00.000Z",
+      "summary": "Visa’s survey of 14,250 people found interest in stablecoin payments is growing, though only 6% of respondents correctly understood how they work."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "U.S. CFTC moves to fold event contracts into swaps regulations as legal fight rages",
+      "link": "https://www.coindesk.com/policy/2026/10/09/u-s-cftc-moves-to-fold-event-contracts-into-swaps-regulations-as-legal-fight-rages",
+      "date": "2026-10-09T21:21:54.000Z",
+      "summary": "The derivatives regulator is proposing a formal rule to include certain contracts traded on platforms like Kalshi's as swaps that require the agency's oversight."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Robinhood Chain considers technology that gives paying traders priority",
+      "link": "https://www.coindesk.com/business/2026/10/09/robinhood-chain-considers-technology-that-gives-paying-traders-priority",
+      "date": "2026-10-09T18:11:00.000Z",
+      "summary": "Arbitrum recently replaced its Timeboost transaction-ordering system with a new model called Priority Gas Auctions."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "New York AG secures up to $35 million and lifetime crypto ban from Celsius’ Alex Mashinsky",
+      "link": "https://www.coindesk.com/policy/2026/10/09/new-york-ag-secures-up-to-usd35-million-and-lifetime-crypto-ban-from-celsius-alex-mashinsky",
+      "date": "2026-10-09T14:55:23.000Z",
+      "summary": "Alex Mashinsky, already serving 12 years for fraud, settled New York’s civil case over claims he misled Celsius customers about the failed crypto lender’s safety."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Ledger investigates potential wallet tampering after reports of $86 million in crypto stolen",
+      "link": "https://www.coindesk.com/business/2026/10/09/ledger-investigates-potential-wallet-tampering-after-reports-of-usd86-million-in-crypto-stolen",
+      "date": "2026-10-09T14:47:27.000Z",
+      "summary": "The hardware wallet maker said it is investigating devices sold by a Southeast Asian reseller as social posts swirl about crypto assets drained from Bitcoin, Ethereum and Tron addresses."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "DWF Labs subsidiaries sue BitGo for $141 million over alleged token lock-up breach",
+      "link": "https://www.coindesk.com/policy/2026/10/09/dwf-labs-subsidiaries-sue-bitgo-for-usd141-million-over-alleged-token-lock-up-breach",
+      "date": "2026-10-09T12:23:54.000Z",
+      "summary": "DWF is seeking $114 million in damages on the basis BitGo’s token sales resulted in direct losses through the fall in tokens' prices."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Zcash developers set January target for quantum-resistant payments after ‘bunker mode’ scare",
+      "link": "https://www.coindesk.com/tech/2026/10/09/zcash-developers-set-january-target-for-quantum-resistant-payments-after-bunker-mode-scare",
+      "date": "2026-10-09T11:39:05.000Z",
+      "summary": "The plan concerns public payments, where about seven in 10 ZEC sit. A separate wallet tool would keep balance checks from revealing which addresses belong together."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Trump's Iran pledge underpins crypto gains as bitcoin bears face liquidation pressure",
+      "link": "https://www.coindesk.com/daybook-us/2026/10/09/trump-s-iran-pledge-underpins-crypto-gains-as-bitcoin-bears-face-liquidation-pressure",
+      "date": "2026-10-09T11:09:04.000Z",
+      "summary": "Your day-ahead look for Oct. 9, 2026"
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Bitcoin steadies near $82,500 after Trump rules out Iran strike before midterms",
+      "link": "https://www.coindesk.com/markets/2026/10/09/bitcoin-steadies-near-usd82-500-after-trump-rules-out-iran-strike-before-midterms",
+      "date": "2026-10-09T10:44:22.000Z",
+      "summary": "Bitcoin recovered to around $82,500 after Trump ruled out an Iran strike, but remains about 4% lower on the week, while ether has lost 9%."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Thailand opens door to locally listed bitcoin and ether ETFs",
+      "link": "https://www.coindesk.com/policy/2026/10/09/thailand-opens-door-to-locally-listed-bitcoin-and-ether-etfs",
+      "date": "2026-10-09T10:16:55.000Z",
+      "summary": "Thailand’s new crypto rules taking effect Oct. 16. They allow Thai asset managers to launch crypto ETFs on the local stock exchange, with bitcoin and ether initially eligible."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "UK slaps sanctions on three crypto exchanges over alleged Russia links",
+      "link": "https://www.coindesk.com/policy/2026/10/09/uk-slaps-sanctions-on-three-crypto-exchanges-over-alleged-russia-links",
+      "date": "2026-10-09T10:14:59.000Z",
+      "summary": "Britain said the crypto platforms and two payment services may have helped Russia evade financial sanctions, with two handling transactions involving the Kremlin-backed A7 network."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Dark web drug market operator sentenced to 40 years, forfeits $101 million in bitcoin",
+      "link": "https://www.coindesk.com/policy/2026/10/09/dark-web-drug-market-operator-forfeits-1-230-bitcoin-and-faces-40-years-in-prison",
+      "date": "2026-10-09T09:20:16.000Z",
+      "summary": "A man from Virginia, who facilitated millions of drug transactions worth roughly $430 million, agreed to give up $100 million worth of BTC. His partner forfeited nearly 1,600 BTC."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "MARA transfers $81.1 million in bitcoin to Galaxy Digital as strategy pivots to AI",
+      "link": "https://www.coindesk.com/markets/2026/10/09/mara-transfers-usd81-1-million-in-bitcoin-to-galaxy-digital-as-strategy-pivots-to-ai",
+      "date": "2026-10-09T09:08:09.000Z",
+      "summary": "The bitcoin miner’s transfer does not confirm a sale, but comes as its treasury has fallen from 53,822 BTC in February to 35,577 BTC in August."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Sam Altman-backed bitcoin insurer Meanwhile secures $37.5 million in Bain Capital Crypto-led round",
+      "link": "https://www.coindesk.com/business/2026/10/09/sam-altman-backed-bitcoin-insurer-meanwhile-secures-usd37-5-million-in-bain-capital-crypto-led-round",
+      "date": "2026-10-09T09:06:00.000Z",
+      "summary": "Meanwhile has signed 15 brokers serving high-net worth clients across markets iSwitzerland, Singapore, Hong Kong and the UAE."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Live updates: Bitcoin slips from day's highs, set to close week with a loss",
+      "link": "https://www.coindesk.com/business/2026/10/09/live-updates-xrp-etfs-the-only-ones-in-green-as-btc-eth-zec-funds-post-outflows",
+      "date": "2026-10-09T06:51:32.000Z",
+      "summary": "Bitcoin ETFs lost $244 million on Thursday and the ZEC fund extended a run of October outflows. Bitcoin is back near $82,000 after a $1 billion liquidation."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "New tech to power bitcoin lending is set to debut with $500 million in commitments",
+      "link": "https://www.coindesk.com/markets/2026/10/09/new-tech-to-power-bitcoin-lending-is-set-to-debut-with-usd500-million-in-commitments",
+      "date": "2026-10-09T06:40:54.000Z",
+      "summary": "Layer-1 blockchain Sui is launching Hashi, an institutional protocol allowing holders to use bitcoin as collateral without moving it off the Bitcoin network."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "Solana is about to halve its block times as final 200-millisecond upgrade nears",
+      "link": "https://www.coindesk.com/tech/2026/10/09/solana-is-about-to-halve-its-block-times-as-final-200-millisecond-upgrade-nears",
+      "date": "2026-10-09T05:00:52.000Z",
+      "summary": "The network is completing a seven-week push to produce blocks twice as frequently, though validators face higher costs and tighter operating windows."
+    },
+    {
+      "source": "CoinDesk",
+      "kind": "crypto",
+      "title": "XRP Ledger adds new controls for banks, stablecoins and tokenized funds",
+      "link": "https://www.coindesk.com/tech/2026/10/09/xrp-ledger-adds-new-controls-for-banks-stablecoins-and-tokenized-funds",
+      "date": "2026-10-09T04:21:36.000Z",
+      "summary": "The feature lets businesses give separate accounts limited powers such as approving customers or making payments, while keeping the keys that control their main holdings offline."
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
+      "date": "2026-10-09T14:00:00.000Z",
+      "summary": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261008a.htm",
+      "date": "2026-10-08T20:30:00.000Z",
+      "summary": "Federal Reserve Board announces enforcement action against American Express Company to address, among other things, the firm’s failure to sufficiently detect and report certain suspicious activity related to money laundering"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261007a.htm",
+      "date": "2026-10-07T18:00:00.000Z",
+      "summary": "Minutes of the Federal Open Market Committee, September 15-16, 2026"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board announces approval of application by Isabella Bank Corporation",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261005a.htm",
+      "date": "2026-10-05T20:30:00.000Z",
+      "summary": "Federal Reserve Board announces approval of application by Isabella Bank Corporation"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+      "date": "2026-10-02T20:45:00.000Z",
+      "summary": "Federal Reserve Board announces approval of application by Fleur Capital Corporation"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+      "date": "2026-10-02T20:00:00.000Z",
+      "summary": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+      "date": "2026-10-02T15:00:00.000Z",
+      "summary": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc."
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+      "date": "2026-09-30T13:00:00.000Z",
+      "summary": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Agencies publish resolution plan feedback letters for 15 banking organizations",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260929a.htm",
+      "date": "2026-09-29T20:00:00.000Z",
+      "summary": "Agencies publish resolution plan feedback letters for 15 banking organizations"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260925a.htm",
+      "date": "2026-09-25T20:30:00.000Z",
+      "summary": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc."
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+      "date": "2026-09-24T18:30:00.000Z",
+      "summary": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
+      "date": "2026-09-24T15:00:00.000Z",
+      "summary": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+      "date": "2026-09-22T20:30:00.000Z",
+      "summary": "Federal Reserve Board announces approval of application by BancFirst Corporation"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918b.htm",
+      "date": "2026-09-18T15:00:00.000Z",
+      "summary": "Federal Reserve Board announces termination of enforcement action with SNB Bancshares and Bank of Eufaula"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260918a.htm",
+      "date": "2026-09-18T15:00:00.000Z",
+      "summary": "Federal Reserve Board issues enforcement actions with former employee of Northstar Bank, former employee of American Express Travel Related Services Company, Inc., and former employee of Regions Bank"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve issues FOMC statement",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+      "date": "2026-09-16T18:00:00.000Z",
+      "summary": "Federal Reserve issues FOMC statement"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916b.htm",
+      "date": "2026-09-16T18:00:00.000Z",
+      "summary": "Federal Reserve Board and Federal Open Market Committee release economic projections from the September 15-16 FOMC meeting"
+    },
+    {
+      "source": "Federal Reserve",
+      "kind": "macro",
+      "title": "Agencies seek comment on proposed third-party risk management guidance and issue statement on community bank engagement with core service providers",
+      "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260911a.htm",
+      "date": "2026-09-11T14:00:00.000Z",
+      "summary": "Agencies seek comment on proposed third-party risk management guidance and issue statement on community bank engagement with core service providers"
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "China, EU strike deal to cut Chinese hybrid vehicle exports by over half",
+      "link": "https://www.investing.com/news/economic-indicators/china-eu-strike-deal-to-cut-chinese-hybrid-vehicle-exports-by-over-half-4941416",
+      "date": "2026-10-09T11:48:43.000Z",
+      "summary": ""
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "Ukraine hits second major tech site, expanding range of targets inside Russia",
+      "link": "https://www.investing.com/news/economic-indicators/ukraine-expands-drone-strikes-on-data-centres-owned-by-russias-yandex-4940686",
+      "date": "2026-10-09T11:36:51.000Z",
+      "summary": ""
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "U.S. consumer sentiment inches lower in October, UMich survey shows",
+      "link": "https://www.investing.com/news/economic-indicators/us-consumer-sentiment-inches-lower-in-october-umich-survey-shows-4941388",
+      "date": "2026-10-09T11:26:31.000Z",
+      "summary": ""
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "Michigan consumer sentiment dips below forecast, signals caution",
+      "link": "https://www.investing.com/news/economic-indicators/michigan-consumer-sentiment-dips-below-forecast-signals-caution-93CH-4941337",
+      "date": "2026-10-09T11:02:07.000Z",
+      "summary": ""
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "World economic growth to slow to 2.6% in 2026, UN trade body says",
+      "link": "https://www.investing.com/news/economic-indicators/world-economic-growth-to-slow-to-26-in-2026-un-trade-body-says-4940451",
+      "date": "2026-10-09T06:07:02.000Z",
+      "summary": ""
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "Italy industrial output dives unexpectedly in August",
+      "link": "https://www.investing.com/news/economic-indicators/italy-industrial-output-dives-unexpectedly-in-august-4940401",
+      "date": "2026-10-09T05:24:37.000Z",
+      "summary": ""
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "Kenya expects budget deficit to rise to 5.9% of GDP in 2027/28",
+      "link": "https://www.investing.com/news/economic-indicators/kenya-expects-budget-deficit-to-rise-to-59-of-gdp-in-202728-4940301",
+      "date": "2026-10-09T05:12:18.000Z",
+      "summary": ""
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "Japan household spending drops slightly less than expected in August",
+      "link": "https://www.investing.com/news/economic-indicators/japan-household-spending-drops-slightly-less-than-expected-in-august-4940019",
+      "date": "2026-10-08T21:00:07.000Z",
+      "summary": ""
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "European industry groups call for urgent EU action on China trade",
+      "link": "https://www.investing.com/news/economic-indicators/european-industry-groups-call-for-urgent-eu-action-on-china-trade-4939861",
+      "date": "2026-10-08T18:30:20.000Z",
+      "summary": ""
+    },
+    {
+      "source": "Investing",
+      "kind": "macro",
+      "title": "EU exec rejects Greek, Italian requests for more fiscal rules flexibility",
+      "link": "https://www.investing.com/news/economic-indicators/eu-exec-rejects-greek-italian-requests-for-more-fiscal-rules-flexibility-4939640",
+      "date": "2026-10-08T16:42:47.000Z",
+      "summary": ""
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "The bull market is turning 4 years old - but yields could crash the party",
+      "link": "https://www.marketwatch.com/story/the-bull-market-is-turning-4-years-old-but-yields-could-crash-the-party-1305fe6c?mod=mw_rss_topstories",
+      "date": "2026-10-11T13:00:00.000Z",
+      "summary": "For four years, tech has been the answer to almost every question about this bull market."
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "‘I feel like a loser’: My stock portfolio is swinging wildly. Is it finally time to worry?",
+      "link": "https://www.marketwatch.com/story/i-feel-like-a-loser-my-etfs-go-up-one-day-and-crash-the-next-is-this-a-bad-sign-0c9848b2?mod=mw_rss_topstories",
+      "date": "2026-10-11T12:30:00.000Z",
+      "summary": "“I presume these are sophisticated investors taking a profit.”"
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "Bank earnings to shed the first light on how higher yields are affecting the economy",
+      "link": "https://www.marketwatch.com/story/bank-earnings-to-shed-the-first-light-on-how-higher-yields-are-affecting-the-economy-cf3763ef?mod=mw_rss_topstories",
+      "date": "2026-10-11T12:00:00.000Z",
+      "summary": "The big banks kick off earnings season on Tuesday, to provide a first read on the health of the economy in a rising-yield environment."
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "‘I have no children’: My aunt gave me $50,000 for a down payment. Now she wants me to leave my home to her two children.",
+      "link": "https://www.marketwatch.com/story/i-have-no-children-my-aunt-gave-me-50-000-for-a-down-payment-she-wants-me-to-leave-my-home-to-her-two-children-24fad94c?mod=mw_rss_topstories",
+      "date": "2026-10-11T12:00:00.000Z",
+      "summary": "“The house cost $385,000. With my savings, her $50,000 and a small mortgage, I was able to close.”"
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "Should I put my nest egg in a 30-year Treasury bond?",
+      "link": "https://www.marketwatch.com/story/should-i-put-my-nest-egg-in-a-30-year-treasury-bond-89db6e09?mod=mw_rss_topstories",
+      "date": "2026-10-10T19:44:00.000Z",
+      "summary": "Risk comes in many forms, even with “safe” investments."
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "Worse than taking away your parents’ car keys? Taking away their cell phone. How to protect your aging parents.",
+      "link": "https://www.marketwatch.com/story/worse-than-taking-away-your-parents-car-keys-taking-away-their-cellphone-how-to-protect-your-aging-parents-f01be6e6?mod=mw_rss_topstories",
+      "date": "2026-10-10T19:44:00.000Z",
+      "summary": "Parental controls aren’t just for kids anymore"
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "These decisions you make in your 20s - not your income - determine whether you’ll spend decades in debt or retire comfortably",
+      "link": "https://www.marketwatch.com/story/these-decisions-you-make-in-your-20s-not-your-income-determine-whether-youll-spend-decades-in-debt-or-retire-comfortably-7bbb28f9?mod=mw_rss_topstories",
+      "date": "2026-10-10T19:44:00.000Z",
+      "summary": "Don’t just focus on stock picks when you’re thinking of building retirement wealth"
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "How to downsize like a pro - and free yourself from being a ‘prisoner of your possessions’",
+      "link": "https://www.marketwatch.com/story/how-to-downsize-like-a-pro-and-free-yourself-from-being-a-prisoner-of-your-possessions-c4b5533e?mod=mw_rss_topstories",
+      "date": "2026-10-10T19:44:00.000Z",
+      "summary": "Seven tips for painlessly moving in retirement."
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "Rising interest rates: The good, the bad and the ugly for retirees",
+      "link": "https://www.marketwatch.com/story/the-good-the-bad-and-the-ugly-of-rising-interest-rates-ee465a81?mod=mw_rss_topstories",
+      "date": "2026-10-10T19:44:00.000Z",
+      "summary": "Unlike higher gas prices, which hurt almost everyone, higher borrowing costs have an uneven impact."
+    },
+    {
+      "source": "MarketWatch",
+      "kind": "macro",
+      "title": "Taxing stocks, estates and employee benefits could keep Social Security from running out of money. Here’s who could pay the most.",
+      "link": "https://www.marketwatch.com/story/taxing-stocks-estates-and-employee-benefits-could-keep-social-security-from-running-out-of-money-heres-who-could-pay-the-most-616be82c?mod=mw_rss_topstories",
+      "date": "2026-10-10T19:44:00.000Z",
+      "summary": "Social Security is projected to become insolvent in six years. These are some of the creative solutions that are on the table, beyond raising payroll taxes."
+    }
+  ]
+}

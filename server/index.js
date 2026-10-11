@@ -2,9 +2,17 @@ import express from 'express';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { collect } from './collect.js';
+import { analyze } from './analyst.js';
+import { check } from './check.js';
+import { saveRun } from './log.js';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const coins = JSON.parse(await readFile(path.join(root, 'config/coins.json'), 'utf8'));
+const marketFeeds = JSON.parse(await readFile(path.join(root, 'config/feeds.json'), 'utf8'));
+const prices = JSON.parse(await readFile(path.join(root, 'config/prices.json'), 'utf8'));
+const MODEL = process.env.MODEL || 'claude-haiku-5-5';
+const DATA_MODE = process.env.DATA_MODE === 'live' ? 'live' : 'sample';
 
 const app = express();
 app.use(express.json());
@@ -44,66 +52,61 @@ app.get('/api/market', (req, res) => {
   });
 });
 
-// SAMPLE ONLY (slice 1): one fixed answer per coin so all three looks can be seen.
-const samples = {
-  ETH: {
-    direction: 'up', verdict: 'Growth expected for ETH', spot_futures_note: 'Spot and futures point the same way.',
-    notes: {
-      chain: [
-        { step: 'The Fed held rates and US inflation cooled, so risk appetite holds.', cites: [1, 2] },
-        { step: 'Money keeps flowing into spot ether funds for a second day.', cites: [3] },
-        { step: 'A calmer macro week plus fresh inflows lean the background up for ETH.', cites: [1, 3] }
-      ],
-      dispatches: [
-        { n: 1, title: 'Fed holds rates, signals patience on cuts', source: 'Federal Reserve' },
-        { n: 2, title: 'US inflation cools slightly in September', source: 'MarketWatch' },
-        { n: 3, title: 'Spot ether ETFs see second day of inflows', source: 'CoinDesk' }
-      ]
-    }
-  },
-  SOL: {
-    direction: 'down', verdict: 'Correction for SOL', spot_futures_note: 'Futures may feel it faster than spot.',
-    notes: {
-      chain: [
-        { step: 'A fee change vote on Solana unsettles validators and traders.', cites: [4] },
-        { step: 'Cooling inflation helps the market, but not enough to offset the coin news.', cites: [2, 4] }
-      ],
-      dispatches: [
-        { n: 2, title: 'US inflation cools slightly in September', source: 'MarketWatch' },
-        { n: 4, title: 'Solana validators approve fee change', source: 'Cointelegraph' }
-      ]
-    }
-  },
-  AAVE: {
-    direction: 'sideways', verdict: 'Neutral for now', spot_futures_note: 'No clear push on spot or futures.',
-    notes: {
-      chain: [
-        { step: 'Record stablecoin supply is good for lending, but no Aave news moves it today.', cites: [5] }
-      ],
-      dispatches: [{ n: 5, title: 'Stablecoin supply reaches new high', source: 'CoinDesk' }]
-    }
-  }
-};
-const fit = (plan, direction) =>
-  direction === 'sideways' ? 'mixed' : (plan === 'long') === (direction === 'up') ? 'supports' : 'against';
+const TIMEFRAMES = ['15m', '1h', '4h', '1d'];
+
+function costOf(usage, model) {
+  const p = prices[model] ?? prices[MODEL];
+  if (!p || !usage) return 0;
+  const input = (usage.input_tokens ?? 0) + (usage.cache_creation_input_tokens ?? 0) + (usage.cache_read_input_tokens ?? 0);
+  return (input * p.input + (usage.output_tokens ?? 0) * p.output) / 1e6;
+}
 
 app.post('/api/analyze', async (req, res) => {
-  const { coin, plan, timeframe } = req.body ?? {};
-  if (!samples[coin] || !['long', 'short'].includes(plan) || !['15m', '1h', '4h', '1d'].includes(timeframe)) {
+  const { coin: symbol, plan, timeframe } = req.body ?? {};
+  const coin = coins.find(c => c.symbol === symbol);
+  if (!coin || !['long', 'short'].includes(plan) || !TIMEFRAMES.includes(timeframe)) {
     return res.status(400).json({ error: 'Pick a coin from the list, Long or Short, and a timeframe.' });
   }
-  await new Promise(r => setTimeout(r, 2500));
-  const s = samples[coin];
-  res.json({
-    sample: true,
-    ...s,
-    plan_fit: fit(plan, s.direction),
-    horizon: ['15m', '1h'].includes(timeframe) ? 'intraday' : 'medium',
-    x_connected: false,
-    missing_sources: [],
-    cost: { usd: 0, model: 'sample' }
-  });
+  const at = new Date().toISOString();
+  try {
+    const gathered = await collect({ coin, marketFeeds, timeframe, mode: DATA_MODE, root });
+    if (gathered.items.length < 3) {
+      return res.status(422).json({ error: 'Not enough news to judge right now. Try again later.', missing_sources: gathered.missing });
+    }
+    const { answer, usage, model } = await analyze({ coin, plan, horizon: gathered.horizon, items: gathered.items, model: MODEL });
+    const checked = check(answer, { plan, items: gathered.items });
+    const usd = costOf(usage, MODEL);
+    const byNumber = new Map(gathered.items.map(it => [it.n, it]));
+    const citedNumbers = [...new Set(checked.answer.chain.flatMap(c => c.cites))].sort((a, b) => a - b);
+    const run = {
+      at, input: { coin: symbol, plan, timeframe }, horizon: gathered.horizon, data_mode: DATA_MODE, model,
+      items: gathered.items, missing_sources: gathered.missing, answer, checked: checked.answer,
+      checker: { problems: checked.problems, cites_ok: checked.citesOk }, usage, cost_usd: usd
+    };
+    const logFile = await saveRun(root, run);
+    if (checked.problems.length) console.warn(`[checker] ${symbol}: ${checked.problems.join('; ')}`);
+    res.json({
+      sample: gathered.sample,
+      direction: checked.answer.direction,
+      plan_fit: checked.answer.plan_fit,
+      verdict: checked.answer.verdict,
+      spot_futures_note: checked.answer.spot_futures_note,
+      horizon: gathered.horizon,
+      notes: {
+        chain: checked.answer.chain,
+        dispatches: citedNumbers.map(n => ({ n, title: byNumber.get(n).title, source: byNumber.get(n).source, link: byNumber.get(n).link }))
+      },
+      x_connected: false,
+      missing_sources: gathered.missing,
+      cost: { usd, model, input_tokens: usage?.input_tokens ?? 0, output_tokens: usage?.output_tokens ?? 0 },
+      log: logFile
+    });
+  } catch (err) {
+    console.error('[analyze]', err);
+    const timeout = err?.name === 'APIConnectionTimeoutError' || /timed? ?out/i.test(String(err?.message));
+    res.status(502).json({ error: timeout ? 'Took too long. Try again in a moment.' : 'The paper could not be printed: ' + (err?.message ?? 'unknown error') });
+  }
 });
 
 const port = Number(process.env.PORT) || 3000;
-app.listen(port, () => console.log(`NewsTide is running at http://localhost:${port}`));
+app.listen(port, () => console.log(`NewsTide is running at http://localhost:${port} (model ${MODEL}, ${DATA_MODE} data)`));

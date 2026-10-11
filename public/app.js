@@ -1,7 +1,7 @@
 // NewsTide page logic: the form, the countdown, the Indicator View and the cost counter.
 
 const $ = id => document.getElementById(id);
-const money = usd => `$${usd.toFixed(3)}`;
+const money = usd => `$${usd.toFixed(usd > 0 && usd < 0.01 ? 4 : 3)}`;
 let sessionSpend = 0;
 let coins = [];
 
@@ -105,6 +105,7 @@ function showResult(r, plan) {
   $('missing').textContent = r.missing_sources?.length ? `Unavailable today: ${r.missing_sources.join(', ')}.` : '';
   $('xNote').hidden = r.x_connected;
   $('resultSample').hidden = !r.sample;
+  $('resultSample').textContent = 'Built from a saved snapshot of the news, not live news.';
 
   // Editor's notes: the reasoning chain, closed by default
   const notes = r.notes ?? { chain: [], dispatches: [] };
