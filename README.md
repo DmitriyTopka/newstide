@@ -6,6 +6,8 @@ Before a trade you pick a coin, Long or Short, and your timeframe. NewsTide read
 
 ![The NewsTide front page: Bull Edition, "Growth expected for SOL", the stamp favours a Long plan, editor's notes open](docs/screenshot-verdict.jpg)
 
+**Demo video:** https://youtu.be/9dTlaGs665U
+
 Built for Devpost's **Build With AI: Basics** hackathon with the Devpost Learn Skill Pack. The planning documents live in [`devpost/`](devpost): [scope](devpost/scope.md), [PRD](devpost/prd.md), [technical spec](devpost/spec.md) and the [build checklist](devpost/checklist.md).
 
 ## Why

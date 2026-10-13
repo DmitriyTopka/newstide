@@ -46,7 +46,7 @@ PRD ref: `prd.md > The Core Journey`.
 - Demo recording: `DATA_MODE=live`, `MODEL=claude-sonnet-5-5`, record the screen while running ETH Long 1h, SOL Short 4h, AAVE Long 1d.
 - Submission: public GitHub repository plus a 1-3 minute video. No deployment.
 - Public repository: https://github.com/DmitriyTopka/newstide (published 2026-10-11, checked without login).
-- Demo video: to be recorded on a weekday with live news; link added here when uploaded. A server for other people is deferred (`What Was Simplified and Why`).
+- Demo video: https://youtu.be/9dTlaGs665U (public on YouTube, 1:47, recorded 2026-10-13 on live news). A server for other people is deferred (`What Was Simplified and Why`).
 
 ## Look and Feel
 Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
