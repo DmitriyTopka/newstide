@@ -106,6 +106,11 @@ function showResult(r, plan) {
   $('missing').textContent = r.missing_sources?.length ? `Unavailable today: ${r.missing_sources.join(', ')}.` : '';
   $('xNote').hidden = r.x_connected;
   $('resultSample').hidden = !r.sample && !r.archived;
+  if (r.edition) {
+    const t = new Date(r.edition.at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    $('resultSample').hidden = false;
+    $('resultSample').textContent = `Printed at ${t} from ${r.edition.items} news items by ${r.edition.model}, shared with every reader for ${r.edition.shared_minutes} minutes.`;
+  }
   if (r.archived) {
     const d = new Date(r.archived.at).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
     $('resultSample').textContent = `Archived edition of ${d}, built from ${r.archived.items} news items by ${r.archived.model}. Replayed, not live.`;
@@ -123,7 +128,9 @@ function showResult(r, plan) {
   $('paper').dataset.mood = moods[r.direction];
   const cost = r.cost?.usd ?? 0;
   sessionSpend += cost;
-  $('price').textContent = r.cost?.archived
+  $('price').textContent = r.cost?.shared
+    ? `Price of this edition: ${money(cost)}, shared by everyone who reads it.`
+    : r.cost?.archived
     ? `Price of this edition when it was printed: ${money(cost)}. Replaying it costs nothing.`
     : `Price of this edition: ${money(cost)}. Spent this session: ${money(sessionSpend)}.`;
 
@@ -168,15 +175,18 @@ $('askForm').addEventListener('submit', async e => {
   try {
     const ctrl = new AbortController();
     const cut = setTimeout(() => ctrl.abort(), 62000);
-    const res = await fetch('/api/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ coin, plan, timeframe }),
-      signal: ctrl.signal
-    });
+    const res = mode.public_live
+      ? await fetch(`/api/edition?coin=${encodeURIComponent(coin)}&timeframe=${encodeURIComponent(timeframe)}`, { signal: ctrl.signal })
+      : await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ coin, plan, timeframe }),
+          signal: ctrl.signal
+        });
     clearTimeout(cut);
     const body = await res.json();
     if (!res.ok) throw new Error(body.error || 'The paper could not be printed.');
+    if (mode.public_live) body.plan_fit = fitOf(plan, body.direction);
     showResult(body, plan);
   } catch (err) {
     $('resultError').textContent = err.name === 'AbortError' ? 'Took too long. Try again in a moment.' : err.message;
@@ -192,4 +202,12 @@ $('coin').addEventListener('input', () => { $('formError').textContent = ''; });
 tearEdges();
 loadCoins();
 loadMarket();
-fetch('/api/mode').then(r => r.json()).then(m => { $('demoBanner').hidden = !m.replay; }).catch(() => {});
+let mode = { replay: false, public_live: false };
+fetch('/api/mode').then(r => r.json()).then(m => {
+  mode = m;
+  if (m.public_live) $('demoBanner').textContent = 'Live public edition: each coin is printed at most once every 30 minutes and shared by every reader. Not financial advice.';
+  $('demoBanner').hidden = !(m.replay || m.public_live);
+}).catch(() => {});
+
+// The same rule as the server's Answer Checker: does the news direction agree with the plan?
+const fitOf = (plan, direction) => direction === 'sideways' ? 'mixed' : (plan === 'long') === (direction === 'up') ? 'supports' : 'against';

@@ -17,15 +17,75 @@ const DATA_MODE = process.env.DATA_MODE === 'live' ? 'live' : 'sample';
 // REPLAY=1: the public demo. Serves archived editions (real runs on live news) and never calls the AI.
 const REPLAY = process.env.REPLAY === '1';
 const replay = REPLAY ? JSON.parse(await readFile(path.join(root, 'data/replay/editions.json'), 'utf8')) : null;
+// PUBLIC_LIVE=1: the public live site. One fresh edition per coin and horizon, shared by every reader
+// for 30 minutes (server memory + CDN cache), and a daily spending limit, so visitors cannot run up the bill.
+const PUBLIC_LIVE = process.env.PUBLIC_LIVE === '1';
+const EDITION_TTL_MS = 30 * 60 * 1000;
+const DAILY_LIMIT_USD = Number(process.env.DAILY_LIMIT_USD || 0.5);
+const editions = new Map();
+const spend = { day: '', usd: 0 };
 // The AI client is loaded only when it is needed, so the demo runs without any key.
 const analyze = async (...args) => (await import('./analyst.js')).analyze(...args);
+
+const TIMEFRAMES = ['15m', '1h', '4h', '1d'];
 
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(root, 'public')));
 
 // The coin list for the suggestions under the coin field.
-app.get('/api/mode', (req, res) => res.json({ replay: REPLAY }));
+app.get('/api/mode', (req, res) => res.json({ replay: REPLAY, public_live: PUBLIC_LIVE }));
+
+// Public live edition: the same answer for every reader of a coin and horizon for 30 minutes.
+app.get('/api/edition', async (req, res) => {
+  if (!PUBLIC_LIVE) return res.status(404).json({ error: 'Not available.' });
+  const symbol = String(req.query.coin ?? '').trim().toUpperCase();
+  const timeframe = String(req.query.timeframe ?? '');
+  const coin = coins.find(c => c.symbol === symbol);
+  if (!coin || !TIMEFRAMES.includes(timeframe)) return res.status(400).json({ error: 'Pick ETH, SOL or AAVE and a timeframe.' });
+  const horizon = horizonOf(timeframe);
+  const key = `${symbol}|${horizon}`;
+  const cached = editions.get(key);
+  const sendCached = c => {
+    res.set('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=600');
+    return res.json(c.data);
+  };
+  if (cached && Date.now() - cached.at < EDITION_TTL_MS) return sendCached(cached);
+
+  const today = new Date().toISOString().slice(0, 10);
+  if (spend.day !== today) { spend.day = today; spend.usd = 0; }
+  if (spend.usd >= DAILY_LIMIT_USD) {
+    if (cached) return sendCached(cached);
+    return res.status(503).json({ error: 'Today\'s free editions are used up. Come back tomorrow, or run NewsTide on your own machine with your own key.' });
+  }
+  try {
+    const gathered = await collect({ coin, marketFeeds, timeframe, mode: 'live', root });
+    if (gathered.items.length < 3) return res.status(422).json({ error: 'Not enough news to judge right now. Try again later.' });
+    const { answer, usage, model } = await analyze({ coin, plan: 'long', horizon, items: gathered.items, model: MODEL });
+    const checked = check(answer, { plan: 'long', items: gathered.items });
+    const usd = costOf(usage, MODEL);
+    spend.usd += usd;
+    const byNumber = new Map(gathered.items.map(it => [it.n, it]));
+    const cited = [...new Set(checked.answer.chain.flatMap(c => c.cites))].sort((a, b) => a - b);
+    const data = {
+      edition: { at: new Date().toISOString(), model, items: gathered.items.length, shared_minutes: 30 },
+      direction: checked.answer.direction,
+      verdict: checked.answer.verdict,
+      spot_futures_note: checked.answer.spot_futures_note,
+      horizon,
+      notes: { chain: checked.answer.chain, dispatches: cited.map(n => ({ n, title: byNumber.get(n).title, source: byNumber.get(n).source, link: byNumber.get(n).link })) },
+      x_connected: false,
+      missing_sources: gathered.missing,
+      cost: { usd, model, shared: true }
+    };
+    editions.set(key, { at: Date.now(), data });
+    sendCached({ data });
+  } catch (err) {
+    console.error('[edition]', err);
+    if (cached) return sendCached(cached);
+    res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.' });
+  }
+});
 
 app.get('/api/coins', (req, res) => {
   res.json(coins.map(({ symbol, name }) => ({ symbol, name })));
@@ -40,8 +100,6 @@ app.get('/api/market', async (req, res) => {
     res.json({ sample: false, quotes: [], today: [], week: [] });
   }
 });
-
-const TIMEFRAMES = ['15m', '1h', '4h', '1d'];
 
 function costOf(usage, model) {
   const p = prices[model] ?? prices[MODEL];
