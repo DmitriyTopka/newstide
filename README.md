@@ -7,6 +7,7 @@ Before a trade you pick a coin, Long or Short, and your timeframe. NewsTide read
 ![The NewsTide front page: Bull Edition, "Growth expected for SOL", the stamp favours a Long plan, editor's notes open](docs/screenshot-verdict.jpg)
 
 **Try it:** https://newstide-paper.vercel.app (replays archived real editions from 13 and 16 October 2026, no AI calls)  
+**Live public edition:** https://newstide-live.vercel.app (12 coins, live news, each coin printed at most every 30 minutes and shared by every reader)  
 **Demo video:** https://youtu.be/9dTlaGs665U
 
 Built for Devpost's **Build With AI: Basics** hackathon with the Devpost Learn Skill Pack. The planning documents live in [`devpost/`](devpost): [scope](devpost/scope.md), [PRD](devpost/prd.md), [technical spec](devpost/spec.md) and the [build checklist](devpost/checklist.md).
@@ -52,6 +53,10 @@ None of the three coins has an open official Telegram channel, so the official b
 ## Public demo
 
 The demo at https://newstide-paper.vercel.app runs with `REPLAY=1`: it serves six archived editions from `data/replay/editions.json` (real runs on live news) and never calls the AI, so it needs no key. The stamp is still worked out for the plan you pick.
+
+## Live public edition
+
+https://newstide-live.vercel.app runs with `PUBLIC_LIVE=1` and Claude Haiku 5.5. Each coin and horizon is printed at most once every 30 minutes and shared by every reader (server memory plus CDN cache), only one print run per coin happens at a time, and a daily limit stops new runs. On top of that, the key lives in a separate Anthropic workspace with a hard monthly spend limit. Coins: BTC, ETH, BNB, SOL, XRP, DOGE, ADA, TRX, TON, AVAX, LINK, AAVE. Official project feeds are used where they exist; crypto headlines that name the coin count as coin news.
 
 ## Run it
 

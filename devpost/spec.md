@@ -51,6 +51,9 @@ PRD ref: `prd.md > The Core Journey`.
 ## Public Demo (Replay Mode)
 Added 2026-10-16 after the pre-ship council. `REPLAY=1` makes `POST /api/analyze` answer from `data/replay/editions.json`: six archived editions, real runs on live news from 13 and 16 October 2026 (one per coin and horizon). The stamp is recomputed for the visitor's plan with the same rule as the Answer Checker. The AI client is never loaded, so the demo needs no key and costs nothing. The page shows a demo banner and "Archived edition of <date>". Deployed on Vercel (free) at https://newstide-paper.vercel.app via `api/index.js`; live mode still runs locally with `npm start`.
 
+## Public Live Edition
+Added 2026-10-16 at Dima's request, after the submission. `PUBLIC_LIVE=1` (project newstide-live on Vercel, deployed by `scripts/deploy-live.sh`): `GET /api/edition` prints one edition per coin and horizon, cached 30 minutes in memory and on the CDN; `POST /api/analyze` is closed; one print run per key at a time; spend reserved before each call; `DAILY_LIMIT_USD` (0.5); the key sits in the Anthropic workspace newstide-public with a $5 monthly limit. Model Claude Haiku 5.5 (Dima: try Haiku first). 12 coins in `config/coins.json`, each with `keywords` that mark crypto headlines naming the coin as coin news.
+
 ## Look and Feel
 Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 - **An old printed newspaper being opened.** Off-white newsprint background, black ink, thin column rules, a masthead "NewsTide" at the top like a newspaper title, date line under it.
