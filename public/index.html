@@ -18,38 +18,39 @@
   <header class="masthead">
     <div class="ear ear-left">
       <p id="dateline">Sunday, October 11, 2026</p>
-      <p class="edition" id="edition">Morning Edition</p>
+      <p class="edition" id="edition" data-i18n="morning">Morning Edition</p>
     </div>
     <h1 class="nameplate">NewsTide</h1>
     <div class="ear ear-right">
       <button type="button" id="themeToggle" class="edition-switch" aria-pressed="false">Night edition</button>
-      <p>Where the news is carrying your coin</p>
+      <button type="button" id="langToggle" class="edition-switch" lang="ru">Русский</button>
+      <p data-i18n="tagline">Where the news is carrying your coin</p>
     </div>
   </header>
 
   <div class="markets" aria-label="Market quotes">
-    <span class="markets-title">Markets</span>
+    <span class="markets-title" data-i18n="markets">Markets</span>
     <div class="tape" id="tape"><div class="tape-track" id="tapeTrack"></div></div>
-    <span class="sample-tag" id="mkSample" hidden>sample figures</span>
+    <span class="sample-tag" id="mkSample" hidden data-i18n="sampleFigures">sample figures</span>
   </div>
 
   <p class="demo-banner" id="demoBanner" hidden>Demo edition: real NewsTide runs on live news from 13 and 16 October 2026, replayed without calling the AI. The live version runs on your own machine with your own key.</p>
 
   <form id="askForm" class="ask" novalidate>
     <div class="field coin-field">
-      <label for="coin">Coin</label>
-      <input id="coin" name="coin" list="coinList" autocomplete="off" placeholder="BTC, ETH, SOL... type to search" required>
+      <label for="coin" data-i18n="coin">Coin</label>
+      <input id="coin" name="coin" list="coinList" autocomplete="off" placeholder="BTC, ETH, SOL... type to search" data-i18n-placeholder="coinPlaceholder" required>
       <datalist id="coinList"></datalist>
     </div>
     <fieldset class="field">
-      <legend>Your plan</legend>
+      <legend data-i18n="yourPlan">Your plan</legend>
       <div class="choices">
         <label><input type="radio" name="plan" value="long" required> Long</label>
         <label><input type="radio" name="plan" value="short"> Short</label>
       </div>
     </fieldset>
     <fieldset class="field">
-      <legend>Timeframe</legend>
+      <legend data-i18n="timeframe">Timeframe</legend>
       <div class="choices">
         <label><input type="radio" name="timeframe" value="15m" required> 15m</label>
         <label><input type="radio" name="timeframe" value="1h"> 1h</label>
@@ -57,24 +58,24 @@
         <label><input type="radio" name="timeframe" value="1d"> 1d</label>
       </div>
     </fieldset>
-    <button type="submit" class="press" id="getData">Get data</button>
-    <p class="hint">Long: you expect the price to rise. Short: you expect it to fall. Below 4h the paper reads today's news, from 4h the last two weeks. The stamp says whether the news favours your plan.</p>
+    <button type="submit" class="press" id="getData" data-i18n="getData">Get data</button>
+    <p class="hint" data-i18n="hint">Long: you expect the price to rise. Short: you expect it to fall. Below 4h the paper reads today's news, from 4h the last two weeks. The stamp says whether the news favours your plan.</p>
     <p class="form-error" id="formError" role="alert"></p>
   </form>
 
   <main class="front">
     <aside class="column" aria-labelledby="todayHead">
-      <h2 class="section-head" id="todayHead">Today's dispatches</h2>
+      <h2 class="section-head" id="todayHead" data-i18n="today">Today's dispatches</h2>
       <ol class="briefs" id="today"></ol>
     </aside>
 
     <section class="lead" aria-live="polite" aria-labelledby="verdict">
       <div class="welcome" id="welcome">
-        <h3 class="headline">Ask the paper before you trade</h3>
-        <p class="deck">Choose a coin, Long or Short, and your timeframe. NewsTide reads the news behind the chart and prints one verdict.</p>
+        <h3 class="headline" data-i18n="welcomeHead">Ask the paper before you trade</h3>
+        <p class="deck" data-i18n="welcomeDeck">Choose a coin, Long or Short, and your timeframe. NewsTide reads the news behind the chart and prints one verdict.</p>
       </div>
 
-      <p class="waiting" id="waiting" hidden>The presses are running. About <span id="secs">60</span> seconds left.</p>
+      <p class="waiting" id="waiting" hidden><span data-i18n="waitA">The presses are running. About</span> <span id="secs">60</span> <span data-i18n="waitB">seconds left.</span></p>
 
       <article class="story" id="result" hidden>
         <div class="plate">
@@ -90,8 +91,8 @@
               <g filter="url(#rough)">
                 <circle cx="100" cy="100" r="92" fill="none" stroke-width="5"/>
                 <circle cx="100" cy="100" r="80" fill="none" stroke-width="1.5"/>
-                <text class="ring"><textPath href="#arcTop" startOffset="50%" text-anchor="middle">THE BACKGROUND</textPath></text>
-                <text class="ring"><textPath href="#arcBottom" startOffset="50%" text-anchor="middle">YOUR PLAN</textPath></text>
+                <text class="ring"><textPath href="#arcTop" startOffset="50%" text-anchor="middle" id="ringTop">THE BACKGROUND</textPath></text>
+                <text class="ring"><textPath href="#arcBottom" startOffset="50%" text-anchor="middle" id="ringBottom">YOUR PLAN</textPath></text>
                 <text class="word" id="stampWord" x="100" y="111" text-anchor="middle">FAVOURS</text>
               </g>
             </svg>
@@ -102,25 +103,25 @@
         <p class="note" id="sfNote"></p>
         <p class="note muted" id="missing" hidden></p>
         <details class="notes" id="notes">
-          <summary>Show the editor's notes</summary>
+          <summary data-i18n="notes">Show the editor's notes</summary>
           <ol id="chain"></ol>
-          <p class="cited-head">Dispatches cited</p>
+          <p class="cited-head" data-i18n="cited">Dispatches cited</p>
           <ul id="cited"></ul>
         </details>
         <p class="sample-tag" id="resultSample" hidden>Built from a saved snapshot of the news, not live news.</p>
       </article>
       <p class="form-error" id="resultError" hidden></p>
-      <p class="x-note" id="xNote">X (Twitter) is not connected yet; this edition is built from blogs, forums and news feeds.</p>
+      <p class="x-note" id="xNote" data-i18n="xNote">X (Twitter) is not connected yet; this edition is built from blogs, forums and news feeds.</p>
     </section>
 
     <aside class="column" aria-labelledby="weekHead">
-      <h2 class="section-head" id="weekHead">This week in the wider world</h2>
+      <h2 class="section-head" id="weekHead" data-i18n="week">This week in the wider world</h2>
       <ol class="briefs" id="week"></ol>
     </aside>
   </main>
 
   <footer class="colophon">
-    <p class="disclaimer">Not financial advice. NewsTide reads the news background; it does not know the future. Trade on your own judgment.</p>
+    <p class="disclaimer" data-i18n="disclaimer">Not financial advice. NewsTide reads the news background; it does not know the future. Trade on your own judgment.</p>
     <p class="price" id="price">Price of this edition: $0.000. Spent this session: $0.000.</p>
   </footer>
 </div>

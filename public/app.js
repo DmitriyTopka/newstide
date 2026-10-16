@@ -1,14 +1,21 @@
 // NewsTide page logic: the form, the countdown, the Indicator View and the cost counter.
+import { TEXT } from './i18n.js';
 
 const $ = id => document.getElementById(id);
 const money = usd => `$${usd.toFixed(usd > 0 && usd < 0.01 ? 4 : 3)}`;
 let sessionSpend = 0;
 let coins = [];
+let lang = 'en';
+try { lang = localStorage.getItem('newstide-lang') === 'ru' ? 'ru' : 'en'; } catch {}
+const T = () => TEXT[lang];
+let mode = { replay: false, public_live: false };
+let last = null; // last result and plan, re-printed when the language changes
+let lastMarket = null;
 
 // Theme: the night edition is remembered per browser; nothing else is stored.
 function applyTheme(night) {
   document.documentElement.dataset.theme = night ? 'night' : 'day';
-  $('themeToggle').textContent = night ? 'Day edition' : 'Night edition';
+  $('themeToggle').textContent = night ? T().day : T().night;
   $('themeToggle').setAttribute('aria-pressed', String(night));
 }
 let night = false;
@@ -20,8 +27,26 @@ $('themeToggle').addEventListener('click', () => {
   try { localStorage.setItem('newstide-theme', night ? 'night' : 'day'); } catch {}
 });
 
-$('dateline').textContent = new Date().toLocaleDateString('en-US', {
-  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+function applyLanguage() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { const v = T()[el.dataset.i18n]; if (typeof v === 'string') el.textContent = v; });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = T()[el.dataset.i18nPlaceholder]; });
+  $('ringTop').textContent = T().ringTop;
+  $('ringBottom').textContent = T().ringBottom;
+  $('langToggle').textContent = T().switchTo;
+  $('langToggle').lang = lang === 'en' ? 'ru' : 'en';
+  $('dateline').textContent = new Date().toLocaleDateString(T().locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  $('themeToggle').textContent = night ? T().day : T().night;
+  $('price').textContent = T().priceStart;
+  if (mode.public_live) $('demoBanner').textContent = T().bannerLive;
+  else if (mode.replay) $('demoBanner').textContent = T().bannerReplay;
+  if (lastMarket) renderMarket(lastMarket);
+  if (last) showResult(last.r, last.plan, true);
+}
+$('langToggle').addEventListener('click', () => {
+  lang = lang === 'en' ? 'ru' : 'en';
+  try { localStorage.setItem('newstide-lang', lang); } catch {}
+  applyLanguage();
 });
 
 // Coin suggestions
@@ -32,27 +57,31 @@ async function loadCoins() {
 
 // Market tape (running line) and the two news columns
 function quoteHtml(q) {
-  if (q.change == null) return `<span class="quote">${escapeHtml(q.name)} <b>no data</b></span>`;
+  const name = T().quoteNames[q.name] ?? q.name;
+  if (q.change == null) return `<span class="quote">${escapeHtml(name)} <b>${T().noData}</b></span>`;
   const up = q.change >= 0;
   const ch = q.unit === 'pt' ? `${up ? '+' : ''}${q.change.toFixed(2)}` : `${up ? '+' : ''}${q.change.toFixed(1)}%`;
-  return `<span class="quote">${escapeHtml(q.name)} <b>${escapeHtml(q.value)}</b> <span class="${up ? 'up-tick' : 'down-tick'}">${up ? '\u25B2' : '\u25BC'} ${ch}</span></span>`;
+  return `<span class="quote">${escapeHtml(name)} <b>${escapeHtml(q.value)}</b> <span class="${up ? 'up-tick' : 'down-tick'}">${up ? '\u25B2' : '\u25BC'} ${ch}</span></span>`;
 }
 function briefs(list) {
-  return list.map(n => `<li><details><summary><b>${escapeHtml(n.title)}</b><small>${escapeHtml(n.source)}</small></summary><p>${escapeHtml(n.summary ?? '')}</p>${/^https?:\/\//i.test(n.link ?? '') ? `<a href="${escapeHtml(n.link)}" target="_blank" rel="noopener">Read the full story</a>` : ''}</details></li>`).join('');
+  return list.map(n => `<li><details><summary><b>${escapeHtml(n.title)}</b><small data-more="${escapeHtml(T().readMore)}" data-close="${escapeHtml(T().close)}">${escapeHtml(n.source)}</small></summary><p>${escapeHtml(n.summary ?? '')}</p>${/^https?:\/\//i.test(n.link ?? '') ? `<a href="${escapeHtml(n.link)}" target="_blank" rel="noopener">${escapeHtml(T().fullStory)}</a>` : ''}</details></li>`).join('');
+}
+function renderMarket(m) {
+  const quotes = m.quotes ?? [];
+  const row = quotes.length ? quotes.map(quoteHtml).join('') : `<span class="quote">${T().quotesNoData}</span>`;
+  // Two copies side by side so the line can loop without a gap.
+  $('tapeTrack').innerHTML = `<div class="tape-run">${row}</div><div class="tape-run" aria-hidden="true">${row}</div>`;
+  $('tapeTrack').style.setProperty('--tape-seconds', `${Math.max(30, quotes.length * 5)}s`);
+  $('mkSample').hidden = !m.sample;
+  $('today').innerHTML = briefs(m.today ?? []);
+  $('week').innerHTML = briefs(m.week ?? []);
 }
 async function loadMarket() {
   try {
-    const m = await (await fetch('/api/market')).json();
-    const quotes = m.quotes ?? [];
-    const row = quotes.length ? quotes.map(quoteHtml).join('') : '<span class="quote">Quotes: no data</span>';
-    // Two copies side by side so the line can loop without a gap.
-    $('tapeTrack').innerHTML = `<div class="tape-run">${row}</div><div class="tape-run" aria-hidden="true">${row}</div>`;
-    $('tapeTrack').style.setProperty('--tape-seconds', `${Math.max(30, quotes.length * 5)}s`);
-    $('mkSample').hidden = !m.sample;
-    $('today').innerHTML = briefs(m.today ?? []);
-    $('week').innerHTML = briefs(m.week ?? []);
+    lastMarket = await (await fetch('/api/market')).json();
+    renderMarket(lastMarket);
   } catch {
-    $('tapeTrack').innerHTML = '<div class="tape-run"><span class="quote">Quotes: no data</span></div>';
+    $('tapeTrack').innerHTML = `<div class="tape-run"><span class="quote">${T().quotesNoData}</span></div>`;
   }
 }
 
@@ -79,41 +108,38 @@ function escapeHtml(s) {
 }
 
 // Indicator View: pointing hand, stamp, engraving, edition name, page tint
-const animals = {
-  up: { file: 'img/bull.jpg', label: 'A smiling bull', edition: 'Bull Edition' },
-  down: { file: 'img/bear.jpg', label: 'A cheerful bear', edition: 'Bear Edition' },
-  sideways: { file: 'img/hamster.jpg', label: 'A hamster', edition: 'Hamster Edition' }
-};
+const images = { up: 'img/bull.jpg', down: 'img/bear.jpg', sideways: 'img/hamster.jpg' };
 const moods = { up: 'up', down: 'down', sideways: 'flat' };
-const stampWords = { supports: 'FAVOURS', mixed: 'MIXED ON', against: 'AGAINST' };
-const fitWords = { supports: 'The background supports your plan.', mixed: 'The background is mixed for your plan.', against: 'The background goes against your plan.' };
+// The model writes English and, on the live site, Russian too; older editions fall back to English.
+const pick = (r, field) => (lang === 'ru' && r[`${field}_ru`]) || r[field];
 
-function showResult(r, plan) {
-  $('verdict').textContent = r.verdict;
-  $('deck').textContent = `Your plan: ${plan === 'long' ? 'Long' : 'Short'}. ${fitWords[r.plan_fit]}`;
-  $('sfNote').textContent = r.spot_futures_note;
+function showResult(r, plan, reprint = false) {
+  last = { r, plan };
+  const t = T();
+  $('verdict').textContent = pick(r, 'verdict');
+  $('deck').textContent = `${t.planIs(plan)} ${t.fit[r.plan_fit]}`;
+  $('sfNote').textContent = pick(r, 'spot_futures_note');
   $('hand').dataset.dir = r.direction;
-  $('hand').alt = `A hand pointing ${r.direction === 'sideways' ? 'sideways' : r.direction}`;
+  $('hand').alt = t.hand(r.direction);
   $('stamp').dataset.fit = r.plan_fit;
-  $('stampWord').textContent = stampWords[r.plan_fit];
-  $('stamp').setAttribute('aria-label', `Stamp: the background ${stampWords[r.plan_fit].toLowerCase()} your plan`);
-  const a = animals[r.direction];
-  $('animal').src = a.file;
-  $('animal').alt = a.label;
-  $('edition').textContent = a.edition;
+  $('stampWord').textContent = t.stamp[r.plan_fit];
+  $('stamp').setAttribute('aria-label', `${t.ringTop}: ${t.stamp[r.plan_fit]} ${t.ringBottom}`);
+  $('animal').src = images[r.direction];
+  $('animal').alt = t.animals[r.direction];
+  $('edition').textContent = t.editions[r.direction];
 
   $('missing').hidden = !r.missing_sources?.length;
-  $('missing').textContent = r.missing_sources?.length ? `Unavailable today: ${r.missing_sources.join(', ')}.` : '';
+  $('missing').textContent = r.missing_sources?.length ? t.unavailable(r.missing_sources.join(', ')) : '';
   $('xNote').hidden = r.x_connected;
-  $('resultSample').hidden = !r.sample && !r.archived;
+  $('resultSample').hidden = !r.sample && !r.archived && !r.edition;
+  if (r.sample) $('resultSample').textContent = t.sample;
   if (r.edition) {
-    const t = new Date(r.edition.at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-    $('resultSample').hidden = false;
-    $('resultSample').textContent = `Printed at ${t} from ${r.edition.items} news items by ${r.edition.model}, shared with every reader for ${r.edition.shared_minutes} minutes.`;
+    const time = new Date(r.edition.at).toLocaleTimeString(t.locale, { hour: '2-digit', minute: '2-digit' });
+    $('resultSample').textContent = t.printed(time, r.edition.items, r.edition.model, r.edition.shared_minutes);
   }
   if (r.archived) {
-    const d = new Date(r.archived.at).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
-    $('resultSample').textContent = `Archived edition of ${d}, built from ${r.archived.items} news items by ${r.archived.model}. Replayed, not live.`;
+    const d = new Date(r.archived.at).toLocaleDateString(t.locale, { day: 'numeric', month: 'long', year: 'numeric' });
+    $('resultSample').textContent = t.archived(d, r.archived.items, r.archived.model) + (lang === 'ru' && !r.verdict_ru ? ` ${t.englishOnly}` : '');
   }
 
   // Editor's notes: the reasoning chain, closed by default
@@ -121,18 +147,16 @@ function showResult(r, plan) {
   $('notes').open = false;
   $('notes').hidden = !notes.chain.length;
   $('chain').innerHTML = notes.chain
-    .map(c => `<li>${escapeHtml(c.step)} <span class="cites">${(c.cites ?? []).map(n => `[${Number(n) | 0}]`).join(' ')}</span></li>`).join('');
+    .map(c => `<li>${escapeHtml((lang === 'ru' && c.step_ru) || c.step)} <span class="cites">${(c.cites ?? []).map(n => `[${Number(n) | 0}]`).join(' ')}</span></li>`).join('');
   $('cited').innerHTML = notes.dispatches
     .map(d => `<li><span class="cites">[${Number(d.n) | 0}]</span> ${escapeHtml(d.title)} <small>${escapeHtml(d.source)}</small></li>`).join('');
 
   $('paper').dataset.mood = moods[r.direction];
   const cost = r.cost?.usd ?? 0;
-  sessionSpend += cost;
-  $('price').textContent = r.cost?.shared
-    ? `Price of this edition: ${money(cost)}, shared by everyone who reads it.`
-    : r.cost?.archived
-    ? `Price of this edition when it was printed: ${money(cost)}. Replaying it costs nothing.`
-    : `Price of this edition: ${money(cost)}. Spent this session: ${money(sessionSpend)}.`;
+  if (!reprint) sessionSpend += cost;
+  $('price').textContent = r.cost?.shared ? t.priceShared(money(cost))
+    : r.cost?.archived ? t.priceArchived(money(cost))
+    : t.priceSession(money(cost), money(sessionSpend));
 
   $('welcome').hidden = true;
   $('result').hidden = false;
@@ -161,16 +185,16 @@ $('askForm').addEventListener('submit', async e => {
   const plan = form.get('plan');
   const timeframe = form.get('timeframe');
   $('formError').textContent = '';
-  if (!coins.some(c => c.symbol === coin)) return ($('formError').textContent = 'Pick a coin from the list.');
-  if (!plan) return ($('formError').textContent = 'Choose Long or Short.');
-  if (!timeframe) return ($('formError').textContent = 'Choose a timeframe.');
+  if (!coins.some(c => c.symbol === coin)) return ($('formError').textContent = T().errCoin);
+  if (!plan) return ($('formError').textContent = T().errPlan);
+  if (!timeframe) return ($('formError').textContent = T().errTf);
 
   $('getData').disabled = true;
   $('welcome').hidden = true;
   $('result').hidden = true;
   $('resultError').hidden = true;
   $('paper').dataset.mood = 'none';
-  $('edition').textContent = 'Late Edition';
+  $('edition').textContent = T().late;
   startCountdown();
   try {
     const ctrl = new AbortController();
@@ -185,11 +209,11 @@ $('askForm').addEventListener('submit', async e => {
         });
     clearTimeout(cut);
     const body = await res.json();
-    if (!res.ok) throw new Error(body.error || 'The paper could not be printed.');
+    if (!res.ok) throw new Error(body.error || T().errPrint);
     if (mode.public_live) body.plan_fit = fitOf(plan, body.direction);
     showResult(body, plan);
   } catch (err) {
-    $('resultError').textContent = err.name === 'AbortError' ? 'Took too long. Try again in a moment.' : err.message;
+    $('resultError').textContent = err.name === 'AbortError' ? T().errSlow : err.message;
     $('resultError').hidden = false;
   } finally {
     stopCountdown();
@@ -200,13 +224,13 @@ $('askForm').addEventListener('submit', async e => {
 $('coin').addEventListener('input', () => { $('formError').textContent = ''; });
 
 tearEdges();
+applyLanguage();
 loadCoins();
 loadMarket();
-let mode = { replay: false, public_live: false };
 fetch('/api/mode').then(r => r.json()).then(m => {
   mode = m;
-  if (m.public_live) $('demoBanner').textContent = 'Live public edition: each coin is printed at most once every 30 minutes and shared by every reader. Not financial advice.';
   $('demoBanner').hidden = !(m.replay || m.public_live);
+  applyLanguage();
 }).catch(() => {});
 
 // The same rule as the server's Answer Checker: does the news direction agree with the plan?

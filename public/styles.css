@@ -174,8 +174,8 @@ body {
 .briefs summary { cursor: pointer; list-style: none; }
 .briefs summary::-webkit-details-marker { display: none; }
 .briefs summary b { font-weight: 700; display: block; }
-.briefs summary small::after { content: " \00B7  read more"; font-style: italic; }
-.briefs details[open] summary small::after { content: " \00B7  close"; }
+.briefs summary small::after { content: " \00B7  " attr(data-more); font-style: italic; }
+.briefs details[open] summary small::after { content: " \00B7  " attr(data-close); }
 .briefs small { color: var(--ink-faded); font-style: italic; font-size: 13px; }
 .briefs details p { margin: 6px 0 2px; font-size: 15px; text-align: justify; hyphens: auto; }
 .briefs a { color: var(--ink); font-size: 14px; font-style: italic; }
@@ -332,3 +332,5 @@ body {
 
 /* No sideways scroll on phones */
 html, body { overflow-x: clip; }
+
+#langToggle { margin-left: 6px; }
