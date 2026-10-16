@@ -161,7 +161,7 @@ $('askForm').addEventListener('submit', async e => {
   const plan = form.get('plan');
   const timeframe = form.get('timeframe');
   $('formError').textContent = '';
-  if (!coins.some(c => c.symbol === coin)) return ($('formError').textContent = 'Pick a coin from the list: ETH, SOL or AAVE.');
+  if (!coins.some(c => c.symbol === coin)) return ($('formError').textContent = 'Pick a coin from the list.');
   if (!plan) return ($('formError').textContent = 'Choose Long or Short.');
   if (!timeframe) return ($('formError').textContent = 'Choose a timeframe.');
 

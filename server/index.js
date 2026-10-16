@@ -9,7 +9,7 @@ import { saveRun } from './log.js';
 import { market } from './market.js';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const coins = JSON.parse(await readFile(path.join(root, 'config/coins.json'), 'utf8'));
+const allCoins = JSON.parse(await readFile(path.join(root, 'config/coins.json'), 'utf8'));
 const marketFeeds = JSON.parse(await readFile(path.join(root, 'config/feeds.json'), 'utf8'));
 const prices = JSON.parse(await readFile(path.join(root, 'config/prices.json'), 'utf8'));
 const MODEL = process.env.MODEL || 'claude-haiku-5-5';
@@ -17,6 +17,8 @@ const DATA_MODE = process.env.DATA_MODE === 'live' ? 'live' : 'sample';
 // REPLAY=1: the public demo. Serves archived editions (real runs on live news) and never calls the AI.
 const REPLAY = process.env.REPLAY === '1';
 const replay = REPLAY ? JSON.parse(await readFile(path.join(root, 'data/replay/editions.json'), 'utf8')) : null;
+// The replay demo only offers the coins it has archived editions for.
+const coins = REPLAY ? allCoins.filter(c => Object.keys(replay.editions).some(k => k.startsWith(c.symbol + '|'))) : allCoins;
 // PUBLIC_LIVE=1: the public live site. One fresh edition per coin and horizon, shared by every reader
 // for 30 minutes (server memory + CDN cache), and a daily spending limit, so visitors cannot run up the bill.
 const PUBLIC_LIVE = process.env.PUBLIC_LIVE === '1';
@@ -44,7 +46,7 @@ app.get('/api/edition', async (req, res) => {
   const symbol = String(req.query.coin ?? '').trim().toUpperCase();
   const timeframe = String(req.query.timeframe ?? '');
   const coin = coins.find(c => c.symbol === symbol);
-  if (!coin || !TIMEFRAMES.includes(timeframe)) return res.status(400).json({ error: 'Pick ETH, SOL or AAVE and a timeframe.' });
+  if (!coin || !TIMEFRAMES.includes(timeframe)) return res.status(400).json({ error: 'Pick a coin from the list and a timeframe.' });
   const horizon = horizonOf(timeframe);
   const key = `${symbol}|${horizon}`;
   const cached = editions.get(key);
@@ -131,7 +133,7 @@ app.post('/api/analyze', async (req, res) => {
   const symbol = String(req.body?.coin ?? '').trim().toUpperCase();
   const coin = coins.find(c => c.symbol === symbol);
   if (!coin || !['long', 'short'].includes(plan) || !TIMEFRAMES.includes(timeframe)) {
-    const what = !coin ? 'Pick ETH, SOL or AAVE.' : !['long', 'short'].includes(plan) ? 'Choose Long or Short.' : 'Choose a timeframe: 15m, 1h, 4h or 1d.';
+    const what = !coin ? 'Pick a coin from the list.' : !['long', 'short'].includes(plan) ? 'Choose Long or Short.' : 'Choose a timeframe: 15m, 1h, 4h or 1d.';
     return res.status(400).json({ error: what });
   }
   if (REPLAY) {

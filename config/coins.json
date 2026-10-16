@@ -1,11 +1,52 @@
 [
   {
+    "symbol": "BTC",
+    "name": "Bitcoin",
+    "coingecko": "bitcoin",
+    "feeds": [
+      {
+        "name": "Bitcoin Core news",
+        "url": "https://bitcoincore.org/en/rss.xml"
+      }
+    ],
+    "keywords": [
+      "bitcoin",
+      " btc "
+    ]
+  },
+  {
     "symbol": "ETH",
     "name": "Ethereum",
     "coingecko": "ethereum",
     "feeds": [
-      { "name": "Ethereum Foundation Blog", "url": "https://blog.ethereum.org/feed.xml" },
-      { "name": "Ethereum Magicians forum", "url": "https://ethereum-magicians.org/latest.rss" }
+      {
+        "name": "Ethereum Foundation Blog",
+        "url": "https://blog.ethereum.org/feed.xml"
+      },
+      {
+        "name": "Ethereum Magicians forum",
+        "url": "https://ethereum-magicians.org/latest.rss"
+      }
+    ],
+    "keywords": [
+      "ethereum",
+      "ether ",
+      " eth "
+    ]
+  },
+  {
+    "symbol": "BNB",
+    "name": "BNB Chain",
+    "coingecko": "binancecoin",
+    "feeds": [
+      {
+        "name": "BNB Chain forum",
+        "url": "https://forum.bnbchain.org/latest.rss"
+      }
+    ],
+    "keywords": [
+      "bnb",
+      "binance"
     ]
   },
   {
@@ -13,8 +54,119 @@
     "name": "Solana",
     "coingecko": "solana",
     "feeds": [
-      { "name": "Solana News", "url": "https://solana.com/news/rss.xml" },
-      { "name": "Solana forum", "url": "https://forum.solana.com/latest.rss" }
+      {
+        "name": "Solana News",
+        "url": "https://solana.com/news/rss.xml"
+      },
+      {
+        "name": "Solana forum",
+        "url": "https://forum.solana.com/latest.rss"
+      }
+    ],
+    "keywords": [
+      "solana",
+      " sol "
+    ]
+  },
+  {
+    "symbol": "XRP",
+    "name": "XRP",
+    "coingecko": "ripple",
+    "feeds": [],
+    "keywords": [
+      "xrp",
+      "ripple"
+    ]
+  },
+  {
+    "symbol": "DOGE",
+    "name": "Dogecoin",
+    "coingecko": "dogecoin",
+    "feeds": [
+      {
+        "name": "Dogecoin Foundation",
+        "url": "https://foundation.dogecoin.com/announcements/index.xml"
+      }
+    ],
+    "keywords": [
+      "dogecoin",
+      "doge"
+    ]
+  },
+  {
+    "symbol": "ADA",
+    "name": "Cardano",
+    "coingecko": "cardano",
+    "feeds": [
+      {
+        "name": "Cardano forum",
+        "url": "https://forum.cardano.org/latest.rss"
+      }
+    ],
+    "keywords": [
+      "cardano",
+      " ada "
+    ]
+  },
+  {
+    "symbol": "TRX",
+    "name": "TRON",
+    "coingecko": "tron",
+    "feeds": [
+      {
+        "name": "TRON DAO forum",
+        "url": "https://forum.trondao.org/latest.rss"
+      }
+    ],
+    "keywords": [
+      "tron",
+      " trx "
+    ]
+  },
+  {
+    "symbol": "TON",
+    "name": "Toncoin",
+    "coingecko": "the-open-network",
+    "feeds": [
+      {
+        "name": "TON blog",
+        "url": "https://medium.com/feed/@tonblockchain"
+      }
+    ],
+    "keywords": [
+      "toncoin",
+      " ton ",
+      "telegram"
+    ]
+  },
+  {
+    "symbol": "AVAX",
+    "name": "Avalanche",
+    "coingecko": "avalanche-2",
+    "feeds": [
+      {
+        "name": "Avalanche blog",
+        "url": "https://medium.com/feed/avalancheavax"
+      }
+    ],
+    "keywords": [
+      "avalanche",
+      "avax"
+    ]
+  },
+  {
+    "symbol": "LINK",
+    "name": "Chainlink",
+    "coingecko": "chainlink",
+    "feeds": [
+      {
+        "name": "Chainlink blog",
+        "url": "https://medium.com/feed/chainlink"
+      }
+    ],
+    "keywords": [
+      "chainlink",
+      " link "
     ]
   },
   {
@@ -22,7 +174,13 @@
     "name": "Aave",
     "coingecko": "aave",
     "feeds": [
-      { "name": "Aave governance forum", "url": "https://governance.aave.com/latest.rss" }
+      {
+        "name": "Aave governance forum",
+        "url": "https://governance.aave.com/latest.rss"
+      }
+    ],
+    "keywords": [
+      "aave"
     ]
   }
 ]

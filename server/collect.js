@@ -84,12 +84,13 @@ export function select(items, { horizon, now = Date.now() }) {
       seen.add(key);
       return true;
     })
-    .sort((a, b) => (a.kind === 'project') - (b.kind === 'project') || Date.parse(b.date) - Date.parse(a.date));
+    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
   // Project items are rare and matter most: keep up to 10 of them, fill the rest with market news.
-  const project = kept.filter(it => it.kind === 'project').slice(0, 10);
+  const isCoin = it => it.kind === 'project' || it.kind === 'coin';
+  const project = kept.filter(isCoin).slice(0, 12);
   // Take market news in turns from each source, so one busy feed cannot crowd out the others.
   const bySource = new Map();
-  for (const it of kept.filter(it => it.kind !== 'project')) {
+  for (const it of kept.filter(it => !isCoin(it))) {
     if (!bySource.has(it.source)) bySource.set(it.source, []);
     bySource.get(it.source).push(it);
   }
@@ -100,6 +101,16 @@ export function select(items, { horizon, now = Date.now() }) {
     if (market.length === before) break;
   }
   return [...project, ...market].map((it, i) => ({ n: i + 1, ...it }));
+}
+
+// Crypto market headlines that name the coin count as news about the coin itself.
+export function markCoinNews(items, coin) {
+  const words = (coin.keywords ?? []).map(w => w.toLowerCase());
+  return items.map(it => {
+    if (it.kind !== 'crypto' || !words.length) return it;
+    const text = ` ${it.title} ${it.summary} `.toLowerCase().replace(/[^a-z0-9 ]/g, ' ');
+    return words.some(w => text.includes(w)) ? { ...it, kind: 'coin' } : it;
+  });
 }
 
 const feedsFor = (coin, marketFeeds) => [
@@ -118,7 +129,7 @@ export async function collect({ coin, marketFeeds, timeframe, mode, root }) {
     return { horizon, items: select(items, { horizon, now: Date.parse(snap.taken_at) }), missing, sample: true };
   }
   const { items, missing } = await fetchAll(feedsFor(coin, marketFeeds));
-  return { horizon, items: select(items, { horizon }), missing, sample: false };
+  return { horizon, items: select(markCoinNews(items, coin), { horizon }), missing, sample: false };
 }
 
 // Save one snapshot of every feed for every coin, used by sample mode.

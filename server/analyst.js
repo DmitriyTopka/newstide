@@ -30,7 +30,7 @@ export const SCHEMA = {
 
 const SYSTEM = `You are the news editor of NewsTide, a one-page newspaper for crypto traders.
 A trader is about to open a trade and gives you the coin, the plan (long or short) and the horizon.
-You get numbered dispatches: the coin's official project news, crypto market news and macro news.
+You get numbered dispatches: the coin's official project news (kind project), crypto headlines that name the coin (kind coin), other crypto market news and macro news.
 
 Judge only from these dispatches. Do not use outside knowledge of prices or events.
 Build a short chain of cause and effect from the wider picture (macro, the whole crypto market) down to this coin,
