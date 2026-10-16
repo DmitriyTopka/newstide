@@ -23,6 +23,8 @@ const PUBLIC_LIVE = process.env.PUBLIC_LIVE === '1';
 const EDITION_TTL_MS = 30 * 60 * 1000;
 const DAILY_LIMIT_USD = Number(process.env.DAILY_LIMIT_USD || 0.5);
 const editions = new Map();
+const inFlight = new Map(); // one print run per coin and horizon at a time
+const RESERVE_USD = 0.002;   // set aside before each call so parallel requests cannot pass the limit
 const spend = { day: '', usd: 0 };
 // The AI client is loaded only when it is needed, so the demo runs without any key.
 const analyze = async (...args) => (await import('./analyst.js')).analyze(...args);
@@ -58,13 +60,22 @@ app.get('/api/edition', async (req, res) => {
     if (cached) return sendCached(cached);
     return res.status(503).json({ error: 'Today\'s free editions are used up. Come back tomorrow, or run NewsTide on your own machine with your own key.' });
   }
+  if (inFlight.has(key)) {
+    try { return sendCached({ data: await inFlight.get(key) }); }
+    catch { return res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.' }); }
+  }
+  spend.usd += RESERVE_USD;
+  let finish;
+  const run = new Promise((resolve, reject) => { finish = { resolve, reject }; });
+  run.catch(() => {});
+  inFlight.set(key, run);
   try {
     const gathered = await collect({ coin, marketFeeds, timeframe, mode: 'live', root });
-    if (gathered.items.length < 3) return res.status(422).json({ error: 'Not enough news to judge right now. Try again later.' });
+    if (gathered.items.length < 3) throw Object.assign(new Error('few'), { status: 422 });
     const { answer, usage, model } = await analyze({ coin, plan: 'long', horizon, items: gathered.items, model: MODEL });
     const checked = check(answer, { plan: 'long', items: gathered.items });
     const usd = costOf(usage, MODEL);
-    spend.usd += usd;
+    spend.usd += usd - RESERVE_USD;
     const byNumber = new Map(gathered.items.map(it => [it.n, it]));
     const cited = [...new Set(checked.answer.chain.flatMap(c => c.cites))].sort((a, b) => a - b);
     const data = {
@@ -79,11 +90,16 @@ app.get('/api/edition', async (req, res) => {
       cost: { usd, model, shared: true }
     };
     editions.set(key, { at: Date.now(), data });
+    finish.resolve(data);
     sendCached({ data });
   } catch (err) {
+    finish.reject(err);
+    if (err.status === 422) return res.status(422).json({ error: 'Not enough news to judge right now. Try again later.' });
     console.error('[edition]', err);
     if (cached) return sendCached(cached);
     res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.' });
+  } finally {
+    inFlight.delete(key);
   }
 });
 
@@ -109,6 +125,8 @@ function costOf(usage, model) {
 }
 
 app.post('/api/analyze', async (req, res) => {
+  // On the public live site every analysis must go through the shared, limited /api/edition.
+  if (PUBLIC_LIVE) return res.status(404).json({ error: 'Not available.' });
   const { plan, timeframe } = req.body ?? {};
   const symbol = String(req.body?.coin ?? '').trim().toUpperCase();
   const coin = coins.find(c => c.symbol === symbol);
