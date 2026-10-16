@@ -6,6 +6,7 @@ Before a trade you pick a coin, Long or Short, and your timeframe. NewsTide read
 
 ![The NewsTide front page: Bull Edition, "Growth expected for SOL", the stamp favours a Long plan, editor's notes open](docs/screenshot-verdict.jpg)
 
+**Try it:** https://newstide-paper.vercel.app (replays archived real editions from 13 and 16 October 2026, no AI calls)  
 **Demo video:** https://youtu.be/9dTlaGs665U
 
 Built for Devpost's **Build With AI: Basics** hackathon with the Devpost Learn Skill Pack. The planning documents live in [`devpost/`](devpost): [scope](devpost/scope.md), [PRD](devpost/prd.md), [technical spec](devpost/spec.md) and the [build checklist](devpost/checklist.md).
@@ -47,6 +48,10 @@ If a feed is down, it is skipped and the page says so. If nothing usable comes b
 | Prices | [CoinGecko](https://docs.coingecko.com/) for Bitcoin and Ether, Yahoo Finance chart data (unofficial) for the S&P 500 and the dollar index |
 
 None of the three coins has an open official Telegram channel, so the official blogs and forums are used instead. X is not connected yet: reading X costs money per post, so it is planned for later.
+
+## Public demo
+
+The demo at https://newstide-paper.vercel.app runs with `REPLAY=1`: it serves six archived editions from `data/replay/editions.json` (real runs on live news) and never calls the AI, so it needs no key. The stamp is still worked out for the plan you pick.
 
 ## Run it
 

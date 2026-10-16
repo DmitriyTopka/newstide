@@ -1,0 +1,9 @@
+.env
+.env.*
+runs/
+data/sample/
+devpost/learner-profile.md
+node_modules/
+.agents/
+agent/
+.claude/

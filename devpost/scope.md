@@ -46,6 +46,7 @@ The "oh, that's cool" moment: about twenty scattered headlines collapse into one
 - Input: coin, long/short, timeframe. Output: short conclusion, verdict vs plan, spot/futures note.
 
 ## Later
+- (Done 2026-10-16) A public demo that replays archived real editions, so anyone can try it without a key. Live analysis stays local.
 - Any coin from the top 100.
 - A TradingView indicator: analyzes the coin on the chart the user is viewing, reacts to the timeframe, may show arrows and an RSI-like line. Needs an outside service, because Pine Script indicators cannot fetch news or call an AI model themselves (to verify in `4-spec`).
 

@@ -6,3 +6,4 @@ node_modules/
 runs/*
 !runs/example-run.json
 .DS_Store
+.vercel

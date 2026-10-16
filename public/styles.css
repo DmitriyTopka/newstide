@@ -319,3 +319,16 @@ body {
   .plate { grid-template-columns: 1fr; }
   .signs { grid-auto-flow: column; }
 }
+
+/* Demo banner for the public replay edition */
+.demo-banner {
+  margin: 10px 0 0;
+  padding: 6px 12px;
+  border: 1px dashed var(--rule);
+  font-size: 14px;
+  font-style: italic;
+  text-align: center;
+}
+
+/* No sideways scroll on phones */
+html, body { overflow-x: clip; }

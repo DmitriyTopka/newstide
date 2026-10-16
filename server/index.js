@@ -3,8 +3,8 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { collect } from './collect.js';
-import { analyze } from './analyst.js';
-import { check } from './check.js';
+import { check, expectedFit } from './check.js';
+import { horizonOf } from './collect.js';
 import { saveRun } from './log.js';
 import { market } from './market.js';
 
@@ -14,12 +14,19 @@ const marketFeeds = JSON.parse(await readFile(path.join(root, 'config/feeds.json
 const prices = JSON.parse(await readFile(path.join(root, 'config/prices.json'), 'utf8'));
 const MODEL = process.env.MODEL || 'claude-haiku-5-5';
 const DATA_MODE = process.env.DATA_MODE === 'live' ? 'live' : 'sample';
+// REPLAY=1: the public demo. Serves archived editions (real runs on live news) and never calls the AI.
+const REPLAY = process.env.REPLAY === '1';
+const replay = REPLAY ? JSON.parse(await readFile(path.join(root, 'data/replay/editions.json'), 'utf8')) : null;
+// The AI client is loaded only when it is needed, so the demo runs without any key.
+const analyze = async (...args) => (await import('./analyst.js')).analyze(...args);
 
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(root, 'public')));
 
 // The coin list for the suggestions under the coin field.
+app.get('/api/mode', (req, res) => res.json({ replay: REPLAY }));
+
 app.get('/api/coins', (req, res) => {
   res.json(coins.map(({ symbol, name }) => ({ symbol, name })));
 });
@@ -51,6 +58,24 @@ app.post('/api/analyze', async (req, res) => {
     const what = !coin ? 'Pick ETH, SOL or AAVE.' : !['long', 'short'].includes(plan) ? 'Choose Long or Short.' : 'Choose a timeframe: 15m, 1h, 4h or 1d.';
     return res.status(400).json({ error: what });
   }
+  if (REPLAY) {
+    const ed = replay.editions[`${symbol}|${horizonOf(timeframe)}`];
+    await new Promise(r => setTimeout(r, 1200));
+    return res.json({
+      sample: false,
+      archived: { at: ed.at, model: ed.model, items: ed.items_count },
+      direction: ed.direction,
+      plan_fit: expectedFit(plan, ed.direction),
+      verdict: ed.verdict,
+      spot_futures_note: ed.spot_futures_note,
+      horizon: horizonOf(timeframe),
+      notes: { chain: ed.chain, dispatches: ed.dispatches },
+      x_connected: false,
+      missing_sources: ed.missing_sources,
+      cost: { usd: ed.cost_usd, model: ed.model, archived: true }
+    });
+  }
+
   const at = new Date().toISOString();
   try {
     const gathered = await collect({ coin, marketFeeds, timeframe, mode: DATA_MODE, root });
@@ -98,5 +123,9 @@ app.use((err, req, res, next) => {
   res.status(err.status && err.status < 500 ? err.status : 500).json({ error: 'Bad request.' });
 });
 
-const port = Number(process.env.PORT) || 3000;
-app.listen(port, () => console.log(`NewsTide is running at http://localhost:${port} (model ${MODEL}, ${DATA_MODE} data)`));
+export default app;
+
+if (!process.env.VERCEL) {
+  const port = Number(process.env.PORT) || 3000;
+  app.listen(port, () => console.log(`NewsTide is running at http://localhost:${port} (${REPLAY ? 'replay of archived editions' : `model ${MODEL}, ${DATA_MODE} data`})`));
+}

@@ -142,3 +142,6 @@ Inside, the indicator builds a logical chain: one factor affects another, that a
 ## Open Questions
 - **Reading X through the user's account:** whether X allows it for free is unknown; check in `4-spec`.
 - **Investing and news sites as sources:** which can be read freely and fairly; check in `4-spec`.
+
+## Public Demo (added 2026-10-16)
+A public replay of archived real editions lets judges try the page without an AI key; live analysis stays on the trader's own machine. See `spec.md > Public Demo (Replay Mode)`.

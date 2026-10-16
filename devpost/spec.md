@@ -48,6 +48,9 @@ PRD ref: `prd.md > The Core Journey`.
 - Public repository: https://github.com/DmitriyTopka/newstide (published 2026-10-11, checked without login).
 - Demo video: https://youtu.be/9dTlaGs665U (public on YouTube, 1:47, recorded 2026-10-13 on live news). A server for other people is deferred (`What Was Simplified and Why`).
 
+## Public Demo (Replay Mode)
+Added 2026-10-16 after the pre-ship council. `REPLAY=1` makes `POST /api/analyze` answer from `data/replay/editions.json`: six archived editions, real runs on live news from 13 and 16 October 2026 (one per coin and horizon). The stamp is recomputed for the visitor's plan with the same rule as the Answer Checker. The AI client is never loaded, so the demo needs no key and costs nothing. The page shows a demo banner and "Archived edition of <date>". Deployed on Vercel (free) at https://newstide-paper.vercel.app via `api/index.js`; live mode still runs locally with `npm start`.
+
 ## Look and Feel
 Carries `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 - **An old printed newspaper being opened.** Off-white newsprint background, black ink, thin column rules, a masthead "NewsTide" at the top like a newspaper title, date line under it.

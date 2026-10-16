@@ -105,7 +105,11 @@ function showResult(r, plan) {
   $('missing').hidden = !r.missing_sources?.length;
   $('missing').textContent = r.missing_sources?.length ? `Unavailable today: ${r.missing_sources.join(', ')}.` : '';
   $('xNote').hidden = r.x_connected;
-  $('resultSample').hidden = !r.sample;
+  $('resultSample').hidden = !r.sample && !r.archived;
+  if (r.archived) {
+    const d = new Date(r.archived.at).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    $('resultSample').textContent = `Archived edition of ${d}, built from ${r.archived.items} news items by ${r.archived.model}. Replayed, not live.`;
+  }
 
   // Editor's notes: the reasoning chain, closed by default
   const notes = r.notes ?? { chain: [], dispatches: [] };
@@ -119,7 +123,9 @@ function showResult(r, plan) {
   $('paper').dataset.mood = moods[r.direction];
   const cost = r.cost?.usd ?? 0;
   sessionSpend += cost;
-  $('price').textContent = `Price of this edition: ${money(cost)}. Spent this session: ${money(sessionSpend)}.`;
+  $('price').textContent = r.cost?.archived
+    ? `Price of this edition when it was printed: ${money(cost)}. Replaying it costs nothing.`
+    : `Price of this edition: ${money(cost)}. Spent this session: ${money(sessionSpend)}.`;
 
   $('welcome').hidden = true;
   $('result').hidden = false;
@@ -186,3 +192,4 @@ $('coin').addEventListener('input', () => { $('formError').textContent = ''; });
 tearEdges();
 loadCoins();
 loadMarket();
+fetch('/api/mode').then(r => r.json()).then(m => { $('demoBanner').hidden = !m.replay; }).catch(() => {});
