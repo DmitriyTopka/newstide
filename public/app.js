@@ -71,7 +71,7 @@ function quoteHtml(q) {
   return `<span class="quote">${escapeHtml(name)} <b>${escapeHtml(q.value)}</b> <span class="${up ? 'up-tick' : 'down-tick'}">${up ? '\u25B2' : '\u25BC'} ${ch}</span></span>`;
 }
 function briefs(list) {
-  return list.map(n => `<li><details><summary><b>${escapeHtml(n.title)}</b><small data-more="${escapeHtml(T().readMore)}" data-close="${escapeHtml(T().close)}">${escapeHtml(n.source)}</small></summary><p>${escapeHtml(n.summary ?? '')}</p>${/^https?:\/\//i.test(n.link ?? '') ? `<a href="${escapeHtml(n.link)}" target="_blank" rel="noopener">${escapeHtml(T().fullStory)}</a>` : ''}</details></li>`).join('');
+  return list.map(n => `<li><details><summary><b>${escapeHtml(pick(n, 'title'))}</b><small data-more="${escapeHtml(T().readMore)}" data-close="${escapeHtml(T().close)}">${escapeHtml(n.source)}</small></summary><p>${escapeHtml(pick(n, 'summary') ?? '')}</p>${/^https?:\/\//i.test(n.link ?? '') ? `<a href="${escapeHtml(n.link)}" target="_blank" rel="noopener">${escapeHtml(T().fullStory)}</a>` : ''}</details></li>`).join('');
 }
 function renderMarket(m) {
   const quotes = m.quotes ?? [];
@@ -160,7 +160,7 @@ function showResult(r, plan, reprint = false) {
   $('chain').innerHTML = notes.chain
     .map(c => `<li>${escapeHtml((lang === 'ru' && c.step_ru) || c.step)} <span class="cites">${(c.cites ?? []).map(n => `[${Number(n) | 0}]`).join(' ')}</span></li>`).join('');
   $('cited').innerHTML = notes.dispatches
-    .map(d => `<li><span class="cites">[${Number(d.n) | 0}]</span> ${escapeHtml(d.title)} <small>${escapeHtml(d.source)}</small></li>`).join('');
+    .map(d => `<li><span class="cites">[${Number(d.n) | 0}]</span> ${escapeHtml(pick(d, 'title'))} <small>${escapeHtml(d.source)}</small></li>`).join('');
 
   $('paper').dataset.mood = moods[r.direction];
   const cost = r.cost?.usd ?? 0;

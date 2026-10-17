@@ -12,10 +12,13 @@
       },
       "direction": "up",
       "verdict": "Growth expected for SOL",
+      "verdict_ru": "Для SOL ожидается рост",
       "spot_futures_note": "Futures would react faster to any swing and amplify gains or losses, while spot should move more calmly.",
+      "spot_futures_note_ru": "Фьючерсы быстрее отреагируют на любое колебание и усилят прибыль или убыток, а спот должен двигаться спокойнее.",
       "chain": [
         {
           "step": "The macro backdrop is mixed: a near-$2 trillion US deficit and geopolitical and trade tensions weigh on sentiment, but easing rate-hike expectations leave no decisive pressure.",
+          "step_ru": "Макрофон смешанный: дефицит бюджета США почти в $2 трлн, геополитическая и торговая напряжённость давят на настроения, но ожидания повышения ставки ослабли, так что решающего давления нет.",
           "cites": [
             13,
             18,
@@ -25,6 +28,7 @@
         },
         {
           "step": "The wider crypto market looks steady, with Bitcoin holding above $80,000 as traders cut expectations of a Fed rate hike, and stablecoin and tokenized stock themes gaining attention.",
+          "step_ru": "Крипторынок в целом выглядит устойчиво: Bitcoin держится выше $80 000, поскольку трейдеры снижают ожидания повышения ставки ФРС, а темы стейблкоинов и токенизированных акций привлекают внимание.",
           "cites": [
             17,
             22,
@@ -34,6 +38,7 @@
         },
         {
           "step": "Solana's own official news is clearly positive, with Samsung Wallet bringing USDC transfers on Solana to 82 million US devices and the Foundation launching institutional settlement infrastructure.",
+          "step_ru": "Собственные официальные новости Solana явно позитивные: Samsung Wallet открывает переводы USDC в сети Solana для 82 млн устройств в США, а фонд Solana запускает инфраструктуру расчётов для институционалов.",
           "cites": [
             7,
             9
@@ -41,6 +46,7 @@
         },
         {
           "step": "Network growth and upgrades add support: stablecoin supply and tokenized equities are rising, payment tests are strong, and slot times are being cut, so the coin's own news decides the direction upward despite the mixed macro picture.",
+          "step_ru": "Рост сети и обновления дают дополнительную опору: предложение стейблкоинов и токенизированных акций растёт, тесты платежей сильные, время слота сокращают, поэтому направление вверх задают новости самой монеты, несмотря на смешанный макрофон.",
           "cites": [
             3,
             6,
@@ -52,78 +58,91 @@
         {
           "n": 3,
           "title": "Payments on Solana: September 2026 in Five Stories",
+          "title_ru": "Платежи на Solana: сентябрь 2026 в пяти историях",
           "source": "Solana News",
           "link": "https://solana.com/news/payments-on-solana-september-2026-in-five-stories"
         },
         {
           "n": 6,
           "title": "Solana Changelog: October 8, 2026",
+          "title_ru": "Список изменений Solana: 8 октября 2026",
           "source": "Solana News",
           "link": "https://solana.com/news/solana-changelog-october-8-2026"
         },
         {
           "n": 7,
           "title": "Samsung Partners with Solana to Natively Deliver Stablecoins in Samsung Wallet to 82 Million U.S. Galaxy Devices",
+          "title_ru": "Samsung и Solana встраивают стейблкоины в Samsung Wallet на 82 млн устройств Galaxy в США",
           "source": "Solana News",
           "link": "https://solana.com/news/samsung-wallet"
         },
         {
           "n": 8,
           "title": "Solana Ecosystem Roundup: September 2026",
+          "title_ru": "Обзор экосистемы Solana: сентябрь 2026",
           "source": "Solana News",
           "link": "https://solana.com/news/solana-ecosystem-roundup-september-2026"
         },
         {
           "n": 9,
           "title": "Solana Foundation Launches Solana DvP, an Atomic Settlement Program Built for Financial Institutions",
+          "title_ru": "Фонд Solana запускает Solana DvP, программу атомарных расчётов для финансовых институтов",
           "source": "Solana News",
           "link": "https://solana.com/news/solana-foundation-launches-solana-dv-p-an-atomic-settlement-program-built-for-financial-institutions"
         },
         {
           "n": 13,
           "title": "US fiscal 2026 budget deficit rises to $1.99 trillion, largest in 5 years",
+          "title_ru": "Дефицит бюджета США за 2026 финансовый год вырос до $1,99 трлн, максимум за 5 лет",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/us-fiscal-2026-budget-deficit-rises-to-199-trillion-largest-in-5-years-4954709"
         },
         {
           "n": 17,
           "title": "Stablecoin remittances cost 84% less than traditional transfers, report finds",
+          "title_ru": "Переводы в стейблкоинах на 84% дешевле обычных, показал отчёт",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/news/stablecoin-remittances-cost-savings-traditional-transfers?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 18,
           "title": "EU to propose import curbs on other Chinese sectors, says EU chief",
+          "title_ru": "ЕС предложит ограничить импорт из других секторов Китая, заявила глава ЕС",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/eu-to-propose-import-curbs-on-other-chinese-sectorssays-eu-chief-4954705"
         },
         {
           "n": 21,
-          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn\u2019t doing much about it",
+          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn’t doing much about it",
+          "title_ru": "Дефицит бюджета США достиг почти $2 трлн, а Вашингтон почти ничего с этим не делает",
           "source": "MarketWatch",
           "link": "https://www.marketwatch.com/story/the-u-s-budget-deficit-just-hit-almost-2-trillion-and-washington-isnt-doing-much-about-it-a1b5c4ea?mod=mw_rss_topstories"
         },
         {
           "n": 22,
           "title": "Crypto Biz: Wall Street closes at 4. Tokenized stocks keep trading",
+          "title_ru": "Crypto Biz: Уолл-стрит закрывается в 4, а токенизированные акции продолжают торговаться",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/news/tokenized-stocks-after-hours-trading-crypto-biz?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 25,
           "title": "Circle targets 40 new markets as stablecoin demand grows globally",
+          "title_ru": "Circle нацелилась на 40 новых рынков на фоне роста спроса на стейблкоины в мире",
           "source": "CoinDesk",
           "link": "https://www.coindesk.com/business/2026/10/16/circle-targets-40-new-markets-as-stablecoin-demand-grows-globally"
         },
         {
           "n": 27,
-          "title": "Bitcoin price steadies around $82K after Fed\u2019s Warsh avoids rate-hike hints",
+          "title": "Bitcoin price steadies around $82K after Fed’s Warsh avoids rate-hike hints",
+          "title_ru": "Цена Bitcoin стабилизировалась около $82K после того, как Уорш из ФРС не намекнул на повышение ставки",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/markets/bitcoin-price-steadies-82k-fed-warsh-avoids-rate-hike-hints?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 28,
-          "title": "Putin says Russia is building non-negotiable \u2019security zone\u2019 in Ukraine along border",
+          "title": "Putin says Russia is building non-negotiable ’security zone’ in Ukraine along border",
+          "title_ru": "Путин заявил, что Россия создаёт в Украине вдоль границы «зону безопасности», которая не обсуждается",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/putin-says-russia-is-building-nonnegotiable-security-zone-in-ukraine-along-border-4954673"
         }
@@ -143,10 +162,13 @@
       },
       "direction": "sideways",
       "verdict": "Neutral for now on SOL",
+      "verdict_ru": "По SOL пока нейтрально",
       "spot_futures_note": "Futures may jump on any Fed or equity headline, while spot SOL should drift more calmly.",
+      "spot_futures_note_ru": "Фьючерсы могут резко дёрнуться на любой новости о ФРС или фондовом рынке, а спот SOL, скорее всего, будет двигаться спокойнее.",
       "chain": [
         {
           "step": "Macro is mixed: a near-$2 trillion deficit and sticky service-sector price pressures weigh, while strong industrial output supports the dollar, so there is no clear push for risk assets.",
+          "step_ru": "Макрофон смешанный: дефицит почти в $2 трлн и устойчивое давление цен в секторе услуг давят, а сильный рост промпроизводства поддерживает доллар, так что явного толчка для рисковых активов нет.",
           "cites": [
             3,
             10,
@@ -156,6 +178,7 @@
         },
         {
           "step": "Crypto is calm, as Bitcoin holds near $82K after Fed Chair Warsh gave no rate-hike hints, and some altcoins are outpacing it, but this is selective rather than a broad rally.",
+          "step_ru": "В крипте спокойно: Bitcoin держится около $82K после того, как глава ФРС Уорш не намекнул на повышение ставки, а часть альткоинов обгоняет его, но это выборочно, а не широкое ралли.",
           "cites": [
             15,
             25
@@ -163,6 +186,7 @@
         },
         {
           "step": "There is no official Solana news in the dispatches, so nothing from the coin itself tips the balance and a long has no clear edge for the next hours.",
+          "step_ru": "Официальных новостей Solana в сводке нет, поэтому сама монета не склоняет чашу весов, и у Long нет явного преимущества на ближайшие часы.",
           "cites": [
             25
           ]
@@ -172,36 +196,42 @@
         {
           "n": 3,
           "title": "US fiscal 2026 budget deficit rises to $1.99 trillion, largest in 5 years",
+          "title_ru": "Дефицит бюджета США за 2026 финансовый год вырос до $1,99 трлн, максимум за 5 лет",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/us-fiscal-2026-budget-deficit-rises-to-199-trillion-largest-in-5-years-4954709"
         },
         {
           "n": 10,
-          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn\u2019t doing much about it",
+          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn’t doing much about it",
+          "title_ru": "Дефицит бюджета США достиг почти $2 трлн, а Вашингтон почти ничего с этим не делает",
           "source": "MarketWatch",
           "link": "https://www.marketwatch.com/story/the-u-s-budget-deficit-just-hit-almost-2-trillion-and-washington-isnt-doing-much-about-it-a1b5c4ea?mod=mw_rss_topstories"
         },
         {
           "n": 15,
-          "title": "Bitcoin price steadies around $82K after Fed\u2019s Warsh avoids rate-hike hints",
+          "title": "Bitcoin price steadies around $82K after Fed’s Warsh avoids rate-hike hints",
+          "title_ru": "Цена Bitcoin стабилизировалась около $82K после того, как Уорш из ФРС не намекнул на повышение ставки",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/markets/bitcoin-price-steadies-82k-fed-warsh-avoids-rate-hike-hints?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 20,
           "title": "NY Fed service sector survey finds notable price pressures",
+          "title_ru": "Опрос ФРБ Нью-Йорка в секторе услуг выявил заметное давление цен",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/ny-fed-service-sector-survey-finds-notable-price-pressures-4954466"
         },
         {
           "n": 25,
           "title": "Altcoins outpace bitcoin as celestia jumps 16%, Warsh silent on interest-rate plans",
+          "title_ru": "Альткоины обгоняют bitcoin, celestia подскочила на 16%, Уорш молчит о планах по ставке",
           "source": "CoinDesk",
           "link": "https://www.coindesk.com/markets/2026/10/16/altcoins-outpace-bitcoin-as-celestia-jumps-16-warsh-silent-on-interest-rate-plans"
         },
         {
           "n": 28,
           "title": "Industrial production surges past expectations, boosting USD outlook",
+          "title_ru": "Промпроизводство резко выросло сверх ожиданий и улучшило прогноз по доллару",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/industrial-production-surges-past-expectations-boosting-usd-outlook-93CH-4954208"
         }
@@ -221,10 +251,13 @@
       },
       "direction": "down",
       "verdict": "Risk-off pressure weighs on ETH",
+      "verdict_ru": "Бегство от риска давит на ETH",
       "spot_futures_note": "Futures would react faster to a risk-off move and amplify it, especially around US inflation data, while spot would move more slowly.",
+      "spot_futures_note_ru": "Фьючерсы быстрее отреагируют на уход от риска и усилят движение, особенно вокруг данных по инфляции в США, а спот будет двигаться медленнее.",
       "chain": [
         {
           "step": "Inflation is rising in Germany, the UK and Romania, and rising stock gains are pushing up the cost of money, which discourages risk-taking.",
+          "step_ru": "Инфляция растёт в Германии, Великобритании и Румынии, а рост фондового рынка поднимает стоимость денег, что отбивает охоту рисковать.",
           "cites": [
             14,
             19,
@@ -234,6 +267,7 @@
         },
         {
           "step": "A deepening South Korean tech and chip sell-off over AI worries is spreading to crypto, where Bitcoin and ether slipped and Bitcoin stalled below resistance ahead of US inflation data.",
+          "step_ru": "Усиливающаяся распродажа техно- и чиповых акций в Южной Корее на фоне опасений вокруг ИИ перекидывается на крипту: Bitcoin и ether просели, а Bitcoin застрял под сопротивлением перед данными по инфляции в США.",
           "cites": [
             16,
             27,
@@ -242,6 +276,7 @@
         },
         {
           "step": "Crypto-specific headwinds add to the caution: South Korea is blocking unregistered exchanges and a retailer pulled Ledger wallets amid tampering reports, though tokenization interest and Metaplanet keeping its holdings are partial offsets.",
+          "step_ru": "Встречный ветер внутри крипты добавляет осторожности: Южная Корея блокирует незарегистрированные биржи, а ритейлер снял с продажи кошельки Ledger из-за сообщений о вскрытии, хотя интерес к токенизации и то, что Metaplanet сохраняет свои запасы, частично это уравновешивают.",
           "cites": [
             12,
             17,
@@ -251,6 +286,7 @@
         },
         {
           "step": "Ethereum's own official news is only routine developer meetings and proposals with no clear catalyst, so the weak market backdrop tilts the outlook down, which favors a short.",
+          "step_ru": "Собственные официальные новости Ethereum это лишь рутинные встречи разработчиков и предложения без явного катализатора, поэтому слабый рыночный фон склоняет прогноз вниз, что говорит в пользу Short.",
           "cites": [
             1,
             4,
@@ -263,90 +299,105 @@
         {
           "n": 1,
           "title": "All Core Devs - Testing (ACDT) #101, October 19, 2026",
+          "title_ru": "All Core Devs - Testing (ACDT) #101, 19 октября 2026",
           "source": "Ethereum Magicians forum",
           "link": "https://ethereum-magicians.org/t/all-core-devs-testing-acdt-101-october-19-2026/29957"
         },
         {
           "n": 4,
           "title": "FOCIL Breakout #44, October 13, 2026",
+          "title_ru": "FOCIL Breakout #44, 13 октября 2026",
           "source": "Ethereum Magicians forum",
           "link": "https://ethereum-magicians.org/t/focil-breakout-44-october-13-2026/29952"
         },
         {
           "n": 7,
           "title": "All Core Devs - Execution (ACDE) #248, October 22, 2026",
+          "title_ru": "All Core Devs - Execution (ACDE) #248, 22 октября 2026",
           "source": "Ethereum Magicians forum",
           "link": "https://ethereum-magicians.org/t/all-core-devs-execution-acde-248-october-22-2026/29937"
         },
         {
           "n": 10,
           "title": "EIP-8440: Execution Chain Proofs",
+          "title_ru": "EIP-8440: доказательства цепочки исполнения",
           "source": "Ethereum Magicians forum",
           "link": "https://ethereum-magicians.org/t/eip-8440-execution-chain-proofs/29930"
         },
         {
           "n": 12,
           "title": "South Korea blocks 27 crypto exchanges, including Bitmart and Kucoin",
+          "title_ru": "Южная Корея блокирует 27 криптобирж, включая Bitmart и Kucoin",
           "source": "CoinDesk",
           "link": "https://www.coindesk.com/policy/2026/10/13/south-korea-blocks-27-crypto-exchanges-including-bitmart-and-kucoin"
         },
         {
           "n": 14,
           "title": "Romania inflation rises to 6.6% in September on fuel costs",
+          "title_ru": "Инфляция в Румынии в сентябре выросла до 6,6% из-за цен на топливо",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/romania-inflation-rises-to-66-in-september-on-fuel-costs-93CH-4946383"
         },
         {
           "n": 16,
           "title": "The South Korean stock market is in free fall, and these are the reasons",
+          "title_ru": "Фондовый рынок Южной Кореи в свободном падении, и вот почему",
           "source": "MarketWatch",
           "link": "https://www.marketwatch.com/story/the-korean-stock-markets-in-freefall-and-these-are-the-reasons-why-9615ac8d?mod=mw_rss_topstories"
         },
         {
           "n": 17,
           "title": "Federated Hermes joins Wall Street's tokenization push with plans for first onchain fund shares",
+          "title_ru": "Federated Hermes присоединяется к токенизации на Уолл-стрит и планирует первые ончейн-паи фонда",
           "source": "CoinDesk",
           "link": "https://www.coindesk.com/business/2026/10/13/federated-hermes-joins-wall-street-s-tokenization-push-with-plans-for-first-onchain-fund-shares"
         },
         {
           "n": 18,
           "title": "Metaplanet to issue $329M convertible bonds to pay debt, fund share buybacks",
+          "title_ru": "Metaplanet выпустит конвертируемые облигации на $329 млн для погашения долга и выкупа акций",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/news/metaplanet-329m-convertible-bonds-pay-debt-share-buybacks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 19,
           "title": "British grocery price inflation rises to 2.5% in October",
+          "title_ru": "Рост цен на продукты в Великобритании в октябре ускорился до 2,5%",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/british-grocery-price-inflation-rises-to-25-in-october-93CH-4945600"
         },
         {
           "n": 23,
           "title": "MediaMarktSaturn pulls Ledger products amid tampering reports",
+          "title_ru": "MediaMarktSaturn снимает с продажи продукцию Ledger из-за сообщений о вскрытии",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/news/mediamarkt-pulls-ledger-wallet-security-incident?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 24,
           "title": "German inflation rises to 3.3% in September",
+          "title_ru": "Инфляция в Германии в сентябре выросла до 3,3%",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/german-inflation-rises-to-33-in-september-93CH-4945543"
         },
         {
           "n": 26,
           "title": "U.S. wealth has shifted to stocks from homes. There are big reasons to worry.",
+          "title_ru": "Богатство американцев переместилось из жилья в акции. Есть серьёзные поводы для беспокойства.",
           "source": "MarketWatch",
           "link": "https://www.marketwatch.com/story/u-s-wealth-has-shifted-to-stocks-from-homes-there-are-big-reasons-to-worry-aa05864d?mod=mw_rss_topstories"
         },
         {
           "n": 27,
           "title": "Bitcoin, ether slip and rebound as South Korean stocks slide on AI-related concerns",
+          "title_ru": "Bitcoin и ether просели и отскочили, пока акции Южной Кореи падают из-за опасений вокруг ИИ",
           "source": "CoinDesk",
           "link": "https://www.coindesk.com/markets/2026/10/13/bitcoin-ether-slip-and-rebound-as-south-korean-stocks-slide-on-ai-related-concerns"
         },
         {
           "n": 28,
           "title": "Bitcoin hits $84K resistance as Korean tech rout deepens KOSPI losses",
+          "title_ru": "Bitcoin упёрся в сопротивление $84K, а обвал корейских техно-акций углубляет падение KOSPI",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/markets/bitcoin-hits-84k-resistance-as-korea-tech-sell-off-sends-kospi-down-74?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         }
@@ -366,10 +417,13 @@
       },
       "direction": "sideways",
       "verdict": "Neutral for now on ETH",
+      "verdict_ru": "По ETH пока нейтрально",
       "spot_futures_note": "Futures may jump on any Fed or Warsh headline, while spot should move more calmly in a quiet session.",
+      "spot_futures_note_ru": "Фьючерсы могут резко дёрнуться на любой новости о ФРС или Уорше, а спот в тихую сессию должен двигаться спокойнее.",
       "chain": [
         {
           "step": "Macro news is mixed: a near-$2 trillion US deficit and notable price pressures point to caution, while strong industrial output supports the dollar, which can weigh on crypto.",
+          "step_ru": "Макроновости смешанные: дефицит США почти в $2 трлн и заметное давление цен говорят об осторожности, а сильный рост промпроизводства поддерживает доллар, что может давить на крипту.",
           "cites": [
             12,
             22,
@@ -378,6 +432,7 @@
         },
         {
           "step": "Crypto traders eased rate-hike fears after Fed Chair Warsh gave no hints, so Bitcoin held steady around $82K with little change.",
+          "step_ru": "Криптотрейдеры ослабили страхи повышения ставки после того, как глава ФРС Уорш не дал намёков, поэтому Bitcoin почти без изменений держался около $82K.",
           "cites": [
             17,
             27
@@ -385,12 +440,14 @@
         },
         {
           "step": "Some altcoins outpaced Bitcoin, but ETH was not among the movers, so the market gives no clear push to it.",
+          "step_ru": "Часть альткоинов обогнала Bitcoin, но ETH среди них не было, так что рынок не даёт ему явного толчка.",
           "cites": [
             27
           ]
         },
         {
           "step": "Ethereum's own official news is only technical forum proposals (intents solver, 64-bit opcodes), which are too thin to move the price within hours.",
+          "step_ru": "Собственные официальные новости Ethereum это только технические предложения на форуме (солвер для интентов, 64-битные опкоды), их слишком мало, чтобы сдвинуть цену в пределах нескольких часов.",
           "cites": [
             1,
             2
@@ -401,42 +458,49 @@
         {
           "n": 1,
           "title": "ERC-8420: AA-Compatible Solver",
+          "title_ru": "ERC-8420: солвер, совместимый с AA",
           "source": "Ethereum Magicians forum",
           "link": "https://ethereum-magicians.org/t/erc-8420-aa-compatible-solver/29989"
         },
         {
           "n": 2,
           "title": "EIP-8442: 64-bit Opcodes for the EVM",
+          "title_ru": "EIP-8442: 64-битные опкоды для EVM",
           "source": "Ethereum Magicians forum",
           "link": "https://ethereum-magicians.org/t/eip-8442-64-bit-opcodes-for-the-evm/29982"
         },
         {
           "n": 12,
-          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn\u2019t doing much about it",
+          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn’t doing much about it",
+          "title_ru": "Дефицит бюджета США достиг почти $2 трлн, а Вашингтон почти ничего с этим не делает",
           "source": "MarketWatch",
           "link": "https://www.marketwatch.com/story/the-u-s-budget-deficit-just-hit-almost-2-trillion-and-washington-isnt-doing-much-about-it-a1b5c4ea?mod=mw_rss_topstories"
         },
         {
           "n": 17,
-          "title": "Bitcoin price steadies around $82K after Fed\u2019s Warsh avoids rate-hike hints",
+          "title": "Bitcoin price steadies around $82K after Fed’s Warsh avoids rate-hike hints",
+          "title_ru": "Цена Bitcoin стабилизировалась около $82K после того, как Уорш из ФРС не намекнул на повышение ставки",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/markets/bitcoin-price-steadies-82k-fed-warsh-avoids-rate-hike-hints?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 22,
           "title": "NY Fed service sector survey finds notable price pressures",
+          "title_ru": "Опрос ФРБ Нью-Йорка в секторе услуг выявил заметное давление цен",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/ny-fed-service-sector-survey-finds-notable-price-pressures-4954466"
         },
         {
           "n": 27,
           "title": "Altcoins outpace bitcoin as celestia jumps 16%, Warsh silent on interest-rate plans",
+          "title_ru": "Альткоины обгоняют bitcoin, celestia подскочила на 16%, Уорш молчит о планах по ставке",
           "source": "CoinDesk",
           "link": "https://www.coindesk.com/markets/2026/10/16/altcoins-outpace-bitcoin-as-celestia-jumps-16-warsh-silent-on-interest-rate-plans"
         },
         {
           "n": 30,
           "title": "Industrial production surges past expectations, boosting USD outlook",
+          "title_ru": "Промпроизводство резко выросло сверх ожиданий и улучшило прогноз по доллару",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/industrial-production-surges-past-expectations-boosting-usd-outlook-93CH-4954208"
         }
@@ -456,10 +520,13 @@
       },
       "direction": "up",
       "verdict": "Growth expected for AAVE",
+      "verdict_ru": "Для AAVE ожидается рост",
       "spot_futures_note": "Futures would react faster and swing harder to any macro shock, while spot AAVE should move more calmly with the steady protocol news.",
+      "spot_futures_note_ru": "Фьючерсы быстрее отреагируют и сильнее качнутся на любой макро-шок, а спот AAVE должен двигаться спокойнее на фоне ровных новостей протокола.",
       "chain": [
         {
           "step": "The macro backdrop is mixed: a near-$2 trillion US deficit is a worry, but traders have lowered their expectations of a Fed rate hike and Bitcoin is holding above $80,000.",
+          "step_ru": "Макрофон смешанный: дефицит США почти в $2 трлн вызывает беспокойство, но трейдеры снизили ожидания повышения ставки ФРС, и Bitcoin держится выше $80 000.",
           "cites": [
             13,
             21,
@@ -468,6 +535,7 @@
         },
         {
           "step": "Crypto demand for stablecoins and tokenized assets keeps growing, which is a favorable backdrop for lending platforms like Aave.",
+          "step_ru": "Спрос в крипте на стейблкоины и токенизированные активы продолжает расти, и это благоприятный фон для кредитных платформ вроде Aave.",
           "cites": [
             17,
             22,
@@ -476,6 +544,7 @@
         },
         {
           "step": "Aave's own official news is clearly positive: proposals to deploy V4 on Tempo, list tokenized equities, and accept native BTC as collateral all point to expansion.",
+          "step_ru": "Собственные официальные новости Aave явно позитивные: предложения развернуть V4 на Tempo, добавить токенизированные акции и принимать нативный BTC в залог указывают на расширение.",
           "cites": [
             3,
             9,
@@ -484,6 +553,7 @@
         },
         {
           "step": "Routine risk-steward cap increases and new asset listings show active growth and orderly risk management, so the coin's own news decides the upward direction despite the mixed macro picture.",
+          "step_ru": "Плановые повышения лимитов от риск-стюардов и листинги новых активов показывают активный рост и упорядоченное управление рисками, поэтому направление вверх задают новости самой монеты, несмотря на смешанный макрофон.",
           "cites": [
             1,
             2,
@@ -496,78 +566,91 @@
         {
           "n": 1,
           "title": "Risk Stewards: Supply and Borrow Cap Changes on Aave V3 / 2026.10.16",
+          "title_ru": "Risk Stewards: изменение лимитов депозитов и займов в Aave V3 / 2026.10.16",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/risk-stewards-supply-and-borrow-cap-changes-on-aave-v3-2026-10-16/25861"
         },
         {
           "n": 2,
           "title": "Risk Stewards: Cap Increases on Aave V4 / 2026.10.16",
+          "title_ru": "Risk Stewards: повышение лимитов в Aave V4 / 2026.10.16",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/risk-stewards-cap-increases-on-aave-v4-2026-10-16/25860"
         },
         {
           "n": 3,
           "title": "[ARFC] Aave V4 Deployment on Tempo",
+          "title_ru": "[ARFC] Развёртывание Aave V4 на Tempo",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/arfc-aave-v4-deployment-on-tempo/25857"
         },
         {
           "n": 4,
           "title": "[Direct-to-AIP] Asset Listing - syrupUSDG X Layer",
+          "title_ru": "[Direct-to-AIP] Листинг актива: syrupUSDG в X Layer",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/direct-to-aip-asset-listing-syrupusdg-x-layer/25855"
         },
         {
           "n": 8,
           "title": "[Direct-to-AIP] Asset Listing - syrupUSDG Arbitrum",
+          "title_ru": "[Direct-to-AIP] Листинг актива: syrupUSDG в Arbitrum",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/direct-to-aip-asset-listing-syrupusdg-arbitrum/25851"
         },
         {
           "n": 9,
           "title": "[Direct-to-AIP] Asset Listing - SPCX to the Aave V4 Equities Hub on Base",
+          "title_ru": "[Direct-to-AIP] Листинг актива: SPCX в хаб акций Aave V4 на Base",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/direct-to-aip-asset-listing-spcx-to-the-aave-v4-equities-hub-on-base/25850"
         },
         {
           "n": 10,
           "title": "[ARFC] Onboard Native BTC as Collateral to Aave V4 via Babylon Trustless Bitcoin Vaults",
+          "title_ru": "[ARFC] Нативный BTC как залог в Aave V4 через trustless-хранилища Babylon",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/arfc-onboard-native-btc-as-collateral-to-aave-v4-via-babylon-trustless-bitcoin-vaults/25845"
         },
         {
           "n": 13,
           "title": "US fiscal 2026 budget deficit rises to $1.99 trillion, largest in 5 years",
+          "title_ru": "Дефицит бюджета США за 2026 финансовый год вырос до $1,99 трлн, максимум за 5 лет",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/us-fiscal-2026-budget-deficit-rises-to-199-trillion-largest-in-5-years-4954709"
         },
         {
           "n": 17,
           "title": "Stablecoin remittances cost 84% less than traditional transfers, report finds",
+          "title_ru": "Переводы в стейблкоинах на 84% дешевле обычных, показал отчёт",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/news/stablecoin-remittances-cost-savings-traditional-transfers?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 21,
-          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn\u2019t doing much about it",
+          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn’t doing much about it",
+          "title_ru": "Дефицит бюджета США достиг почти $2 трлн, а Вашингтон почти ничего с этим не делает",
           "source": "MarketWatch",
           "link": "https://www.marketwatch.com/story/the-u-s-budget-deficit-just-hit-almost-2-trillion-and-washington-isnt-doing-much-about-it-a1b5c4ea?mod=mw_rss_topstories"
         },
         {
           "n": 22,
           "title": "Crypto Biz: Wall Street closes at 4. Tokenized stocks keep trading",
+          "title_ru": "Crypto Biz: Уолл-стрит закрывается в 4, а токенизированные акции продолжают торговаться",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/news/tokenized-stocks-after-hours-trading-crypto-biz?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 25,
           "title": "Circle targets 40 new markets as stablecoin demand grows globally",
+          "title_ru": "Circle нацелилась на 40 новых рынков на фоне роста спроса на стейблкоины в мире",
           "source": "CoinDesk",
           "link": "https://www.coindesk.com/business/2026/10/16/circle-targets-40-new-markets-as-stablecoin-demand-grows-globally"
         },
         {
           "n": 27,
-          "title": "Bitcoin price steadies around $82K after Fed\u2019s Warsh avoids rate-hike hints",
+          "title": "Bitcoin price steadies around $82K after Fed’s Warsh avoids rate-hike hints",
+          "title_ru": "Цена Bitcoin стабилизировалась около $82K после того, как Уорш из ФРС не намекнул на повышение ставки",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/markets/bitcoin-price-steadies-82k-fed-warsh-avoids-rate-hike-hints?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         }
@@ -587,10 +670,13 @@
       },
       "direction": "sideways",
       "verdict": "Neutral for now on AAVE",
+      "verdict_ru": "По AAVE пока нейтрально",
       "spot_futures_note": "Futures may jump on any sudden Fed or altcoin swing, while spot should stay calmer on routine news.",
+      "spot_futures_note_ru": "Фьючерсы могут резко дёрнуться на любом внезапном движении ФРС или альткоинов, а спот на рутинных новостях должен остаться спокойнее.",
       "chain": [
         {
           "step": "Macro news is mixed: a record-size deficit and price pressures in the service sector are offset by a narrower-than-expected deficit report and firmer manufacturing output.",
+          "step_ru": "Макроновости смешанные: рекордный по размеру дефицит и давление цен в секторе услуг уравновешиваются отчётом о сокращении дефицита сильнее ожиданий и более крепким промышленным выпуском.",
           "cites": [
             6,
             13,
@@ -601,6 +687,7 @@
         },
         {
           "step": "Crypto markets are steady, with Bitcoin holding above $80K as the Fed chair avoided rate-hike hints, and some altcoins are outperforming, which gives only a mild lift.",
+          "step_ru": "Крипторынок устойчив: Bitcoin держится выше $80K, поскольку глава ФРС избегал намёков на повышение ставки, а часть альткоинов опережает рынок, что даёт лишь лёгкую поддержку.",
           "cites": [
             18,
             28
@@ -608,6 +695,7 @@
         },
         {
           "step": "Aave's own news is routine, covering risk-steward cap changes and a proposal to deploy V4 on Tempo; it is mildly constructive but not an immediate price driver, so no clear push emerges for an intraday long.",
+          "step_ru": "Собственные новости Aave рутинные: изменения лимитов от риск-стюардов и предложение развернуть V4 на Tempo. Это умеренно конструктивно, но не прямой драйвер цены, поэтому явного толчка для внутридневного Long нет.",
           "cites": [
             1,
             2,
@@ -619,60 +707,70 @@
         {
           "n": 1,
           "title": "Risk Stewards: Supply and Borrow Cap Changes on Aave V3 / 2026.10.16",
+          "title_ru": "Risk Stewards: изменение лимитов депозитов и займов в Aave V3 / 2026.10.16",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/risk-stewards-supply-and-borrow-cap-changes-on-aave-v3-2026-10-16/25861"
         },
         {
           "n": 2,
           "title": "Risk Stewards: Cap Increases on Aave V4 / 2026.10.16",
+          "title_ru": "Risk Stewards: повышение лимитов в Aave V4 / 2026.10.16",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/risk-stewards-cap-increases-on-aave-v4-2026-10-16/25860"
         },
         {
           "n": 3,
           "title": "[ARFC] Aave V4 Deployment on Tempo",
+          "title_ru": "[ARFC] Развёртывание Aave V4 на Tempo",
           "source": "Aave governance forum",
           "link": "https://governance.aave.com/t/arfc-aave-v4-deployment-on-tempo/25857"
         },
         {
           "n": 6,
           "title": "US fiscal 2026 budget deficit rises to $1.99 trillion, largest in 5 years",
+          "title_ru": "Дефицит бюджета США за 2026 финансовый год вырос до $1,99 трлн, максимум за 5 лет",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/us-fiscal-2026-budget-deficit-rises-to-199-trillion-largest-in-5-years-4954709"
         },
         {
           "n": 13,
-          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn\u2019t doing much about it",
+          "title": "The U.S. budget deficit just hit almost $2 trillion - and Washington isn’t doing much about it",
+          "title_ru": "Дефицит бюджета США достиг почти $2 трлн, а Вашингтон почти ничего с этим не делает",
           "source": "MarketWatch",
           "link": "https://www.marketwatch.com/story/the-u-s-budget-deficit-just-hit-almost-2-trillion-and-washington-isnt-doing-much-about-it-a1b5c4ea?mod=mw_rss_topstories"
         },
         {
           "n": 15,
           "title": "Federal Budget Deficit Narrows More Than Expected",
+          "title_ru": "Дефицит федерального бюджета сократился сильнее ожиданий",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/federal-budget-deficit-narrows-more-than-expected-93CH-4954702"
         },
         {
           "n": 18,
-          "title": "Bitcoin price steadies around $82K after Fed\u2019s Warsh avoids rate-hike hints",
+          "title": "Bitcoin price steadies around $82K after Fed’s Warsh avoids rate-hike hints",
+          "title_ru": "Цена Bitcoin стабилизировалась около $82K после того, как Уорш из ФРС не намекнул на повышение ставки",
           "source": "Cointelegraph",
           "link": "https://cointelegraph.com/markets/bitcoin-price-steadies-82k-fed-warsh-avoids-rate-hike-hints?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         },
         {
           "n": 23,
           "title": "NY Fed service sector survey finds notable price pressures",
+          "title_ru": "Опрос ФРБ Нью-Йорка в секторе услуг выявил заметное давление цен",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/ny-fed-service-sector-survey-finds-notable-price-pressures-4954466"
         },
         {
           "n": 27,
           "title": "US manufacturing output rises in September",
+          "title_ru": "Промышленный выпуск в США в сентябре вырос",
           "source": "Investing",
           "link": "https://www.investing.com/news/economic-indicators/us-manufacturing-output-rises-in-september-4954422"
         },
         {
           "n": 28,
           "title": "Altcoins outpace bitcoin as celestia jumps 16%, Warsh silent on interest-rate plans",
+          "title_ru": "Альткоины обгоняют bitcoin, celestia подскочила на 16%, Уорш молчит о планах по ставке",
           "source": "CoinDesk",
           "link": "https://www.coindesk.com/markets/2026/10/16/altcoins-outpace-bitcoin-as-celestia-jumps-16-warsh-silent-on-interest-rate-plans"
         }

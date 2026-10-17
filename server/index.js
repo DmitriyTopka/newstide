@@ -32,6 +32,9 @@ const spend = { day: '', usd: 0 };
 const DEMO_URL = 'https://newstide-paper.vercel.app';
 // The AI client is loaded only when it is needed, so the demo runs without any key.
 const analyze = async (...args) => (await import('./analyst.js')).analyze(...args);
+const translate = async (...args) => (await import('./translate.js')).translate(...args);
+// The demo has no key: it borrows the Russian news columns from the live site, which translates them.
+const LIVE_URL = 'https://newstide-live.vercel.app';
 
 const TIMEFRAMES = ['15m', '1h', '4h', '1d'];
 
@@ -82,6 +85,14 @@ app.get('/api/edition', async (req, res) => {
     spend.usd += usd - RESERVE_USD;
     const byNumber = new Map(gathered.items.map(it => [it.n, it]));
     const cited = [...new Set(checked.answer.chain.flatMap(c => c.cites))].sort((a, b) => a - b);
+    // Russian titles for the cited dispatches; if the translator fails the titles stay in English.
+    let titlesRu = new Map(), trUsd = 0;
+    try {
+      const tr = await translate(cited.map(n => byNumber.get(n).title));
+      titlesRu = tr.ru;
+      trUsd = costOf(tr.usage, tr.model);
+    } catch (err) { console.error('[translate edition]', err.message); }
+    spend.usd += trUsd;
     const data = {
       edition: { at: new Date().toISOString(), model, items: gathered.items.length, shared_minutes: 30 },
       direction: checked.answer.direction,
@@ -90,10 +101,10 @@ app.get('/api/edition', async (req, res) => {
       spot_futures_note: checked.answer.spot_futures_note,
       spot_futures_note_ru: checked.answer.spot_futures_note_ru,
       horizon,
-      notes: { chain: checked.answer.chain, dispatches: cited.map(n => ({ n, title: byNumber.get(n).title, source: byNumber.get(n).source, link: byNumber.get(n).link })) },
+      notes: { chain: checked.answer.chain, dispatches: cited.map(n => ({ n, title: byNumber.get(n).title, title_ru: titlesRu.get(byNumber.get(n).title), source: byNumber.get(n).source, link: byNumber.get(n).link })) },
       x_connected: false,
       missing_sources: gathered.missing,
-      cost: { usd, model, shared: true }
+      cost: { usd: usd + trUsd, model, shared: true }
     };
     editions.set(key, { at: Date.now(), data });
     finish.resolve(data);
@@ -116,12 +127,44 @@ app.get('/api/coins', (req, res) => {
 // The market strip: live quotes and headlines, cached for 5 minutes.
 app.get('/api/market', async (req, res) => {
   try {
-    res.json(await market(marketFeeds));
+    if (REPLAY) {
+      // The demo calls no AI itself: it shows the live site's columns, Russian included.
+      try {
+        const r = await fetch(`${LIVE_URL}/api/market`, { signal: AbortSignal.timeout(8000) });
+        if (r.ok) return res.json(await r.json());
+      } catch (err) { console.error('[market from live]', err.message); }
+      return res.json(await market(marketFeeds));
+    }
+    const data = await market(marketFeeds);
+    if (PUBLIC_LIVE) {
+      res.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=120');
+      await withRussian(data);
+    }
+    res.json(data);
   } catch (err) {
     console.error('[market]', err);
     res.json({ sample: false, quotes: [], today: [], week: [] });
   }
 });
+
+// Russian twins for the day's and week's headlines and summaries. Each text is translated once;
+// past the daily spending limit, or if the translator fails, the columns simply stay in English.
+async function withRussian(data) {
+  const list = [...(data.today ?? []), ...(data.week ?? [])];
+  const texts = list.flatMap(n => [n.title, n.summary]).filter(Boolean);
+  if (!texts.length) return;
+  const today = new Date().toISOString().slice(0, 10);
+  if (spend.day !== today) { spend.day = today; spend.usd = 0; }
+  if (spend.usd >= DAILY_LIMIT_USD) return;
+  try {
+    const tr = await translate(texts);
+    spend.usd += costOf(tr.usage, tr.model);
+    for (const n of list) {
+      if (tr.ru.has(n.title)) n.title_ru = tr.ru.get(n.title);
+      if (n.summary && tr.ru.has(n.summary)) n.summary_ru = tr.ru.get(n.summary);
+    }
+  } catch (err) { console.error('[translate market]', err.message); }
+}
 
 function costOf(usage, model) {
   const p = prices[model] ?? prices[MODEL];
@@ -149,7 +192,9 @@ app.post('/api/analyze', async (req, res) => {
       direction: ed.direction,
       plan_fit: expectedFit(plan, ed.direction),
       verdict: ed.verdict,
+      verdict_ru: ed.verdict_ru,
       spot_futures_note: ed.spot_futures_note,
+      spot_futures_note_ru: ed.spot_futures_note_ru,
       horizon: horizonOf(timeframe),
       notes: { chain: ed.chain, dispatches: ed.dispatches },
       x_connected: false,
