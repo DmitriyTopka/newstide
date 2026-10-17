@@ -1,6 +1,6 @@
 #!/bin/sh
 # Deploys the public live site (PUBLIC_LIVE=1) to the separate Vercel project newstide-live.
-# The judges' replay demo (newstide-paper) is deployed from the app folder itself and is not touched.
+# The judges' replay demo (newstide-paper) is deployed with scripts/deploy-demo.sh and is not touched.
 set -e
 APP="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$APP/../deploy-live"
