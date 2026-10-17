@@ -28,6 +28,8 @@ const editions = new Map();
 const inFlight = new Map(); // one print run per coin and horizon at a time
 const RESERVE_USD = 0.002;   // set aside before each call so parallel requests cannot pass the limit
 const spend = { day: '', usd: 0 };
+// When no fresh edition can be printed, readers are sent to the archived demo instead of a dead end.
+const DEMO_URL = 'https://newstide-paper.vercel.app';
 // The AI client is loaded only when it is needed, so the demo runs without any key.
 const analyze = async (...args) => (await import('./analyst.js')).analyze(...args);
 
@@ -60,11 +62,11 @@ app.get('/api/edition', async (req, res) => {
   if (spend.day !== today) { spend.day = today; spend.usd = 0; }
   if (spend.usd >= DAILY_LIMIT_USD) {
     if (cached) return sendCached(cached);
-    return res.status(503).json({ error: 'Today\'s free editions are used up. Come back tomorrow, or run NewsTide on your own machine with your own key.' });
+    return res.status(503).json({ error: 'Today\'s free editions are used up. Come back tomorrow, or read the archived editions in the demo.', reason: 'limit', demo: DEMO_URL });
   }
   if (inFlight.has(key)) {
     try { return sendCached({ data: await inFlight.get(key) }); }
-    catch { return res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.' }); }
+    catch { return res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.', reason: 'print', demo: DEMO_URL }); }
   }
   spend.usd += RESERVE_USD;
   let finish;
@@ -101,7 +103,7 @@ app.get('/api/edition', async (req, res) => {
     if (err.status === 422) return res.status(422).json({ error: 'Not enough news to judge right now. Try again later.' });
     console.error('[edition]', err);
     if (cached) return sendCached(cached);
-    res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.' });
+    res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.', reason: 'print', demo: DEMO_URL });
   } finally {
     inFlight.delete(key);
   }

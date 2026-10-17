@@ -127,6 +127,8 @@ function showResult(r, plan, reprint = false) {
   $('animal').src = images[r.direction];
   $('animal').alt = t.animals[r.direction];
   $('edition').textContent = t.editions[r.direction];
+  $('quiet').hidden = r.direction !== 'sideways';
+  $('quiet').textContent = t.quiet;
 
   $('missing').hidden = !r.missing_sources?.length;
   $('missing').textContent = r.missing_sources?.length ? t.unavailable(r.missing_sources.join(', ')) : '';
@@ -209,11 +211,19 @@ $('askForm').addEventListener('submit', async e => {
         });
     clearTimeout(cut);
     const body = await res.json();
-    if (!res.ok) throw new Error(body.error || T().errPrint);
+    if (!res.ok) throw Object.assign(new Error(body.error || T().errPrint), { reason: body.reason, demo: body.demo });
     if (mode.public_live) body.plan_fit = fitOf(plan, body.direction);
     showResult(body, plan);
   } catch (err) {
-    $('resultError').textContent = err.name === 'AbortError' ? T().errSlow : err.message;
+    const t = T();
+    $('resultError').textContent = err.name === 'AbortError' ? t.errSlow
+      : err.reason === 'limit' ? t.errLimit : err.reason === 'print' ? t.errPrintLive : err.message;
+    // Out of free editions or the print run failed: point the reader to the archived demo.
+    if (err.demo && /^https:\/\//.test(err.demo)) {
+      const a = document.createElement('a');
+      a.href = err.demo; a.textContent = t.demoLink; a.target = '_blank'; a.rel = 'noopener';
+      $('resultError').append(' ', a);
+    }
     $('resultError').hidden = false;
   } finally {
     stopCountdown();

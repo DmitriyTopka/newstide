@@ -6,8 +6,8 @@ Before a trade you pick a coin, Long or Short, and your timeframe. NewsTide read
 
 ![The NewsTide front page: Bull Edition, "Growth expected for SOL", the stamp favours a Long plan, editor's notes open](docs/screenshot-verdict.jpg)
 
-**Try it:** https://newstide-paper.vercel.app (replays archived real editions from 13 and 16 October 2026, no AI calls)  
-**Live public edition:** https://newstide-live.vercel.app (12 coins, live news, each coin printed at most every 30 minutes and shared by every reader)  
+**Live public edition:** https://newstide-live.vercel.app (12 coins, live news, English and Russian, each coin printed at most every 30 minutes and shared by every reader)  
+**Demo for judges:** https://newstide-paper.vercel.app (replays archived real editions from 13 and 16 October 2026, no AI calls, always the same answers)  
 **Demo video:** https://youtu.be/9dTlaGs665U
 
 Built for Devpost's **Build With AI: Basics** hackathon with the Devpost Learn Skill Pack. The planning documents live in [`devpost/`](devpost): [scope](devpost/scope.md), [PRD](devpost/prd.md), [technical spec](devpost/spec.md) and the [build checklist](devpost/checklist.md).
@@ -21,7 +21,7 @@ I trade spot and futures, mostly coins from the top 100. I can read a chart. Wha
 - **The pointing hand** shows where the news background points: up, down or sideways.
 - **The ink stamp** says whether the background FAVOURS, is MIXED ON, or goes AGAINST your plan.
 - **The headline** gives the verdict in a few words, for example "Growth expected for ETH" or "Neutral for now".
-- **The page itself changes**: a Bull Edition (green paper, a smiling bull), a Bear Edition (red paper, a cheerful bear) or a Hamster Edition (yellowish paper, a hamster) when nothing is clear.
+- **The page itself changes**: a Bull Edition (green paper, a smiling bull), a Bear Edition (red paper, a cheerful bear) or a Hamster Edition (yellowish paper, a hamster) when nothing is clear. A Hamster Edition is an answer too: the news is quiet or pulls both ways, so nothing backs a trade right now.
 - **Show the editor's notes** opens the reasoning: a short cause-and-effect chain, each step citing the numbered dispatches it relies on, and the list of those dispatches. It is closed by default.
 - **Price of this edition** shows what the analysis cost in model usage.
 
@@ -41,6 +41,7 @@ If a feed is down, it is skipped and the page says so. If nothing usable comes b
 
 | What | Where |
 |---|---|
+| Bitcoin | [Bitcoin Core](https://bitcoincore.org/en/rss.xml) |
 | Ethereum | [Ethereum Foundation Blog](https://blog.ethereum.org/feed.xml), [Ethereum Magicians forum](https://ethereum-magicians.org/latest.rss) |
 | Solana | [Solana News](https://solana.com/news/rss.xml), [Solana forum](https://forum.solana.com/latest.rss) |
 | Aave | [Aave governance forum](https://governance.aave.com/latest.rss) |
@@ -48,7 +49,7 @@ If a feed is down, it is skipped and the page says so. If nothing usable comes b
 | Macro | [Federal Reserve press releases](https://www.federalreserve.gov/feeds/press_all.xml), [Investing](https://www.investing.com/rss/news_95.rss), [MarketWatch](https://feeds.content.dowjones.io/public/rss/mw_topstories) |
 | Prices | [CoinGecko](https://docs.coingecko.com/) for Bitcoin and Ether, Yahoo Finance chart data (unofficial) for the S&P 500 and the dollar index |
 
-None of the three coins has an open official Telegram channel, so the official blogs and forums are used instead. X is not connected yet: reading X costs money per post, so it is planned for later.
+The live site covers 12 coins (BTC, ETH, BNB, SOL, XRP, DOGE, ADA, TRX, TON, AVAX, LINK, AAVE). Each coin's official blog or forum is read where it has a feed (see [`config/coins.json`](config/coins.json)); XRP has none, and DOGE, TON, AVAX and LINK post rarely, so for them crypto headlines that name the coin count as coin news. Official Telegram channels are not open to read, so blogs and forums are used instead. X is not connected yet: reading X costs money per post, so it is planned for later.
 
 ## Public demo
 
@@ -86,8 +87,9 @@ npm run check:live   # read every feed now and test what happens when feeds fail
 - NewsTide reads the news background. It does not know the future, and it is not financial advice.
 - The model is not deterministic. The same request on the same news can come back with a different verdict. That is one more reason the editor's notes are there: you can see what the verdict rests on.
 - On a quiet weekend many verdicts are "Neutral for now". When the wider picture is mixed, the coin's own official news decides: on the saved Sunday snapshot Solana came out "Growth expected" (strong ecosystem news), while Ethereum and Aave stayed neutral.
-- It runs only on your own machine. A public version would need accounts, limits and a server, so nobody else can spend the key's balance.
-- Three coins for now. Adding a coin is one entry in `config/coins.json` with its official feeds.
+- The public live site has no accounts. It keeps costs safe with shared editions (one print per coin and horizon every 30 minutes), a daily spending limit and a hard monthly limit on its own Anthropic workspace. When the free editions are used up, it shows the last edition it has or points to the archived demo.
+- 12 coins for now. Adding a coin is one entry in `config/coins.json` with its official feeds.
+- The archived demo editions are in English only; the live site prints English and Russian.
 
 ## Later
 

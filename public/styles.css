@@ -334,3 +334,6 @@ body {
 html, body { overflow-x: clip; }
 
 #langToggle { margin-left: 6px; }
+
+/* Hamster Edition: say plainly that a quiet background is an answer too */
+.note.quiet { font-style: italic; border-left: 3px solid currentColor; padding-left: .6em; }
