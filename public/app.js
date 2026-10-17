@@ -39,7 +39,14 @@ function applyLanguage() {
   $('themeToggle').textContent = night ? T().day : T().night;
   $('price').textContent = T().priceStart;
   if (mode.public_live) $('demoBanner').textContent = T().bannerLive;
-  else if (mode.replay) $('demoBanner').textContent = T().bannerReplay;
+  else if (mode.replay) {
+    // The live site address in the demo banner is a real link.
+    const live = 'newstide-live.vercel.app';
+    const [before, after] = T().bannerReplay.split(live);
+    const a = document.createElement('a');
+    a.href = `https://${live}`; a.textContent = live; a.target = '_blank'; a.rel = 'noopener';
+    $('demoBanner').replaceChildren(before, ...(after !== undefined ? [a, after] : []));
+  }
   if (lastMarket) renderMarket(lastMarket);
   if (last) showResult(last.r, last.plan, true);
 }
@@ -123,6 +130,8 @@ function showResult(r, plan, reprint = false) {
   $('hand').alt = t.hand(r.direction);
   $('stamp').dataset.fit = r.plan_fit;
   $('stampWord').textContent = t.stamp[r.plan_fit];
+  // Long words (СМЕШАННО) are set smaller so they stay inside the ring.
+  $('stampWord').style.fontSize = t.stamp[r.plan_fit].length > 7 ? '24px' : '';
   $('stamp').setAttribute('aria-label', `${t.ringTop}: ${t.stamp[r.plan_fit]} ${t.ringBottom}`);
   $('animal').src = images[r.direction];
   $('animal').alt = t.animals[r.direction];

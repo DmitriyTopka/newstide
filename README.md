@@ -57,7 +57,7 @@ The demo at https://newstide-paper.vercel.app runs with `REPLAY=1`: it serves si
 
 ## Live public edition
 
-https://newstide-live.vercel.app runs with `PUBLIC_LIVE=1` and Claude Haiku 5.5. Each coin and horizon is printed at most once every 30 minutes and shared by every reader (server memory plus CDN cache), only one print run per coin happens at a time, and a daily limit stops new runs. On top of that, the key lives in a separate Anthropic workspace with a hard monthly spend limit. Coins: BTC, ETH, BNB, SOL, XRP, DOGE, ADA, TRX, TON, AVAX, LINK, AAVE. Official project feeds are used where they exist; crypto headlines that name the coin count as coin news.
+https://newstide-live.vercel.app runs with `PUBLIC_LIVE=1` and Claude Haiku 5.5 (the archived demo editions were printed with Claude Sonnet 5.5). Each coin and horizon is cached for 30 minutes and shared by readers (CDN cache plus server memory), one print run per coin happens at a time within a server instance, and a daily limit per instance stops new runs. On top of that, the key lives in a separate Anthropic workspace with a hard monthly spend limit. Coins: BTC, ETH, BNB, SOL, XRP, DOGE, ADA, TRX, TON, AVAX, LINK, AAVE. Official project feeds are used where they exist; crypto headlines that name the coin count as coin news.
 
 ## Run it
 
@@ -87,7 +87,7 @@ npm run check:live   # read every feed now and test what happens when feeds fail
 - NewsTide reads the news background. It does not know the future, and it is not financial advice.
 - The model is not deterministic. The same request on the same news can come back with a different verdict. That is one more reason the editor's notes are there: you can see what the verdict rests on.
 - On a quiet weekend many verdicts are "Neutral for now". When the wider picture is mixed, the coin's own official news decides: on the saved Sunday snapshot Solana came out "Growth expected" (strong ecosystem news), while Ethereum and Aave stayed neutral.
-- The public live site has no accounts. It keeps costs safe with shared editions (one print per coin and horizon every 30 minutes), a daily spending limit and a hard monthly limit on its own Anthropic workspace. When the free editions are used up, it shows the last edition it has or points to the archived demo.
+- The public live site has no accounts. Editions are cached for 30 minutes by the CDN and in each server instance's memory, and each instance keeps a daily spending limit. On serverless hosting instances restart, so the real safety net is the hard monthly spend limit on the site's own Anthropic workspace. When the free editions are used up, it shows the last edition it has or points to the archived demo.
 - 12 coins for now. Adding a coin is one entry in `config/coins.json` with its official feeds.
 - The archived demo editions are in English only; the live site prints English and Russian.
 
