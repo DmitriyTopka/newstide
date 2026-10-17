@@ -86,13 +86,15 @@ app.get('/api/edition', async (req, res) => {
     const byNumber = new Map(gathered.items.map(it => [it.n, it]));
     const cited = [...new Set(checked.answer.chain.flatMap(c => c.cites))].sort((a, b) => a - b);
     // Russian titles for the cited dispatches; if the translator fails the titles stay in English.
-    let titlesRu = new Map(), trUsd = 0;
+    // This runs inside the edition's own print run, so it is already one call per coin and horizon.
+    let titlesRu = new Map(), trUsd = RESERVE_USD;
+    spend.usd += RESERVE_USD;
     try {
       const tr = await translate(cited.map(n => byNumber.get(n).title));
       titlesRu = tr.ru;
       trUsd = costOf(tr.usage, tr.model);
     } catch (err) { console.error('[translate edition]', err.message); }
-    spend.usd += trUsd;
+    spend.usd += trUsd - RESERVE_USD;
     const data = {
       edition: { at: new Date().toISOString(), model, items: gathered.items.length, shared_minutes: 30 },
       direction: checked.answer.direction,
@@ -155,16 +157,24 @@ async function withRussian(data) {
   if (!texts.length) return;
   const today = new Date().toISOString().slice(0, 10);
   if (spend.day !== today) { spend.day = today; spend.usd = 0; }
-  if (spend.usd >= DAILY_LIMIT_USD) return;
-  try {
-    const tr = await translate(texts);
-    spend.usd += costOf(tr.usage, tr.model);
-    for (const n of list) {
-      if (tr.ru.has(n.title)) n.title_ru = tr.ru.get(n.title);
-      if (n.summary && tr.ru.has(n.summary)) n.summary_ru = tr.ru.get(n.summary);
-    }
-  } catch (err) { console.error('[translate market]', err.message); }
+  if (spend.usd >= DAILY_LIMIT_USD || Date.now() < marketTr.pauseUntil) return;
+  // One translation at a time: parallel requests wait for the same call. A reserve is set aside
+  // before the call and settled to the real cost after; a failed call pauses retries for 2 minutes.
+  if (!marketTr.run) {
+    spend.usd += RESERVE_USD;
+    marketTr.run = translate(texts)
+      .then(tr => { spend.usd += costOf(tr.usage, tr.model) - RESERVE_USD; return tr; })
+      .catch(err => { marketTr.pauseUntil = Date.now() + 2 * 60 * 1000; console.error('[translate market]', err.message); return null; })
+      .finally(() => { marketTr.run = null; });
+  }
+  const tr = await marketTr.run;
+  if (!tr) return;
+  for (const n of list) {
+    if (tr.ru.has(n.title)) n.title_ru = tr.ru.get(n.title);
+    if (n.summary && tr.ru.has(n.summary)) n.summary_ru = tr.ru.get(n.summary);
+  }
 }
+const marketTr = { run: null, pauseUntil: 0 };
 
 function costOf(usage, model) {
   const p = prices[model] ?? prices[MODEL];
