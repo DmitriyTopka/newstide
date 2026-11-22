@@ -7,7 +7,8 @@ import path from 'node:path';
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) NewsTide/0.1';
 const MAX_ITEMS = 30;
-const HOURS = { intraday: 24, medium: 24 * 14 };
+// Only the news of the last 24 hours at the moment of the request: what happened today is what moves the market now.
+const HOURS = { intraday: 24, medium: 24 };
 
 export const horizonOf = timeframe => (['15m', '1h'].includes(timeframe) ? 'intraday' : 'medium');
 
@@ -48,7 +49,9 @@ export function parseFeed(xml, feed) {
       summary: clean(text(it.description) || text(it.summary) || text(it['content:encoded'])).slice(0, 400)
     }))
     // Daily round-up pages carry no news of their own.
-    .filter(it => it.title && !/^here['\u2019]s what happened in crypto today$/i.test(it.title));
+    .filter(it => it.title && !/^here['\u2019]s what happened in crypto today$/i.test(it.title))
+    // Sport pages (for example in Al Jazeera's all-news feed) say nothing about markets.
+    .filter(it => !/\/sports?\//i.test(it.link));
 }
 
 async function fetchFeed(feed, timeoutMs = 12000) {

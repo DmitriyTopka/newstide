@@ -17,7 +17,7 @@ async function crypto() {
 }
 
 // Yahoo Finance chart endpoint (unofficial, no key). May stop working; the cell then shows "no data".
-async function yahoo(symbol, name) {
+export async function yahoo(symbol, name) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=1d`;
   const d = await (await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(10000) })).json();
   const m = d.chart.result[0].meta;
@@ -47,20 +47,27 @@ function newest(items, kinds, hours, count) {
   return out.map(brief);
 }
 
+// Top stock-market and macro values next to the crypto ones: US indices, fear index, dollar, gold, oil.
+const STOCKS = [['^GSPC', 'S&P 500'], ['^IXIC', 'Nasdaq'], ['^DJI', 'Dow Jones'], ['^VIX', 'VIX'], ['DX-Y.NYB', 'Dollar index'], ['GC=F', 'Gold'], ['CL=F', 'Oil']];
+const noData = name => ({ name, value: 'no data', change: null });
+let quotesCache = null;
+
+// All quotes for the tape and the bot: crypto first, then stocks and macro. Cached for 5 minutes.
+export async function marketQuotes() {
+  if (quotesCache && Date.now() - quotesCache.at < CACHE_MS) return quotesCache.data;
+  const [c, ...rest] = await Promise.allSettled([crypto(), ...STOCKS.map(([sym, name]) => yahoo(sym, name))]);
+  const data = [
+    ...(c.status === 'fulfilled' ? c.value : [noData('Bitcoin'), noData('Ether')]),
+    ...rest.map((r, i) => (r.status === 'fulfilled' ? r.value : noData(STOCKS[i][1])))
+  ];
+  quotesCache = { at: Date.now(), data };
+  return data;
+}
+
 export async function market(marketFeeds) {
   if (cache && Date.now() - cache.at < CACHE_MS) return cache.data;
-  const [c, spx, dxy, news] = await Promise.allSettled([
-    crypto(),
-    yahoo('^GSPC', 'S&P 500'),
-    yahoo('DX-Y.NYB', 'Dollar index'),
-    fetchAll(marketFeeds)
-  ]);
-  const noData = name => ({ name, value: 'no data', change: null });
-  const quotes = [
-    ...(c.status === 'fulfilled' ? c.value : [noData('Bitcoin'), noData('Ether')]),
-    spx.status === 'fulfilled' ? spx.value : noData('S&P 500'),
-    dxy.status === 'fulfilled' ? dxy.value : noData('Dollar index')
-  ];
+  const [q, news] = await Promise.allSettled([marketQuotes(), fetchAll(marketFeeds)]);
+  const quotes = q.status === 'fulfilled' ? q.value : [noData('Bitcoin'), noData('Ether'), ...STOCKS.map(([, n]) => noData(n))];
   const items = news.status === 'fulfilled' ? news.value.items : [];
   const data = {
     sample: false,

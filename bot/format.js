@@ -1,7 +1,19 @@
 // Digest Format: turns one edition into a Telegram message (HTML mode) and spots flipped verdicts.
+import { expectedFit } from '../server/check.js';
 export const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const ARROW = { up: '↑', down: '↓', sideways: '↔' };
+// Direction icons: green chart up, red chart down, blue for no clear direction.
+const ICON = { up: '🟢📈', down: '🔴📉', sideways: '🔵↔️' };
+const FIT = { ru: { supports: 'за', against: 'против', mixed: 'неясно' }, en: { supports: 'for', against: 'against', mixed: 'unclear' } };
+// What the verdict means for each plan: up is for Long and against Short, down the other way round.
+export function planLine(direction, lang = 'ru') {
+  const f = FIT[lang] ?? FIT.ru;
+  return `Long: ${f[expectedFit('long', direction)]} · Short: ${f[expectedFit('short', direction)]}`;
+}
+export const HORIZON = {
+  ru: 'Срок оценки: ближайшие сутки. Берутся только новости за последние 24 часа на момент запроса. Отдельной оценки для 4-часового и более коротких графиков нет.',
+  en: 'Horizon: the next day. Only the news of the last 24 hours at the moment of the request is used. There is no separate read for the 4-hour or shorter charts.'
+};
 const WORD = {
   ru: { up: 'вверх', down: 'вниз', sideways: 'в сторону', why: 'Почему', src: 'Источники', flip: 'Вердикт перевернулся', was: 'было', now: 'стало', cause: 'Новость', note: 'Спот и фьючерсы' },
   en: { up: 'up', down: 'down', sideways: 'sideways', why: 'Why', src: 'Sources', flip: 'The verdict flipped', was: 'was', now: 'now', cause: 'Story', note: 'Spot and futures' }
@@ -21,7 +33,7 @@ export function digestMessage(coin, ed, { lang = 'ru', prev } = {}) {
   // The last chain steps are about the coin itself, so its sources come first.
   const cited = [...new Set([...ed.notes.chain].reverse().flatMap(c => c.cites))].slice(0, 3).map(n => byN.get(n)).filter(Boolean);
   const links = cited.map(d => `• <a href="${esc(d.link)}">${esc((ru && d.title_ru) || d.title)}</a> (${esc(d.source)})`);
-  const lines = [`<b>${esc(coin.symbol)} ${ARROW[ed.direction] ?? ''} ${esc(verdict)}</b>`, `${w[ed.direction]} ${ru ? 'на ближайшие сутки' : 'for the next day'}`];
+  const lines = [`${ICON[ed.direction] ?? ''} <b>${esc(coin.symbol)}</b> ${esc(verdict)}`, `${w[ed.direction]} ${ru ? 'в ближайшие сутки' : 'over the next day'} · ${planLine(ed.direction, lang)}`];
   if (flipped(prev, ed.direction)) {
     const last = ed.notes.chain.at(-1);
     const cause = last ? byN.get(last.cites[0]) : null;
@@ -38,13 +50,13 @@ export function summaryMessage(results, { lang = 'ru', head } = {}) {
   const lines = [`<b>${esc(head)}</b>`, ''];
   for (const r of results) {
     if (!r.ed) lines.push(`· <b>${esc(r.sym)}</b> ${ru ? 'нет данных' : 'no data'}`);
-    else lines.push(`${ARROW[r.ed.direction] ?? '·'} <b>${esc(r.sym)}</b> ${esc((ru && r.ed.verdict_ru) || r.ed.verdict)}`);
+    else lines.push(`${ICON[r.ed.direction] ?? '·'} <b>${esc(r.sym)}</b> ${esc((ru && r.ed.verdict_ru) || r.ed.verdict)}\n<i>${planLine(r.ed.direction, lang)}</i>`);
   }
   const flips = results.filter(r => r.ed && flipped(r.prev, r.ed.direction));
   if (flips.length) lines.push('', `⚠ <b>${w.flip}:</b> ` + flips.map(r => `${esc(r.sym)} (${w[r.prev]} → ${w[r.ed.direction]})`).join(', '));
   lines.push('', ru
-    ? '<i>↑ новости тянут вверх, ↓ вниз, ↔ ясного направления нет. Оценка на ближайшие сутки по новостям за две недели. Не совет по торговле.</i>'
-    : '<i>↑ the news point up, ↓ down, ↔ no clear direction. A view for the next day from two weeks of news. Not trading advice.</i>');
+    ? `<i>🟢📈 новости тянут вверх, 🔴📉 вниз, 🔵↔️ ясного направления нет. Long и Short: за или против вашей идеи. ${HORIZON.ru} Это крипторынок, не совет по торговле.</i>`
+    : `<i>🟢📈 the news point up, 🔴📉 down, 🔵↔️ no clear direction. Long and Short: for or against your idea. ${HORIZON.en} This is the crypto market, not trading advice.</i>`);
   return lines.join('\n');
 }
 
@@ -64,4 +76,73 @@ export function isDue(user, date = new Date()) {
   const [h, m] = user.time.split(':').map(Number);
   const want = h * 60 + m;
   return minutes >= want && minutes - want <= CATCH_UP_MIN;
+}
+
+// ---------- markets and news screens ----------
+const QNAME = {
+  ru: { Bitcoin: 'Биткоин', Ether: 'Эфир', 'S&P 500': 'S&P 500', Nasdaq: 'Nasdaq', 'Dow Jones': 'Доу Джонс', VIX: 'VIX (индекс страха)', 'Dollar index': 'Индекс доллара', Gold: 'Золото', Oil: 'Нефть' },
+  en: { Bitcoin: 'Bitcoin', Ether: 'Ether', 'S&P 500': 'S&P 500', Nasdaq: 'Nasdaq', 'Dow Jones': 'Dow Jones', VIX: 'VIX (fear index)', 'Dollar index': 'Dollar index', Gold: 'Gold', Oil: 'Oil' }
+};
+const QGROUP = [['Bitcoin', 'Ether'], ['S&P 500', 'Nasdaq', 'Dow Jones'], ['VIX', 'Dollar index', 'Gold', 'Oil']];
+
+export function quotesMessage(quotes, { lang = 'ru' } = {}) {
+  const ru = lang === 'ru';
+  const names = QNAME[ru ? 'ru' : 'en'];
+  const heads = ru ? ['Крипто', 'Акции США', 'Страх и макро'] : ['Crypto', 'US stocks', 'Fear and macro'];
+  const by = new Map(quotes.map(q => [q.name, q]));
+  const out = [`<b>${ru ? 'Рынки сейчас: крипто и фондовый рынок' : 'Markets now: crypto and stocks'}</b>`];
+  QGROUP.forEach((group, gi) => {
+    out.push('', `<b>${heads[gi]}</b>`);
+    for (const name of group) {
+      const q = by.get(name);
+      if (!q || q.change == null) { out.push(`⚪ ${esc(names[name])} ${ru ? 'нет данных' : 'no data'}`); continue; }
+      // A rising fear index is bad news, so VIX is coloured the other way round.
+      const good = name === 'VIX' ? q.change < -0.05 : q.change > 0.05;
+      const bad = name === 'VIX' ? q.change > 0.05 : q.change < -0.05;
+      out.push(`${good ? '🟢' : bad ? '🔴' : '🔵'} ${esc(names[name])} <b>${esc(q.value)}</b> ${q.change >= 0 ? '▲ +' : '▼ '}${q.change.toFixed(1)}%`);
+    }
+  });
+  out.push('', ru
+    ? '<i>Данные CoinGecko и Yahoo Finance (неофициальный источник), могут запаздывать. Не совет по торговле.</i>'
+    : '<i>Data from CoinGecko and Yahoo Finance (unofficial source), may lag. Not trading advice.</i>');
+  return out.join('\n');
+}
+
+export const STOCKS_PAGE = 25;
+// The top-50 US stocks, 25 per page: colour, rank, ticker, company, price, day change.
+export function stocksPage(list, { page = 0, lang = 'ru' } = {}) {
+  const ru = lang === 'ru';
+  const pages = Math.max(1, Math.ceil(list.length / STOCKS_PAGE));
+  const out = [`<b>${ru ? 'Акции США: топ-50 по капитализации' : 'US stocks: the top 50 by market value'}</b> (${page + 1}/${pages})`, ''];
+  for (const s of list.slice(page * STOCKS_PAGE, page * STOCKS_PAGE + STOCKS_PAGE)) {
+    if (s.change == null) { out.push(`⚪ ${s.rank}. <b>${esc(s.symbol)}</b> ${esc(s.name)} ${ru ? 'нет данных' : 'no data'}`); continue; }
+    const dot = s.change > 0.05 ? '🟢' : s.change < -0.05 ? '🔴' : '🔵';
+    out.push(`${dot} ${s.rank}. <b>${esc(s.symbol)}</b> ${esc(s.name)} $${esc(s.value)} ${s.change >= 0 ? '▲ +' : '▼ '}${s.change.toFixed(1)}%`);
+  }
+  out.push('', ru
+    ? '<i>Список составлен вручную, порядок примерный. Данные Yahoo Finance (неофициальный источник), могут запаздывать. Не совет по торговле.</i>'
+    : '<i>The list is compiled by hand, the order is approximate. Data from Yahoo Finance (unofficial source), may lag. Not trading advice.</i>');
+  return { text: out.join('\n'), pages };
+}
+
+export const NEWS_PAGE = 5;
+const when = (iso, tz) => new Intl.DateTimeFormat('ru-RU', { timeZone: tz, day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(iso)).replace(',', '');
+
+// One page of the news feed: the full headline as a link to the source, the source, the time, the summary.
+export function newsPage(items, { page = 0, title, lang = 'ru', tz = 'Europe/Kyiv', ruMap = new Map() } = {}) {
+  const ru = lang === 'ru';
+  const pages = Math.max(1, Math.ceil(items.length / NEWS_PAGE));
+  const slice = items.slice(page * NEWS_PAGE, page * NEWS_PAGE + NEWS_PAGE);
+  const out = [`<b>${esc(title)}</b> (${page + 1}/${pages})`, ''];
+  if (!slice.length) out.push(ru ? 'Свежих новостей по этому разделу пока нет.' : 'No fresh news in this section yet.');
+  for (const it of slice) {
+    const head = (ru && ruMap.get(it.title)) || it.title;
+    const sum = (ru && ruMap.get(it.summary)) || it.summary;
+    const link = /^https?:\/\//i.test(it.link ?? '') ? `<a href="${esc(it.link)}">${esc(head)}</a>` : esc(head);
+    out.push(`${it.sym ? `[${esc(it.sym)}] ` : ''}${link}`, `<i>${esc(it.source)}, ${when(it.date, tz)}</i>`);
+    // search-engine summaries often just repeat the headline plus the source name: skip those
+    if (sum && !sum.toLowerCase().includes(it.title.toLowerCase().slice(0, 40)) && !sum.toLowerCase().includes(head.toLowerCase().slice(0, 40))) out.push(esc(sum));
+    out.push('');
+  }
+  return { text: out.join('\n').trim(), pages };
 }

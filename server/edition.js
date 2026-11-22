@@ -104,3 +104,23 @@ export async function getEdition(coin, timeframe, { root, marketFeeds, deps = {}
     inFlight.delete(key);
   }
 }
+
+// Russian titles for any list of English texts (the bot's news pages). Uses the same daily limit as editions;
+// past the limit, or on any failure, the caller simply keeps the English.
+export async function translateBatch(texts, { deps = {} } = {}) {
+  const { translate } = { ...realDeps, ...deps };
+  const list = [...new Set(texts.filter(Boolean))];
+  if (!list.length) return new Map();
+  resetSpendDay();
+  if (spend.usd >= DAILY_LIMIT_USD) return new Map();
+  spend.usd += RESERVE_USD;
+  try {
+    const tr = await translate(list);
+    spend.usd += costOf(tr.usage, tr.model) - RESERVE_USD;
+    return tr.ru;
+  } catch (err) {
+    spend.usd -= RESERVE_USD;
+    console.error('[translate batch]', err.message);
+    return new Map();
+  }
+}

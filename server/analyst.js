@@ -49,7 +49,7 @@ Every text field also has a _ru twin: the same meaning in natural, plain Russian
 Choose sideways only when the coin's own news is thin or balanced and the wider picture gives no clear push either way.`;
 
 export function buildPrompt({ coin, plan, horizon, items }) {
-  const window = horizon === 'intraday' ? 'the next hours (intraday, today\'s news)' : 'the next days (medium term, last two weeks of news)';
+  const window = 'the next day (only the news of the last 24 hours)';
   const lines = items.map(it => `[${it.n}] (${it.kind}, ${it.source}, ${it.date.slice(0, 10)}) ${it.title}${it.summary ? ` - ${it.summary.slice(0, 240)}` : ''}`);
   return `Coin: ${coin.symbol} (${coin.name})\nPlan: ${plan}\nHorizon: ${window}\n\nDispatches:\n${lines.join('\n')}`;
 }

@@ -5,7 +5,10 @@ import { fileURLToPath } from 'node:url';
 import { telegram } from './telegram.js';
 import { loadUsers, saveUsers } from './store.js';
 import { createBot } from './bot.js';
-import { getEdition } from '../server/edition.js';
+import { getEdition, translateBatch } from '../server/edition.js';
+import { getNews } from '../server/newsfeed.js';
+import { marketQuotes } from '../server/market.js';
+import { stockQuotes } from '../server/stocks.js';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -23,13 +26,20 @@ await tg.setCommands([
   { command: 'menu', description: 'Menu / Меню' },
   { command: 'now', description: 'Edition right now / Выпуск сейчас' },
   { command: 'list', description: 'My coins / Мои монеты' },
+  { command: 'news', description: 'News / Новости' },
+  { command: 'markets', description: 'Markets / Рынки' },
   { command: 'about', description: 'About the bot / О боте' },
   { command: 'help', description: 'Help / Помощь' }
 ]);
 const bot = createBot({
   tg, users, coins,
   save: u => saveUsers(file, u),
-  getEdition: (coin, timeframe) => getEdition(coin, timeframe, { root, marketFeeds })
+  getEdition: (coin, timeframe) => getEdition(coin, timeframe, { root, marketFeeds }),
+  getNews: (scope, opts) => getNews(scope, { ...opts, marketFeeds }),
+  getQuotes: () => marketQuotes(),
+  getStocks: () => stockQuotes(),
+  translateTexts: texts => translateBatch(texts),
+  photos: { up: path.join(root, 'public/img/bull.jpg'), down: path.join(root, 'public/img/bear.jpg'), sideways: path.join(root, 'public/img/hamster.jpg') }
 });
 console.log(`NewsTide bot @${me.username} is running, ${Object.keys(users).length} subscribers, ${coins.length} coins.`);
 

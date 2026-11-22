@@ -2,7 +2,7 @@
 
 A one-page news background indicator for crypto traders, printed as an old newspaper.
 
-Before a trade you pick a coin, Long or Short, and your timeframe. NewsTide reads the news behind the chart (the coin's own official blog and forum, crypto news, the Federal Reserve and macro headlines) and prints one verdict: which way the news background points, and whether it favours your plan or goes against it.
+Before a trade you pick a coin and Long or Short. NewsTide reads the news behind the chart (the coin's own official blog and forum, crypto news, the Federal Reserve and macro headlines) and prints one verdict: which way the news background points, and whether it favours your plan or goes against it.
 
 ![The NewsTide front page: Bull Edition, "Growth expected for SOL", the stamp favours a Long plan, editor's notes open](docs/screenshot-verdict.jpg)
 
@@ -29,8 +29,8 @@ There are no percentages. A language model would have to invent them, so NewsTid
 
 ## How it works
 
-1. The page sends your coin, plan and timeframe to a small local server.
-2. The server reads public RSS feeds. The timeframes are 4h and 1d (news moves the market over hours and days, not minutes), and it keeps the last two weeks of news. Each source takes turns, so one busy feed cannot crowd out the rest, and the coin's own official news always gets a place.
+1. The page sends your coin and plan to a small local server.
+2. The server reads public RSS feeds. There is one read, with no timeframe to pick (news moves the market over hours and days, not minutes), and it keeps only the news of the last 24 hours, read at the moment of the request. Each source takes turns, so one busy feed cannot crowd out the rest, and the coin's own official news always gets a place.
 3. About 30 numbered dispatches go to Claude with one fixed answer shape (direction, plan fit, headline, a spot/futures note, and the chain with citations).
 4. **An answer checker** runs before anything reaches the page: no percent signs, a headline of at most six words, the stamp must agree with the hand and your plan, and every step of the chain must cite a dispatch that was really collected. Broken rules are fixed and logged.
 5. Each run is saved to `runs/` with every collected dispatch and the full chain, so any verdict can be traced back to its sources. One example is in [`runs/example-run.json`](runs/example-run.json).
@@ -111,7 +111,7 @@ MIT, see [LICENSE](LICENSE).
 
 ## Telegram bot (daily summary)
 
-A reader picks up to 10 coins from a grid with checkmarks (groups: Top, L1, L2, DeFi, Memes) and gets one short summary a day at their time: one line per coin, a note when the direction flips from up to down or back, and a "details" button per coin with the reasons and links. Everything works with buttons (menu, coin grid, time, time zone, language); typed commands such as /add or /time stay as a fallback. The bot writes only to people who started it; it reads no channels or accounts. Flip alerts: every 4 hours (`WATCH_HOURS`) the bot prints an edition for each followed coin and writes at once when the verdict flips up to down or back, never between 23:00 and 07:00 in the reader's zone and at most once per coin in 6 hours; they can be switched off in Settings. A "Full version" button joins a waiting list (`node scripts/waitlist.js` counts it).
+A reader picks up to 10 coins from a grid with checkmarks (groups: Top, L1, L2, DeFi, Memes) and gets one short summary a day at their time: one line per coin, a note when the direction flips from up to down or back, and a "details" button per coin with the reasons and links. Everything works with buttons (menu, coin grid, a news feed with links to the sources, a markets screen with crypto and stock indices, time, time zone, language). Direction icons are green (up), red (down) and blue (no clear direction), each coin line says what the verdict means for Long and for Short, and the horizon is stated: the next day, from the news of the last 24 hours; typed commands such as /add or /time stay as a fallback. The bot writes only to people who started it; it reads no channels or accounts. Flip alerts: every 4 hours (`WATCH_HOURS`) the bot prints an edition for each followed coin and writes at once when the verdict flips up to down or back, never between 23:00 and 07:00 in the reader's zone and at most once per coin in 6 hours; they can be switched off in Settings. A "Full version" button joins a waiting list (`node scripts/waitlist.js` counts it).
 
 1. In Telegram open @BotFather, send /newbot, copy the token.
 2. Put it in .env as TELEGRAM_BOT_TOKEN.

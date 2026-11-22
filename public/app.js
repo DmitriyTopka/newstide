@@ -92,6 +92,22 @@ async function loadMarket() {
   }
 }
 
+// Top 50 US stocks: loaded when the box is opened, at most every 5 minutes.
+let stocks = null, stocksAt = 0;
+function renderStocks() {
+  const rows = (stocks ?? []).map(s => {
+    if (s.change == null) return `<tr><td class="num">${s.rank}</td><td><b>${escapeHtml(s.symbol)}</b></td><td>${escapeHtml(s.name)}</td><td class="num">-</td><td class="num">${T().noData}</td></tr>`;
+    const up = s.change >= 0;
+    return `<tr><td class="num">${s.rank}</td><td><b>${escapeHtml(s.symbol)}</b></td><td>${escapeHtml(s.name)}</td><td class="num">$${escapeHtml(s.value)}</td><td class="num ${up ? 'up-tick' : 'down-tick'}">${up ? '\u25B2 +' : '\u25BC '}${s.change.toFixed(1)}%</td></tr>`;
+  });
+  $('stocksBody').innerHTML = rows.length ? rows.join('') : `<tr><td>${T().stocksFail}</td></tr>`;
+}
+$('stocksBox').addEventListener('toggle', async e => {
+  if (!e.target.open || (stocks?.length && Date.now() - stocksAt < 5 * 60 * 1000)) return;
+  try { stocks = (await (await fetch('/api/stocks')).json()).stocks; stocksAt = Date.now(); } catch { stocks = []; }
+  renderStocks();
+});
+
 // Torn newspaper edges: a slightly uneven outline, drawn once per page load.
 function tearEdges() {
   // Gentle deckle: small, smooth irregularities, like newsprint torn along a fold.
@@ -194,11 +210,10 @@ $('askForm').addEventListener('submit', async e => {
   const form = new FormData(e.target);
   const coin = String(form.get('coin') ?? '').trim().toUpperCase();
   const plan = form.get('plan');
-  const timeframe = form.get('timeframe');
+  const timeframe = '1d'; // one read for everyone: the news of the last 24 hours, judged for the next day
   $('formError').textContent = '';
   if (!coins.some(c => c.symbol === coin)) return ($('formError').textContent = T().errCoin);
   if (!plan) return ($('formError').textContent = T().errPlan);
-  if (!timeframe) return ($('formError').textContent = T().errTf);
 
   $('getData').disabled = true;
   $('welcome').hidden = true;

@@ -1,0 +1,205 @@
+{
+  "note": "The 50 largest US listed companies, compiled by hand (order is approximate, by market value). Quotes come from Yahoo Finance.",
+  "stocks": [
+    {
+      "symbol": "AAPL",
+      "name": "Apple"
+    },
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft"
+    },
+    {
+      "symbol": "NVDA",
+      "name": "NVIDIA"
+    },
+    {
+      "symbol": "AMZN",
+      "name": "Amazon"
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet"
+    },
+    {
+      "symbol": "META",
+      "name": "Meta Platforms"
+    },
+    {
+      "symbol": "AVGO",
+      "name": "Broadcom"
+    },
+    {
+      "symbol": "TSLA",
+      "name": "Tesla"
+    },
+    {
+      "symbol": "BRK-B",
+      "name": "Berkshire Hathaway"
+    },
+    {
+      "symbol": "LLY",
+      "name": "Eli Lilly"
+    },
+    {
+      "symbol": "JPM",
+      "name": "JPMorgan Chase"
+    },
+    {
+      "symbol": "WMT",
+      "name": "Walmart"
+    },
+    {
+      "symbol": "V",
+      "name": "Visa"
+    },
+    {
+      "symbol": "ORCL",
+      "name": "Oracle"
+    },
+    {
+      "symbol": "MA",
+      "name": "Mastercard"
+    },
+    {
+      "symbol": "XOM",
+      "name": "Exxon Mobil"
+    },
+    {
+      "symbol": "UNH",
+      "name": "UnitedHealth"
+    },
+    {
+      "symbol": "COST",
+      "name": "Costco"
+    },
+    {
+      "symbol": "NFLX",
+      "name": "Netflix"
+    },
+    {
+      "symbol": "HD",
+      "name": "Home Depot"
+    },
+    {
+      "symbol": "PG",
+      "name": "Procter & Gamble"
+    },
+    {
+      "symbol": "JNJ",
+      "name": "Johnson & Johnson"
+    },
+    {
+      "symbol": "BAC",
+      "name": "Bank of America"
+    },
+    {
+      "symbol": "ABBV",
+      "name": "AbbVie"
+    },
+    {
+      "symbol": "CRM",
+      "name": "Salesforce"
+    },
+    {
+      "symbol": "CVX",
+      "name": "Chevron"
+    },
+    {
+      "symbol": "KO",
+      "name": "Coca-Cola"
+    },
+    {
+      "symbol": "AMD",
+      "name": "AMD"
+    },
+    {
+      "symbol": "TMUS",
+      "name": "T-Mobile US"
+    },
+    {
+      "symbol": "WFC",
+      "name": "Wells Fargo"
+    },
+    {
+      "symbol": "CSCO",
+      "name": "Cisco"
+    },
+    {
+      "symbol": "MRK",
+      "name": "Merck"
+    },
+    {
+      "symbol": "PEP",
+      "name": "PepsiCo"
+    },
+    {
+      "symbol": "ACN",
+      "name": "Accenture"
+    },
+    {
+      "symbol": "ADBE",
+      "name": "Adobe"
+    },
+    {
+      "symbol": "LIN",
+      "name": "Linde"
+    },
+    {
+      "symbol": "IBM",
+      "name": "IBM"
+    },
+    {
+      "symbol": "MCD",
+      "name": "McDonald's"
+    },
+    {
+      "symbol": "ABT",
+      "name": "Abbott"
+    },
+    {
+      "symbol": "GE",
+      "name": "GE Aerospace"
+    },
+    {
+      "symbol": "NOW",
+      "name": "ServiceNow"
+    },
+    {
+      "symbol": "PM",
+      "name": "Philip Morris"
+    },
+    {
+      "symbol": "QCOM",
+      "name": "Qualcomm"
+    },
+    {
+      "symbol": "DIS",
+      "name": "Disney"
+    },
+    {
+      "symbol": "TXN",
+      "name": "Texas Instruments"
+    },
+    {
+      "symbol": "CAT",
+      "name": "Caterpillar"
+    },
+    {
+      "symbol": "ISRG",
+      "name": "Intuitive Surgical"
+    },
+    {
+      "symbol": "INTU",
+      "name": "Intuit"
+    },
+    {
+      "symbol": "VZ",
+      "name": "Verizon"
+    },
+    {
+      "symbol": "PLTR",
+      "name": "Palantir"
+    }
+  ]
+}

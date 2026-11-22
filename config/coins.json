@@ -8,6 +8,11 @@
       {
         "name": "Bitcoin Core news",
         "url": "https://bitcoincore.org/en/rss.xml"
+      },
+      {
+        "name": "Bitcoin in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Bitcoin+BTC+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -28,6 +33,11 @@
       {
         "name": "Ethereum Magicians forum",
         "url": "https://ethereum-magicians.org/latest.rss"
+      },
+      {
+        "name": "Ethereum in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Ethereum+ETH+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -45,6 +55,11 @@
       {
         "name": "BNB Chain forum",
         "url": "https://forum.bnbchain.org/latest.rss"
+      },
+      {
+        "name": "BNB Chain in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=BNB+Binance+Coin+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -65,6 +80,11 @@
       {
         "name": "Solana forum",
         "url": "https://forum.solana.com/latest.rss"
+      },
+      {
+        "name": "Solana in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Solana+SOL+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -85,7 +105,7 @@
       {
         "name": "XRP in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=XRP+Ripple+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=XRP+Ripple+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -102,6 +122,11 @@
       {
         "name": "Dogecoin Foundation",
         "url": "https://foundation.dogecoin.com/announcements/index.xml"
+      },
+      {
+        "name": "Dogecoin in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Dogecoin+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -118,6 +143,11 @@
       {
         "name": "Cardano forum",
         "url": "https://forum.cardano.org/latest.rss"
+      },
+      {
+        "name": "Cardano in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Cardano+ADA+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -134,6 +164,11 @@
       {
         "name": "TRON DAO forum",
         "url": "https://forum.trondao.org/latest.rss"
+      },
+      {
+        "name": "TRON in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=TRON+TRX+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -150,6 +185,11 @@
       {
         "name": "TON blog",
         "url": "https://medium.com/feed/@tonblockchain"
+      },
+      {
+        "name": "Toncoin in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Toncoin+TON+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -167,6 +207,11 @@
       {
         "name": "Avalanche blog",
         "url": "https://medium.com/feed/avalancheavax"
+      },
+      {
+        "name": "Avalanche in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Avalanche+AVAX+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -183,6 +228,11 @@
       {
         "name": "Chainlink blog",
         "url": "https://medium.com/feed/chainlink"
+      },
+      {
+        "name": "Chainlink in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Chainlink+LINK+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -199,6 +249,11 @@
       {
         "name": "Aave governance forum",
         "url": "https://governance.aave.com/latest.rss"
+      },
+      {
+        "name": "Aave in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Aave+DeFi+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -218,7 +273,7 @@
       {
         "name": "Litecoin in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=Litecoin+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=Litecoin+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -239,7 +294,7 @@
       {
         "name": "Bitcoin Cash in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=Bitcoin+Cash+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=Bitcoin+Cash+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -264,6 +319,11 @@
       {
         "name": "Polkadot SDK releases",
         "url": "https://github.com/paritytech/polkadot-sdk/releases.atom"
+      },
+      {
+        "name": "Polkadot in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Polkadot+DOT+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -283,6 +343,11 @@
       {
         "name": "Polygon Bor releases",
         "url": "https://github.com/maticnetwork/bor/releases.atom"
+      },
+      {
+        "name": "Polygon in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Polygon+POL+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -303,6 +368,11 @@
       {
         "name": "NEAR core releases",
         "url": "https://github.com/near/nearcore/releases.atom"
+      },
+      {
+        "name": "NEAR Protocol in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=NEAR+Protocol+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -323,6 +393,11 @@
       {
         "name": "Cosmos SDK releases",
         "url": "https://github.com/cosmos/cosmos-sdk/releases.atom"
+      },
+      {
+        "name": "Cosmos in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Cosmos+ATOM+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -343,7 +418,7 @@
       {
         "name": "Uniswap in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=Uniswap+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=Uniswap+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -368,6 +443,11 @@
       {
         "name": "Stellar Core releases",
         "url": "https://github.com/stellar/stellar-core/releases.atom"
+      },
+      {
+        "name": "Stellar in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Stellar+XLM+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -388,6 +468,11 @@
       {
         "name": "Internet Computer releases",
         "url": "https://github.com/dfinity/ic/releases.atom"
+      },
+      {
+        "name": "Internet Computer in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Internet+Computer+ICP+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -409,7 +494,7 @@
       {
         "name": "Aptos in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=Aptos+crypto+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=Aptos+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -429,6 +514,11 @@
       {
         "name": "Arbitrum Nitro releases",
         "url": "https://github.com/OffchainLabs/nitro/releases.atom"
+      },
+      {
+        "name": "Arbitrum in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Arbitrum+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -448,6 +538,11 @@
       {
         "name": "Optimism releases",
         "url": "https://github.com/ethereum-optimism/optimism/releases.atom"
+      },
+      {
+        "name": "Optimism in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Optimism+OP+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -470,6 +565,11 @@
       {
         "name": "Filecoin Lotus releases",
         "url": "https://github.com/filecoin-project/lotus/releases.atom"
+      },
+      {
+        "name": "Filecoin in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Filecoin+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -489,6 +589,11 @@
       {
         "name": "Sui releases",
         "url": "https://github.com/MystenLabs/sui/releases.atom"
+      },
+      {
+        "name": "Sui in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Sui+blockchain+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -509,6 +614,11 @@
       {
         "name": "Hedera services releases",
         "url": "https://github.com/hashgraph/hedera-services/releases.atom"
+      },
+      {
+        "name": "Hedera in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Hedera+HBAR+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -529,6 +639,11 @@
       {
         "name": "Algorand releases",
         "url": "https://github.com/algorand/go-algorand/releases.atom"
+      },
+      {
+        "name": "Algorand in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Algorand+ALGO+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -549,6 +664,11 @@
       {
         "name": "Sky forum",
         "url": "https://forum.sky.money/latest.rss"
+      },
+      {
+        "name": "Maker (Sky) in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Sky+Maker+MKR+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -566,6 +686,11 @@
       {
         "name": "The Graph forum",
         "url": "https://forum.thegraph.com/latest.rss"
+      },
+      {
+        "name": "The Graph in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=The+Graph+GRT+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -582,6 +707,11 @@
       {
         "name": "Stacks forum",
         "url": "https://forum.stacks.org/latest.rss"
+      },
+      {
+        "name": "Stacks in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Stacks+STX+Bitcoin+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -602,6 +732,11 @@
       {
         "name": "Celestia node releases",
         "url": "https://github.com/celestiaorg/celestia-node/releases.atom"
+      },
+      {
+        "name": "Celestia in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Celestia+TIA+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -621,6 +756,11 @@
       {
         "name": "Sei chain releases",
         "url": "https://github.com/sei-protocol/sei-chain/releases.atom"
+      },
+      {
+        "name": "Sei in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Sei+SEI+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -637,6 +777,11 @@
       {
         "name": "THORChain on Medium",
         "url": "https://medium.com/feed/thorchain"
+      },
+      {
+        "name": "THORChain in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=THORChain+RUNE+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -653,7 +798,7 @@
       {
         "name": "Shiba Inu in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=Shiba+Inu+crypto+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=Shiba+Inu+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -670,7 +815,7 @@
       {
         "name": "Pepe in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=PEPE+memecoin+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=PEPE+memecoin+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -687,7 +832,7 @@
       {
         "name": "Ethereum Classic in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=Ethereum+Classic+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=Ethereum+Classic+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -704,7 +849,7 @@
       {
         "name": "Injective in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=Injective+INJ+crypto+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=Injective+INJ+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -721,7 +866,7 @@
       {
         "name": "Immutable in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=Immutable+IMX+crypto+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=Immutable+IMX+crypto+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [
@@ -738,7 +883,7 @@
       {
         "name": "VeChain in the news",
         "kind": "coin",
-        "url": "https://news.google.com/rss/search?q=VeChain+when:7d&hl=en-US&gl=US&ceid=US:en"
+        "url": "https://news.google.com/rss/search?q=VeChain+when:1d&hl=en-US&gl=US&ceid=US:en"
       }
     ],
     "keywords": [

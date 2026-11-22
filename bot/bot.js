@@ -2,7 +2,7 @@
 // Everything outside (Telegram, the printer, the clock, the disk) is passed in, so the whole thing
 // can be tested without a token.
 import { addCoins, removeCoins, newUser, validTime, validTz, MAX_COINS } from './store.js';
-import { digestMessage, summaryMessage, flipped, isDue, localClock, esc } from './format.js';
+import { digestMessage, summaryMessage, quotesMessage, newsPage, NEWS_PAGE, stocksPage, flipped, isDue, localClock, esc } from './format.js';
 
 // Flip alerts: never at night (the morning summary carries the flip), and not more than once per coin per 6 hours.
 const QUIET_FROM = 23 * 60, QUIET_TO = 7 * 60, ALERT_COOLDOWN_MS = 6 * 3600e3;
@@ -20,16 +20,21 @@ const T = {
     welcome: `<b>NewsTide</b>: новостной фон по вашим монетам.\n\nВыберите до ${MAX_COINS} монет, и каждое утро я пришлю одну короткую сводку: куда сейчас тянут новости, ↑ вверх, ↓ вниз или ↔ ясного направления нет. Если направление развернулось, напишу сразу, не дожидаясь утра.\n\nЭто не прогноз цены и не совет по торговле: я читаю новости и показываю, на что они похожи. Пример сводки можно посмотреть кнопкой ниже.`,
     pickCoins: 'Выбрать монеты', quick: `Быстрый старт: ${QUICK_START.join(' ')}`, example: 'Пример сводки',
     exampleTitle: 'Пример сводки (данные ненастоящие)',
-    exampleBody: ['↑ <b>BTC</b> Рост ожидается', '↔ <b>ETH</b> Пока без ясного направления', '↓ <b>SOL</b> Риск коррекции', '', '⚠ <b>Вердикт перевернулся:</b> SOL (вверх → вниз)', '', '<i>↑ новости тянут вверх, ↓ вниз, ↔ ясного направления нет. Оценка на ближайшие сутки по новостям за две недели. Не совет по торговле.</i>', '', 'Под сводкой будут кнопки монет: нажмёте, и придут причины и ссылки на новости.'],
+    exampleBody: ['🟢📈 <b>BTC</b> Рост ожидается', '<i>Long: за · Short: против</i>', '🔵↔️ <b>ETH</b> Пока без ясного направления', '<i>Long: неясно · Short: неясно</i>', '🔴📉 <b>SOL</b> Риск коррекции', '<i>Long: против · Short: за</i>', '', '⚠ <b>Вердикт перевернулся:</b> SOL (вверх → вниз)', '', '<i>🟢📈 новости тянут вверх, 🔴📉 вниз, 🔵↔️ ясного направления нет. Срок оценки: ближайшие сутки, по новостям за последние 24 часа. Это крипторынок, не совет по торговле.</i>', '', 'Под сводкой будут кнопки монет: нажмёте, и придут причины и ссылки на новости.'],
     menuHead: 'Меню', noCoins: 'Монет пока нет.', yourCoins: c => `Ваши монеты: ${c.join(', ')}`,
     schedule: (t, tz) => `Сводка приходит в ${t} (${tz}).`,
     bNow: 'Выпуск сейчас', bCoins: 'Мои монеты', bSettings: 'Настройки', bFull: 'Версия Full', bHelp: 'Помощь', bBack: 'Назад', bDone: n => `Готово (${n})`,
     pickHead: n => `Выберите монеты, до ${MAX_COINS}. Выбрано: ${n}.`, pickHint: 'Нужной монеты нет в списке? Напишите её тикер командой /add.',
     pickedNote: 'Готово. Нажмите «Выпуск сейчас», чтобы увидеть первую сводку.', quickNote: c => `Добавил ${c.join(', ')}. Нажмите «Выпуск сейчас», чтобы увидеть первую сводку.`,
     limitReached: `Лимит ${MAX_COINS} монет. Уберите что-нибудь.`, empty: 'Сначала выберите монеты.',
+    bStocks: 'Топ-50 акций США', stocksFail: 'Не удалось получить котировки акций, попробуйте позже.', stocksLoading: 'Загружаю акции...',
+    bNews: 'Новости', bMarkets: 'Рынки', newsHead: 'Новости: что показать?', newsMine: 'Мои монеты', newsCrypto: 'Крипторынок', newsWorld: 'Мир и макро (войны, ФРС)',
+    newsTitles: { mine: 'Новости по вашим монетам', crypto: 'Новости крипторынка', world: 'Мировые новости и макро' }, newsMore: 'Ещё ›', newsPrev: '‹ Назад', newsSections: 'Разделы', newsLoading: 'Загружаю новости...',
+    newsHint: 'Заголовки ведут на сайты источников. Полный текст читайте там.', newsNoCoins: 'Сначала выберите монеты, тогда покажу новости по ним.', marketsLoading: 'Загружаю рынки...', marketsFail: 'Не удалось получить котировки, попробуйте позже.',
+    moodUp: 'Бык: новости по вашим монетам в основном тянут вверх', moodDown: 'Медведь: новости по вашим монетам в основном тянут вниз', moodFlat: 'Хомяк: ясного направления нет',
     bAbout: 'О боте', bRead: 'Как читать сводку', bSources: 'Откуда новости', bPriv: 'Приватность', bDelete: 'Удалить мои данные',
     aboutText: '<b>О боте</b>\nNewsTide читает новости и показывает, куда они сейчас тянут вашу монету. Вы выбираете монеты (до ' + MAX_COINS + '), бот каждое утро присылает одну короткую сводку и сам пишет, если вердикт развернулся.\n\n<b>Что он делает.</b> Читает блоги и форумы проектов, релизы разработчиков, крупные крипто-СМИ и макро-новости. Модель сводит это в один вердикт на монету, со ссылками на новости, на которых он стоит.\n\n<b>Чего он не делает.</b> Не предсказывает цену, не даёт торговых советов, не знает будущего.',
-    readText: '<b>Как читать сводку</b>\n↑ новости тянут вверх\n↓ новости тянут вниз\n↔ ясного направления нет: тихо или новости спорят друг с другом\n\nОценка на ближайшие сутки, по новостям за две недели.\n\nКнопка с монетой под сводкой открывает причины по шагам и ссылки на новости.\n\n⚠ <b>Вердикт перевернулся</b> значит, что было вверх, а стало вниз (или наоборот). Это пришлю сразу, днём. Ночью не беспокою, тогда переворот будет в утренней сводке.',
+    readText: '<b>Как читать сводку</b>\n🟢📈 новости тянут вверх\n🔴📉 новости тянут вниз\n🔵↔️ ясного направления нет: тихо или новости спорят друг с другом\n\n<b>Long и Short</b> показывают, что это значит для вашей идеи: покупаете (Long) или продаёте в шорт (Short), новостной фон за вас, против вас или неясен.\n\n<b>Срок:</b> ближайшие сутки. Берутся только новости за последние 24 часа на момент запроса. Отдельной оценки для 4-часового и более коротких графиков нет.\n\nКнопка с монетой под сводкой открывает причины по шагам и ссылки на новости.\n\n⚠ <b>Вердикт перевернулся</b> значит, что было вверх, а стало вниз (или наоборот). Это пришлю сразу, днём. Ночью не беспокою, тогда переворот будет в утренней сводке.',
     srcText: '<b>Откуда новости</b>\nПо каждой монете: блог и форум проекта, релизы разработчиков на GitHub и поиск новостей про неё. Для всех сразу: Cointelegraph, CoinDesk, ФРС США, Investing, MarketWatch, а также мировые события (войны, санкции, удары, отношения между странами): BBC World, Al Jazeera и поиск по геополитике.\n\nПока не читаю: X, Discord, Telegram-каналы, Reddit. X планируется в версии Full, остальное пока не подключено. У части монет собственных новостей мало, тогда вердикт опирается на общий фон рынка.',
     privText: '<b>Приватность</b>\nБот пишет только тем, кто сам его запустил. Он не читает ваши чаты, каналы и аккаунты.\n\nХранится: номер вашего чата, выбранные монеты, время, часовой пояс, язык и последний вердикт по монетам. Ничего больше.\n\nУдалить всё можно в любой момент кнопкой ниже или командой /stop.',
     settingsHead: 'Настройки', time: 'Время', tz: 'Часовой пояс', lang: 'Язык',
@@ -38,7 +43,7 @@ const T = {
     timeSet: t => `Время: ${t}.`, tzSet: z => `Пояс: ${z}.`, langSet: 'Язык: русский.',
     wait: 'Печатаю сводку, это займёт до минуты.', slow: 'Не так часто, подождите полминуты.',
     detail: 'Подробнее', moreHint: 'Нажмите на монету, чтобы увидеть причины и ссылки.',
-    helpText: `Всё делается кнопками в /menu. Команды для тех, кто любит печатать:\n\n/add BTC ETH - добавить монеты\n/remove BTC - убрать\n/list - мои монеты\n/coins - все монеты\n/now - сводка сейчас\n/time 08:00 - время\n/tz Europe/Kyiv - пояс\n/lang en - язык\n/full - лист ожидания Full\n/stop - удалить мои данные\n\nСводка строится только по открытым новостям и не является советом по торговле.`,
+    helpText: `Всё делается кнопками в /menu. Команды для тех, кто любит печатать:\n\n/add BTC ETH - добавить монеты\n/remove BTC - убрать\n/list - мои монеты\n/coins - все монеты\n/now - сводка сейчас\n/news - новости\n/markets - рынки\n/stocks - топ-50 акций США\n/time 08:00 - время\n/tz Europe/Kyiv - пояс\n/lang en - язык\n/full - лист ожидания Full\n/stop - удалить мои данные\n\nСводка строится только по открытым новостям и не является советом по торговле.`,
     added: a => `Добавлено: ${a.join(', ')}.`, unknown: u => `Не знаю таких монет: ${u.join(', ')}. Список: /coins`,
     removed: g => `Убрано: ${g.join(', ')}.`, nothingRemoved: 'Такой монеты нет в вашем списке.',
     coinsAll: c => `Доступные монеты (${c.length}): ${c.join(' ')}`,
@@ -46,22 +51,27 @@ const T = {
     stopAsk: 'Удалить ваши монеты и настройки? Сводки приходить перестанут.', stopYes: 'Да, удалить', stopNo: 'Нет, оставить',
     stop: 'Готово, данные удалены. Чтобы вернуться, нажмите /start.',
     limit: 'На сегодня лимит расходов исчерпан, сводка придёт позже.', few: 'Сейчас слишком мало новостей, чтобы судить.', print: 'Не удалось напечатать выпуск. Попробуйте позже.',
-    head: d => `NewsTide, сводка за ${d}`, unknownCmd: 'Не понял. Нажмите кнопку или откройте /menu.'
+    head: d => `NewsTide: крипто-сводка за ${d}`, unknownCmd: 'Не понял. Нажмите кнопку или откройте /menu.'
   },
   en: {
     welcome: `<b>NewsTide</b>: the news background for your coins.\n\nPick up to ${MAX_COINS} coins and every morning I send one short summary: where the news point now, ↑ up, ↓ down or ↔ no clear direction. If the direction flips, I write right away, not at the next morning.\n\nThis is not a price forecast and not trading advice: I read the news and show what they look like. See a sample summary with the button below.`,
     pickCoins: 'Pick coins', quick: `Quick start: ${QUICK_START.join(' ')}`, example: 'Sample summary',
     exampleTitle: 'Sample summary (made-up data)',
-    exampleBody: ['↑ <b>BTC</b> Growth expected', '↔ <b>ETH</b> No clear direction for now', '↓ <b>SOL</b> Correction risk', '', '⚠ <b>The verdict flipped:</b> SOL (up → down)', '', '<i>↑ the news point up, ↓ down, ↔ no clear direction. A view for the next day from two weeks of news. Not trading advice.</i>', '', 'Under a real summary there are coin buttons: tap one to see the reasons and the news links.'],
+    exampleBody: ['🟢📈 <b>BTC</b> Growth expected', '<i>Long: for · Short: against</i>', '🔵↔️ <b>ETH</b> No clear direction for now', '<i>Long: unclear · Short: unclear</i>', '🔴📉 <b>SOL</b> Correction risk', '<i>Long: against · Short: for</i>', '', '⚠ <b>The verdict flipped:</b> SOL (up → down)', '', '<i>🟢📈 the news point up, 🔴📉 down, 🔵↔️ no clear direction. Horizon: the next day, from the news of the last 24 hours. This is the crypto market, not trading advice.</i>', '', 'Under a real summary there are coin buttons: tap one to see the reasons and the news links.'],
     menuHead: 'Menu', noCoins: 'No coins yet.', yourCoins: c => `Your coins: ${c.join(', ')}`,
     schedule: (t, tz) => `The summary arrives at ${t} (${tz}).`,
     bNow: 'Summary now', bCoins: 'My coins', bSettings: 'Settings', bFull: 'Full version', bHelp: 'Help', bBack: 'Back', bDone: n => `Done (${n})`,
     pickHead: n => `Pick coins, up to ${MAX_COINS}. Selected: ${n}.`, pickHint: 'Coin not in the list? Send its ticker with /add.',
     pickedNote: 'Done. Press "Summary now" to see the first one.', quickNote: c => `Added ${c.join(', ')}. Press "Summary now" to see the first one.`,
     limitReached: `Limit is ${MAX_COINS} coins. Remove one first.`, empty: 'Pick some coins first.',
+    bStocks: 'Top 50 US stocks', stocksFail: 'Could not get the stock quotes, try later.', stocksLoading: 'Loading the stocks...',
+    bNews: 'News', bMarkets: 'Markets', newsHead: 'News: what to show?', newsMine: 'My coins', newsCrypto: 'Crypto market', newsWorld: 'World and macro (wars, the Fed)',
+    newsTitles: { mine: 'News about your coins', crypto: 'Crypto market news', world: 'World news and macro' }, newsMore: 'More ›', newsPrev: '‹ Back', newsSections: 'Sections', newsLoading: 'Loading the news...',
+    newsHint: 'Headlines link to the source sites. Read the full text there.', newsNoCoins: 'Pick some coins first and I will show the news about them.', marketsLoading: 'Loading the markets...', marketsFail: 'Could not get the quotes, try later.',
+    moodUp: 'The bull: the news on your coins mostly point up', moodDown: 'The bear: the news on your coins mostly point down', moodFlat: 'The hamster: no clear direction',
     bAbout: 'About', bRead: 'How to read it', bSources: 'Where news come from', bPriv: 'Privacy', bDelete: 'Delete my data',
     aboutText: '<b>About the bot</b>\nNewsTide reads the news and shows where they point your coin right now. You pick coins (up to ' + MAX_COINS + '), the bot sends one short summary every morning and writes on its own if a verdict flips.\n\n<b>What it does.</b> Reads project blogs and forums, developer releases, big crypto media and macro news. A model turns that into one verdict per coin, with links to the news it rests on.\n\n<b>What it does not do.</b> It does not predict the price, give trading advice or know the future.',
-    readText: '<b>How to read the summary</b>\n↑ the news point up\n↓ the news point down\n↔ no clear direction: quiet, or the news pull both ways\n\nA view for the next day, from two weeks of news.\n\nThe coin button under a summary opens the reasons step by step and the news links.\n\n⚠ <b>The verdict flipped</b> means it was up and is now down (or the other way). I send that at once, in the daytime. Not at night: then the flip is in the morning summary.',
+    readText: '<b>How to read the summary</b>\n🟢📈 the news point up\n🔴📉 the news point down\n🔵↔️ no clear direction: quiet, or the news pull both ways\n\n<b>Long and Short</b> say what this means for your idea: if you buy (Long) or sell short (Short), is the news background for you, against you or unclear.\n\n<b>Horizon:</b> the next day. Only the news of the last 24 hours at the moment of the request is used. There is no separate read for the 4-hour or shorter charts.\n\nThe coin button under a summary opens the reasons step by step and the news links.\n\n⚠ <b>The verdict flipped</b> means it was up and is now down (or the other way). I send that at once, in the daytime. Not at night: then the flip is in the morning summary.',
     srcText: '<b>Where the news come from</b>\nFor every coin: the project blog and forum, developer releases on GitHub and a news search about it. For all: Cointelegraph, CoinDesk, the US Fed, Investing, MarketWatch, plus world events (wars, sanctions, strikes, relations between states): BBC World, Al Jazeera and a geopolitics search.\n\nNot read yet: X, Discord, Telegram channels, Reddit. X is planned for the Full version, the rest is not connected yet. Some coins have little news of their own; then the verdict leans on the general market background.',
     privText: '<b>Privacy</b>\nThe bot writes only to people who started it. It does not read your chats, channels or accounts.\n\nStored: your chat number, picked coins, time, time zone, language and the last verdict per coin. Nothing else.\n\nYou can delete it all at any time with the button below or /stop.',
     settingsHead: 'Settings', time: 'Time', tz: 'Time zone', lang: 'Language',
@@ -70,7 +80,7 @@ const T = {
     timeSet: t => `Time: ${t}.`, tzSet: z => `Zone: ${z}.`, langSet: 'Language: English.',
     wait: 'Printing the summary, up to a minute.', slow: 'Not so fast, wait half a minute.',
     detail: 'Details', moreHint: 'Tap a coin to see the reasons and links.',
-    helpText: `Everything works with the buttons in /menu. Commands for those who like typing:\n\n/add BTC ETH - add coins\n/remove BTC - remove\n/list - my coins\n/coins - all coins\n/now - summary now\n/time 08:00 - time\n/tz Europe/Kyiv - zone\n/lang ru - language\n/full - Full waiting list\n/stop - delete my data\n\nThe summary is built from public news only and is not trading advice.`,
+    helpText: `Everything works with the buttons in /menu. Commands for those who like typing:\n\n/add BTC ETH - add coins\n/remove BTC - remove\n/list - my coins\n/coins - all coins\n/now - summary now\n/news - news\n/markets - markets\n/stocks - top 50 US stocks\n/time 08:00 - time\n/tz Europe/Kyiv - zone\n/lang ru - language\n/full - Full waiting list\n/stop - delete my data\n\nThe summary is built from public news only and is not trading advice.`,
     added: a => `Added: ${a.join(', ')}.`, unknown: u => `Unknown coins: ${u.join(', ')}. See /coins`,
     removed: g => `Removed: ${g.join(', ')}.`, nothingRemoved: 'That coin is not on your list.',
     coinsAll: c => `Available coins (${c.length}): ${c.join(' ')}`,
@@ -78,7 +88,7 @@ const T = {
     stopAsk: 'Delete your coins and settings? The summaries will stop.', stopYes: 'Yes, delete', stopNo: 'No, keep',
     stop: 'Done, your data is deleted. Press /start to come back.',
     limit: 'Today\'s spending limit is used up, the summary will come later.', few: 'Too little news right now to judge.', print: 'Could not print the edition. Try again later.',
-    head: d => `NewsTide, summary for ${d}`, unknownCmd: 'Did not get that. Press a button or open /menu.'
+    head: d => `NewsTide: crypto summary for ${d}`, unknownCmd: 'Did not get that. Press a button or open /menu.'
   }
 };
 
@@ -86,7 +96,7 @@ const btn = (text, data) => ({ text, callback_data: data });
 const kb = rows => ({ inline_keyboard: rows });
 const chunk = (list, n) => Array.from({ length: Math.ceil(list.length / n) }, (_, i) => list.slice(i * n, i * n + n));
 
-export function createBot({ tg, users, save, coins, getEdition, now = () => new Date(), log = console }) {
+export function createBot({ tg, users, save, coins, getEdition, getNews, getQuotes, getStocks, translateTexts, photos = {}, now = () => new Date(), log = console }) {
   const bySymbol = new Map(coins.map(c => [c.symbol, c]));
   const known = new Set(bySymbol.keys());
   const lastNow = new Map();
@@ -103,7 +113,7 @@ export function createBot({ tg, users, save, coins, getEdition, now = () => new 
   const menuScreen = (u, note) => {
     const t = tx(u);
     const text = [`<b>${t.menuHead}</b>`, note ? esc(note) : '', u.coins.length ? esc(t.yourCoins(u.coins)) : esc(t.noCoins), esc(t.schedule(u.time, u.tz))].filter(x => x !== '').join('\n');
-    return { text, markup: kb([[btn(t.bNow, 'now'), btn(t.bCoins, 'pick')], [btn(t.bSettings, 'set'), btn(t.bAbout, 'about')], [btn(t.bFull, 'full'), btn(t.bHelp, 'help')]]) };
+    return { text, markup: kb([[btn(t.bNow, 'now'), btn(t.bCoins, 'pick')], [btn(t.bNews, 'news'), btn(t.bMarkets, 'mk')], [btn(t.bSettings, 'set'), btn(t.bAbout, 'about')], [btn(t.bFull, 'full'), btn(t.bHelp, 'help')]]) };
   };
   const welcomeScreen = u => {
     const t = tx(u);
@@ -172,6 +182,7 @@ export function createBot({ tg, users, save, coins, getEdition, now = () => new 
         results.push({ sym, ed: null, err: t[err.reason] ?? t.print });
       }
     }
+    await sendMood(chatId, user, results);
     const rows = chunk(results.filter(r => r.ed).map(r => btn(`${r.sym} ›`, `m:${r.sym}`)), 4);
     rows.push([btn(t.menuHead, 'menu')]);
     await tg.send(chatId, `${summaryMessage(results, { lang: user.lang, head: t.head(`${d}.${mo}.${y}`) })}\n\n${esc(t.moreHint)}`, kb(rows));
@@ -179,6 +190,69 @@ export function createBot({ tg, users, save, coins, getEdition, now = () => new 
     if (failed) await tg.send(chatId, esc(`${failed.sym}: ${failed.err}`));
     if (markSent) user.lastSent = date;
     await save(users);
+  }
+
+  // A woodcut before the summary: the bull, the bear or the hamster, by what most of the coins say.
+  const fileIds = new Map();
+  async function sendMood(chatId, u, results) {
+    const dirs = results.filter(r => r.ed).map(r => r.ed.direction);
+    if (!dirs.length || !tg.sendPhoto) return;
+    const up = dirs.filter(d => d === 'up').length, down = dirs.filter(d => d === 'down').length;
+    const mood = up > down ? 'up' : down > up ? 'down' : 'sideways';
+    const src = fileIds.get(mood) ?? photos[mood];
+    if (!src) return;
+    const t = tx(u);
+    try {
+      const msg = await tg.sendPhoto(chatId, src, `<i>${esc({ up: t.moodUp, down: t.moodDown, sideways: t.moodFlat }[mood])}</i>`);
+      const id = msg?.photo?.at(-1)?.file_id;
+      if (id) fileIds.set(mood, id);
+    } catch (err) { log.error('[bot photo]', err.message); }
+  }
+
+  // ---------- markets and news ----------
+  const newsCache = new Map(); // chat -> { scope, items, ruMap } for paging without refetching
+  async function showMarkets(chatId, mid, u) {
+    const t = tx(u);
+    let text;
+    try { text = quotesMessage(await getQuotes(), { lang: u.lang }); } catch (err) { log.error('[bot markets]', err.message); text = esc(t.marketsFail); }
+    return show(chatId, mid, { text, markup: kb([[btn(t.bStocks, 'st:0')], [btn(t.bBack, 'menu')]]) });
+  }
+  async function showStocks(chatId, mid, u, page) {
+    const t = tx(u);
+    let list = [];
+    try { list = await getStocks(); } catch (err) { log.error('[bot stocks]', err.message); }
+    if (!list.length) return show(chatId, mid, { text: esc(t.stocksFail), markup: kb([[btn(t.bBack, 'mk')]]) });
+    const { text, pages } = stocksPage(list, { page, lang: u.lang });
+    const nav = [];
+    if (page > 0) nav.push(btn(t.newsPrev, `st:${page - 1}`));
+    if (page + 1 < pages) nav.push(btn(t.newsMore, `st:${page + 1}`));
+    return show(chatId, mid, { text, markup: kb([...(nav.length ? [nav] : []), [btn(t.bMarkets, 'mk'), btn(t.menuHead, 'menu')]]) });
+  }
+  const newsSections = u => {
+    const t = tx(u);
+    return { text: `<b>${esc(t.newsHead)}</b>\n<i>${esc(t.newsHint)}</i>`, markup: kb([[btn(t.newsMine, 'nw:mine:0')], [btn(t.newsCrypto, 'nw:crypto:0')], [btn(t.newsWorld, 'nw:world:0')], [btn(t.bBack, 'menu')]]) };
+  };
+  async function showNews(chatId, mid, u, scope, page) {
+    const t = tx(u);
+    if (!getNews) return;
+    if (scope === 'mine' && !u.coins.length) return show(chatId, mid, { text: esc(t.newsNoCoins), markup: kb([[btn(t.pickCoins, 'pick')], [btn(t.bBack, 'news')]]) });
+    let c = newsCache.get(chatId);
+    if (!c || c.scope !== scope || page === 0) {
+      let items = [];
+      try { items = await getNews(scope, { coins: u.coins.map(s => bySymbol.get(s)).filter(Boolean) }); } catch (err) { log.error('[bot news]', err.message); }
+      c = { scope, items, ruMap: new Map() };
+      newsCache.set(chatId, c);
+    }
+    const slice = c.items.slice(page * NEWS_PAGE, page * NEWS_PAGE + NEWS_PAGE);
+    if (u.lang === 'ru' && translateTexts) {
+      const need = slice.flatMap(it => [it.title, it.summary]).filter(x => x && !c.ruMap.has(x));
+      for (const [k, v] of await translateTexts(need)) c.ruMap.set(k, v);
+    }
+    const { text, pages } = newsPage(c.items, { page, title: t.newsTitles[scope], lang: u.lang, tz: u.tz, ruMap: c.ruMap });
+    const nav = [];
+    if (page > 0) nav.push(btn(t.newsPrev, `nw:${scope}:${page - 1}`));
+    if (page + 1 < pages) nav.push(btn(t.newsMore, `nw:${scope}:${page + 1}`));
+    return show(chatId, mid, { text, markup: kb([...(nav.length ? [nav] : []), [btn(t.newsSections, 'news'), btn(t.menuHead, 'menu')]]) });
   }
 
   async function sendDetail(chatId, u, sym) {
@@ -276,6 +350,15 @@ export function createBot({ tg, users, save, coins, getEdition, now = () => new 
       case 'aloff':
         u.alerts = false; await save(users); await ack(t.alertsOffDone); return;
       case 'full': await ack(); return joinWaitlist(chatId, u);
+      case 'mk': await ack(t.marketsLoading); return showMarkets(chatId, mid, u);
+      case 'st': await ack(t.stocksLoading); return getStocks ? showStocks(chatId, mid, u, Math.max(0, Number(arg) || 0)) : undefined;
+      case 'news': await ack(); return show(chatId, mid, newsSections(u));
+      case 'nw': {
+        const [scope, page] = arg.split(':');
+        if (!['mine', 'crypto', 'world'].includes(scope)) return ack();
+        await ack(t.newsLoading);
+        return showNews(chatId, mid, u, scope, Math.max(0, Number(page) || 0));
+      }
       case 'about': await ack(); return show(chatId, mid, aboutScreen(u));
       case 'ab': await ack(); return show(chatId, mid, aboutScreen(u, arg));
       case 'help': await ack(); return show(chatId, mid, helpScreen(u));
@@ -309,6 +392,9 @@ export function createBot({ tg, users, save, coins, getEdition, now = () => new 
       case '/menu': return reply(chatId, menuScreen(u));
       case '/help': return reply(chatId, helpScreen(u));
       case '/about': return reply(chatId, aboutScreen(u));
+      case '/markets': return showMarkets(chatId, null, u);
+      case '/stocks': return getStocks ? showStocks(chatId, null, u, 0) : undefined;
+      case '/news': return reply(chatId, newsSections(u));
       case '/coins': return tg.send(chatId, esc(t.coinsAll([...known])));
       case '/list': return reply(chatId, menuScreen(u));
       case '/add': {

@@ -49,15 +49,8 @@
         <label><input type="radio" name="plan" value="short"> Short</label>
       </div>
     </fieldset>
-    <fieldset class="field">
-      <legend data-i18n="timeframe">Timeframe</legend>
-      <div class="choices">
-        <label><input type="radio" name="timeframe" value="4h" required> 4h</label>
-        <label><input type="radio" name="timeframe" value="1d"> 1d</label>
-      </div>
-    </fieldset>
     <button type="submit" class="press" id="getData" data-i18n="getData">Get data</button>
-    <p class="hint" data-i18n="hint">Long: you expect the price to rise. Short: you expect it to fall. Below 4h the paper reads today's news, from 4h the last two weeks. The stamp says whether the news favours your plan.</p>
+    <p class="hint" data-i18n="hint">Long: you expect the price to rise. Short: you expect it to fall. The paper reads only the news of the last 24 hours. The stamp says whether the news favours your plan.</p>
     <p class="form-error" id="formError" role="alert"></p>
   </form>
   <p class="tg-strip"><span data-i18n="stripText">Want this every morning, without opening the site?</span> <a href="#telegram" data-i18n="stripLink">Get it in Telegram</a></p>
@@ -71,7 +64,7 @@
     <section class="lead" aria-live="polite" aria-labelledby="verdict">
       <div class="welcome" id="welcome">
         <h3 class="headline" data-i18n="welcomeHead">Ask the paper before you trade</h3>
-        <p class="deck" data-i18n="welcomeDeck">A news background indicator for crypto traders. Choose a coin, Long or Short, and your timeframe. NewsTide reads the news behind the chart and prints one verdict.</p>
+        <p class="deck" data-i18n="welcomeDeck">A news background indicator for crypto traders. Choose a coin and Long or Short. NewsTide reads the news behind the chart and prints one verdict.</p>
       </div>
 
       <p class="waiting" id="waiting" hidden><span data-i18n="waitA">The presses are running. About</span> <span id="secs">60</span> <span data-i18n="waitB">seconds left.</span></p>
@@ -119,6 +112,14 @@
       <ol class="briefs" id="week"></ol>
     </aside>
   </main>
+
+  <section class="stocks" aria-labelledby="stocksHead">
+    <details id="stocksBox">
+      <summary class="section-head" id="stocksHead" data-i18n="stocksHead">US stocks: the 50 largest companies</summary>
+      <p class="x-note" data-i18n="stocksNote">Price and the day's change. The list is compiled by hand, the order is approximate, by market value. Data from Yahoo Finance (unofficial), may lag. Not trading advice.</p>
+      <table class="stocks-table"><tbody id="stocksBody"><tr><td data-i18n="stocksLoading">Loading...</td></tr></tbody></table>
+    </details>
+  </section>
 
   <section class="tg-connect" id="telegram" aria-labelledby="tgHead">
     <h2 class="section-head" id="tgHead" data-i18n="tgHead">The morning summary in Telegram</h2>

@@ -223,6 +223,11 @@ body {
 .hint { flex-basis: 100%; margin: 0; font-size: 13px; color: var(--ink-faded); }
 .form-error { flex-basis: 100%; color: var(--lamp-red); margin: 0; font-size: 15px; }
 .form-error:empty { display: none; }
+.stocks { margin: 24px 0 0; }
+.stocks summary { cursor: pointer; }
+.stocks-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.stocks-table td { padding: 3px 8px; border-bottom: 1px solid var(--rule); }
+.stocks-table .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .tg-strip { margin: 10px 0 0; font-size: 15px; font-style: italic; color: var(--ink-faded); }
 .tg-strip a, .guide a:not(.press) { color: var(--ink); }
 .tg-connect { margin: 28px 0 8px; padding-top: 14px; border-top: 3px double var(--ink-faded); }

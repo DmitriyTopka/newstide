@@ -77,6 +77,7 @@ test('isDue: at the time, in the catch-up window, once a day, in the user zone',
 
 function harness(over = {}) {
   const sent = [];
+  const photosSent = [];
   const acks = [];
   const users = {};
   let clock = new Date('2026-11-22T06:00:00Z');
@@ -85,13 +86,19 @@ function harness(over = {}) {
     tg: {
       send: async (id, text, markup) => { sent.push({ id, text, markup }); },
       edit: async (id, mid, text, markup) => { sent.push({ id, text, markup, edited: mid }); },
-      answer: async (cbId, text) => { acks.push({ cbId, text }); }
+      answer: async (cbId, text) => { acks.push({ cbId, text }); },
+      sendPhoto: async (id, photo, caption) => { photosSent.push({ id, photo, caption }); return { photo: [{ file_id: 'FILE123' }] }; }
     },
+    photos: { up: '/img/bull.jpg', down: '/img/bear.jpg', sideways: '/img/hamster.jpg' },
+    getNews: async scope => Array.from({ length: 7 }, (_, i) => ({ title: `Headline ${scope} ${i}`, summary: `Summary ${i}`, link: `https://example.com/${i}`, source: 'Src', date: '2026-11-22T10:00:00Z', ...(scope === 'mine' ? { sym: 'XRP' } : {}) })),
+    getStocks: async () => Array.from({ length: 50 }, (_, i) => ({ rank: i + 1, symbol: `S${i + 1}`, name: `Company ${i + 1}`, value: '100.0', change: i === 3 ? null : (i % 2 ? -1.5 : 2.5) })),
+    getQuotes: async () => [{ name: 'Bitcoin', value: '$60,000', change: 1.2 }, { name: 'S&P 500', value: '6,900', change: -3.7 }, { name: 'VIX', value: '35.9', change: 26.2 }, { name: 'Gold', value: 'x', change: null }],
+    translateTexts: async texts => new Map(texts.map(t => [t, `RU ${t}`])),
     users, coins, save: async () => {},
     getEdition: async () => { calls.editions++; if (over.fail) throw Object.assign(new Error('x'), { reason: over.fail }); return edition(over.direction ?? 'up'); },
     now: () => clock, log: { error() {} }
   });
-  return { bot, sent, acks, users, calls, setClock: d => { clock = d; } };
+  return { bot, sent, acks, photosSent, users, calls, setClock: d => { clock = d; } };
 }
 const msg = (text, id = 7) => ({ chat: { id, type: 'private' }, text, from: { language_code: 'ru' } });
 
@@ -309,4 +316,91 @@ test('market feeds: geopolitics sources are present and every kind is one the pr
   const feeds = JSON.parse(await readFile(new URL('../config/feeds.json', import.meta.url), 'utf8'));
   assert.ok(feeds.filter(f => f.kind === 'geo').length >= 3);
   for (const f of feeds) assert.ok(['crypto', 'macro', 'geo'].includes(f.kind), f.name);
+});
+
+test('summary: coloured icons, Long/Short lines, horizon note, crypto marker, a woodcut first', async () => {
+  const h = harness({ direction: 'up' });
+  await h.bot.handle(msg('/start'));
+  await h.bot.handle(msg('/add XRP'));
+  h.sent.length = 0;
+  await h.bot.handle(msg('/now'));
+  const summary = h.sent.find(s => /крипто-сводка/.test(s.text));
+  assert.ok(summary.text.includes('🟢📈'));
+  assert.match(summary.text, /Long: за · Short: против/);
+  assert.match(summary.text, /ближайшие сутки.*последние 24 часа/);
+  assert.match(summary.text, /Это крипторынок/);
+  assert.equal(h.photosSent.length, 1);
+  assert.equal(h.photosSent[0].photo, '/img/bull.jpg');
+  const down = harness({ direction: 'down' });
+  await down.bot.handle(msg('/start'));
+  await down.bot.handle(msg('/add XRP'));
+  await down.bot.handle(msg('/now'));
+  assert.equal(down.photosSent[0].photo, '/img/bear.jpg');
+  assert.ok(down.sent.some(s => s.text.includes('🔴📉') && /Long: против · Short: за/.test(s.text)));
+});
+
+test('markets screen: crypto, US stocks and macro with colours, VIX inverted', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handleCallback(press('mk'));
+  const text = h.sent.at(-1).text;
+  assert.match(text, /крипто и фондовый рынок/);
+  assert.match(text, /🟢 Биткоин/);
+  assert.match(text, /🔴 S&amp;P 500|🔴 S&P 500/);
+  assert.match(text, /🔴 VIX/, 'a rising fear index is red');
+  assert.match(text, /⚪ Золото нет данных/);
+});
+
+test('news: sections, paging, links to sources, Russian titles, empty coin list', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handleCallback(press('nw:mine:0'));
+  assert.match(h.sent.at(-1).text, /Сначала выберите монеты/);
+  await h.bot.handle(msg('/add XRP'));
+  await h.bot.handle(msg('/news'));
+  assert.ok(h.sent.at(-1).markup.inline_keyboard.flat().some(b => b.callback_data === 'nw:world:0'));
+  await h.bot.handleCallback(press('nw:mine:0'));
+  let m = h.sent.at(-1);
+  assert.match(m.text, /Новости по вашим монетам<\/b> \(1\/2\)/);
+  assert.match(m.text, /\[XRP\] <a href="https:\/\/example.com\/0">RU Headline mine 0<\/a>/);
+  assert.match(m.text, /RU Summary 0/);
+  assert.ok(m.markup.inline_keyboard.flat().some(b => b.callback_data === 'nw:mine:1'));
+  await h.bot.handleCallback(press('nw:mine:1'));
+  m = h.sent.at(-1);
+  assert.match(m.text, /\(2\/2\)/);
+  assert.ok(m.markup.inline_keyboard.flat().some(b => b.callback_data === 'nw:mine:0'));
+  assert.ok(!m.markup.inline_keyboard.flat().some(b => b.callback_data === 'nw:mine:2'));
+  await h.bot.handleCallback(press('l:en'));
+  await h.bot.handleCallback(press('nw:world:0'));
+  assert.match(h.sent.at(-1).text, /Headline world 0/);
+  assert.ok(!/RU Headline/.test(h.sent.at(-1).text));
+  assert.ok(Buffer.byteLength(h.sent.at(-1).text) < 4096);
+});
+
+import { parseFeed } from '../server/collect.js';
+test('sport pages are dropped from feeds', () => {
+  const xml = '<rss><channel><item><title>Match report</title><link>https://example.com/sports/2026/1</link><pubDate>Sun, 22 Nov 2026 10:00:00 GMT</pubDate></item><item><title>Strike on port</title><link>https://example.com/news/2026/2</link><pubDate>Sun, 22 Nov 2026 10:00:00 GMT</pubDate></item></channel></rss>';
+  assert.deepEqual(parseFeed(xml, { name: 'X', kind: 'geo' }).map(i => i.title), ['Strike on port']);
+});
+
+test('stocks: top 50 US stocks in two pages with colours and no data marks', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handleCallback(press('mk'));
+  assert.ok(h.sent.at(-1).markup.inline_keyboard.flat().some(b => b.callback_data === 'st:0'));
+  await h.bot.handleCallback(press('st:0'));
+  let m = h.sent.at(-1);
+  assert.match(m.text, /Акции США: топ-50.*\(1\/2\)/);
+  assert.match(m.text, /🟢 1\. <b>S1<\/b> Company 1 \$100.0 ▲ \+2.5%/);
+  assert.match(m.text, /🔴 2\. <b>S2<\/b>/);
+  assert.match(m.text, /⚪ 4\. <b>S4<\/b>.*нет данных/);
+  assert.ok(Buffer.byteLength(m.text) < 4096);
+  assert.ok(m.markup.inline_keyboard.flat().some(b => b.callback_data === 'st:1'));
+  await h.bot.handleCallback(press('st:1'));
+  m = h.sent.at(-1);
+  assert.match(m.text, /\(2\/2\)/);
+  assert.match(m.text, /26\. <b>S26<\/b>/);
+  assert.ok(!m.markup.inline_keyboard.flat().some(b => b.callback_data === 'st:2'));
+  await h.bot.handle(msg('/stocks'));
+  assert.match(h.sent.at(-1).text, /\(1\/2\)/);
 });

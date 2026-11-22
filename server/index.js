@@ -8,6 +8,7 @@ import { horizonOf } from './collect.js';
 import { saveRun } from './log.js';
 import { market } from './market.js';
 import { recordVerdict } from './journal.js';
+import { stockQuotes } from './stocks.js';
 import { getEdition, MODEL, DAILY_LIMIT_USD, RESERVE_USD, spend, costOf, resetSpendDay } from './edition.js';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -30,8 +31,9 @@ const translate = async (...args) => (await import('./translate.js')).translate(
 // The demo has no key: it borrows the Russian news columns from the live site, which translates them.
 const LIVE_URL = 'https://newstide-live.vercel.app';
 
-// Minutes-long timeframes were dropped: news moves the market over hours and days, not minutes.
-const TIMEFRAMES = ['4h', '1d'];
+// There is one read: the news of the last 24 hours, judged for the next day. The timeframe choice was dropped
+// from the site; the journal and the printer still label every edition '1d'.
+const TIMEFRAME = '1d';
 
 const app = express();
 app.use(express.json());
@@ -45,9 +47,9 @@ app.get('/api/mode', (req, res) => res.json({ replay: REPLAY, public_live: PUBLI
 app.get('/api/edition', async (req, res) => {
   if (!PUBLIC_LIVE) return res.status(404).json({ error: 'Not available.' });
   const symbol = String(req.query.coin ?? '').trim().toUpperCase();
-  const timeframe = String(req.query.timeframe ?? '');
+  const timeframe = TIMEFRAME;
   const coin = coins.find(c => c.symbol === symbol);
-  if (!coin || !TIMEFRAMES.includes(timeframe)) return res.status(400).json({ error: 'Pick a coin from the list and a timeframe.' });
+  if (!coin) return res.status(400).json({ error: 'Pick a coin from the list.' });
   try {
     const data = await getEdition(coin, timeframe, { root, marketFeeds });
     res.set('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=600');
@@ -56,6 +58,18 @@ app.get('/api/edition', async (req, res) => {
     if (err.reason === 'few') return res.status(422).json({ error: 'Not enough news to judge right now. Try again later.' });
     if (err.reason === 'limit') return res.status(503).json({ error: 'Today\'s free editions are used up. Come back tomorrow, or read the archived editions in the demo.', reason: 'limit', demo: DEMO_URL });
     return res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.', reason: 'print', demo: DEMO_URL });
+  }
+});
+
+// The 50 largest US stocks with price and day change (Yahoo Finance, refreshed every 5 minutes for everybody).
+app.get('/api/stocks', async (req, res) => {
+  try {
+    const stocks = await stockQuotes();
+    if (PUBLIC_LIVE) res.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=120');
+    res.json({ stocks });
+  } catch (err) {
+    console.error('[stocks]', err);
+    res.json({ stocks: [] });
   }
 });
 
@@ -115,11 +129,12 @@ const marketTr = { run: null, pauseUntil: 0 };
 app.post('/api/analyze', async (req, res) => {
   // On the public live site every analysis must go through the shared, limited /api/edition.
   if (PUBLIC_LIVE) return res.status(404).json({ error: 'Not available.' });
-  const { plan, timeframe } = req.body ?? {};
+  const { plan } = req.body ?? {};
+  const timeframe = TIMEFRAME;
   const symbol = String(req.body?.coin ?? '').trim().toUpperCase();
   const coin = coins.find(c => c.symbol === symbol);
-  if (!coin || !['long', 'short'].includes(plan) || !TIMEFRAMES.includes(timeframe)) {
-    const what = !coin ? 'Pick a coin from the list.' : !['long', 'short'].includes(plan) ? 'Choose Long or Short.' : 'Choose a timeframe: 4h or 1d.';
+  if (!coin || !['long', 'short'].includes(plan)) {
+    const what = !coin ? 'Pick a coin from the list.' : 'Choose Long or Short.';
     return res.status(400).json({ error: what });
   }
   if (REPLAY) {

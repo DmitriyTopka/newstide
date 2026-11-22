@@ -18,12 +18,12 @@ const PROFILE = {
   '': {
     description: 'NewsTide is a newspaper-style news background for crypto traders. Pick up to 10 coins and every morning the bot sends a short summary: where the news point your coin, up, down or no clear direction. If a verdict flips, it writes right away. Not a price forecast and not trading advice. Press Start.',
     short: 'The news background for your coins: a short morning summary and an alert when the verdict flips.',
-    commands: [['menu', 'Menu'], ['now', 'Summary now'], ['list', 'My coins'], ['about', 'About the bot'], ['help', 'Help']]
+    commands: [['menu', 'Menu'], ['now', 'Summary now'], ['news', 'News'], ['markets', 'Markets'], ['stocks', 'US stocks'], ['list', 'My coins'], ['about', 'About the bot'], ['help', 'Help']]
   },
   ru: {
     description: 'NewsTide: газета о новостном фоне для крипто-трейдера. Выберите до 10 монет, и каждое утро бот пришлёт короткую сводку: куда новости тянут монету, вверх, вниз или ясного направления нет. Если вердикт развернулся, напишет сразу. Это не прогноз цены и не совет по торговле. Нажмите «Запустить».',
     short: 'Новостной фон по вашим монетам: короткая утренняя сводка и сигнал, если вердикт развернулся.',
-    commands: [['menu', 'Меню'], ['now', 'Сводка сейчас'], ['list', 'Мои монеты'], ['about', 'О боте'], ['help', 'Помощь']]
+    commands: [['menu', 'Меню'], ['now', 'Сводка сейчас'], ['news', 'Новости'], ['markets', 'Рынки'], ['stocks', 'Акции США'], ['list', 'Мои монеты'], ['about', 'О боте'], ['help', 'Помощь']]
   }
 };
 
