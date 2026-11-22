@@ -30,7 +30,7 @@ There are no percentages. A language model would have to invent them, so NewsTid
 ## How it works
 
 1. The page sends your coin, plan and timeframe to a small local server.
-2. The server reads public RSS feeds. Below a 4h timeframe it keeps the last 24 hours of news; from 4h up it keeps the last two weeks. Each source takes turns, so one busy feed cannot crowd out the rest, and the coin's own official news always gets a place.
+2. The server reads public RSS feeds. The timeframes are 4h and 1d (news moves the market over hours and days, not minutes), and it keeps the last two weeks of news. Each source takes turns, so one busy feed cannot crowd out the rest, and the coin's own official news always gets a place.
 3. About 30 numbered dispatches go to Claude with one fixed answer shape (direction, plan fit, headline, a spot/futures note, and the chain with citations).
 4. **An answer checker** runs before anything reaches the page: no percent signs, a headline of at most six words, the stamp must agree with the hand and your plan, and every step of the chain must cite a dispatch that was really collected. Broken rules are fixed and logged.
 5. Each run is saved to `runs/` with every collected dispatch and the full chain, so any verdict can be traced back to its sources. One example is in [`runs/example-run.json`](runs/example-run.json).
@@ -47,6 +47,7 @@ If a feed is down, it is skipped and the page says so. If nothing usable comes b
 | Aave | [Aave governance forum](https://governance.aave.com/latest.rss) |
 | Crypto news | [Cointelegraph](https://cointelegraph.com/rss), [CoinDesk](https://www.coindesk.com/arc/outboundfeeds/rss/) |
 | Macro | [Federal Reserve press releases](https://www.federalreserve.gov/feeds/press_all.xml), [Investing](https://www.investing.com/rss/news_95.rss), [MarketWatch](https://feeds.content.dowjones.io/public/rss/mw_topstories) |
+| Geopolitics | [BBC World](https://feeds.bbci.co.uk/news/world/rss.xml), [Al Jazeera](https://www.aljazeera.com/xml/rss/all.xml), a Google News search on wars, sanctions and strikes (Iran, Israel, Russia, China, Ukraine, Taiwan) |
 | Prices | [CoinGecko](https://docs.coingecko.com/) for Bitcoin and Ether, Yahoo Finance chart data (unofficial) for the S&P 500 and the dollar index |
 
 The live site covers 12 coins (BTC, ETH, BNB, SOL, XRP, DOGE, ADA, TRX, TON, AVAX, LINK, AAVE). Each coin's official blog or forum is read where it has a feed (see [`config/coins.json`](config/coins.json)); XRP has none, and DOGE, TON, AVAX and LINK post rarely, so for them crypto headlines that name the coin count as coin news. Official Telegram channels are not open to read, so blogs and forums are used instead. X is not connected yet: reading X costs money per post, so it is planned for later.
@@ -107,3 +108,13 @@ Built with Claude Code following the Devpost Learn Skill Pack: start, scope, PRD
 ## License
 
 MIT, see [LICENSE](LICENSE).
+
+## Telegram bot (daily summary)
+
+A reader picks up to 10 coins from a grid with checkmarks (groups: Top, L1, L2, DeFi, Memes) and gets one short summary a day at their time: one line per coin, a note when the direction flips from up to down or back, and a "details" button per coin with the reasons and links. Everything works with buttons (menu, coin grid, time, time zone, language); typed commands such as /add or /time stay as a fallback. The bot writes only to people who started it; it reads no channels or accounts. Flip alerts: every 4 hours (`WATCH_HOURS`) the bot prints an edition for each followed coin and writes at once when the verdict flips up to down or back, never between 23:00 and 07:00 in the reader's zone and at most once per coin in 6 hours; they can be switched off in Settings. A "Full version" button joins a waiting list (`node scripts/waitlist.js` counts it).
+
+1. In Telegram open @BotFather, send /newbot, copy the token.
+2. Put it in .env as TELEGRAM_BOT_TOKEN.
+3. Run `npm run bot` (it uses claude-haiku-5-5). Subscribers are kept in data/bot/users.json.
+
+Editions come from the same printer as the site (server/edition.js): one edition per coin is shared by every subscriber for 30 minutes, under one daily spending limit.

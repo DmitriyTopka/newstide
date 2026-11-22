@@ -114,7 +114,8 @@ export function markCoinNews(items, coin) {
 }
 
 const feedsFor = (coin, marketFeeds) => [
-  ...coin.feeds.map(f => ({ ...f, kind: 'project' })),
+  // Official feeds are "project"; a feed can set its own kind (news search feeds are "coin").
+  ...coin.feeds.map(f => ({ ...f, kind: f.kind ?? 'project' })),
   ...marketFeeds
 ];
 

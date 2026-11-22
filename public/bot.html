@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NewsTide bot guide</title>
+<meta name="description" content="How the NewsTide Telegram bot works: connect, pick coins, read the summary, settings, sources, privacy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23e6e4dc%27/%3E%3Ctext x=%2716%27 y=%2725%27 font-family=%27serif%27 font-weight=%27700%27 font-size=%2726%27 text-anchor=%27middle%27 fill=%27%2312110e%27%3EN%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<style>
+.guide { max-width: 760px; margin: 0 auto; padding: 8px 4px 24px; }
+.guide h2 { font-size: 24px; margin: 28px 0 8px; border-bottom: 1px solid var(--rule); padding-bottom: 4px; }
+.guide p, .guide li { font-size: 17px; line-height: 1.5; }
+.guide ul, .guide ol { padding-left: 22px; }
+.guide li { margin: 0 0 6px; }
+.guide .sample { background: rgba(0,0,0,.05); border-left: 3px solid var(--rule); padding: 10px 14px; margin: 12px 0; font-size: 16px; white-space: pre-line; }
+.guide .note { color: var(--ink-faded); font-style: italic; }
+.guide .go { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin: 18px 0; }
+.guide .go a.press { text-decoration: none; display: inline-block; }
+.guide .back { display: inline-block; margin: 10px 0 0; }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+<div class="paper" id="paper" data-mood="none">
+  <header class="masthead">
+    <div class="ear ear-left"><p class="edition">Reader's guide</p></div>
+    <h1 class="nameplate">NewsTide</h1>
+    <div class="ear ear-right">
+      <button type="button" id="langToggle" class="edition-switch" lang="ru">Русский</button>
+      <p><a href="./">Back to the paper</a></p>
+    </div>
+  </header>
+
+  <main class="guide">
+  <!-- ENGLISH -->
+  <div lang="en" data-l="en">
+    <h2>What the bot is</h2>
+    <p>The NewsTide bot is the paper in your pocket. You pick up to 10 coins once. Every morning it sends one short summary: where the news point each coin, up, down or nowhere in particular. If a verdict flips from up to down (or back) during the day, it writes at once.</p>
+    <p class="note">It is not a price forecast and not trading advice. It reads the news and shows what they look like.</p>
+    <div class="go"><a class="press" href="https://t.me/newstide_bot?start=site" target="_blank" rel="noopener">Connect Telegram</a><span>Opens the bot in Telegram. No sign-up on this site.</span></div>
+
+    <h2>Connect in one minute</h2>
+    <ol>
+      <li>Press <strong>Connect Telegram</strong>. Telegram opens on the NewsTide bot. If you have no Telegram yet, install it or use web.telegram.org.</li>
+      <li>Press <strong>Start</strong>. The bot says in two sentences what it is.</li>
+      <li>Press <strong>Pick coins</strong> and tap the coins you follow, with tabs for Top, L1, L2, DeFi and Memes. Or press <strong>Quick start</strong> for BTC, ETH and SOL.</li>
+      <li>Press <strong>Done</strong>, then <strong>Summary now</strong> to see the first one at once. After that it arrives every morning at 08:00 Kyiv time. You can change the time in Settings.</li>
+    </ol>
+
+    <h2>The menu, button by button</h2>
+    <ul>
+      <li><strong>Summary now</strong>: the summary for your coins right now.</li>
+      <li><strong>My coins</strong>: the coin grid with checkmarks. Tap a coin to add or remove it. Up to 10.</li>
+      <li><strong>Settings</strong>: time of the morning summary, time zone (8 cities), language (Russian or English) and the on/off switch for instant flip alerts.</li>
+      <li><strong>About</strong>: what the bot does and does not do, how to read a summary, where the news come from, privacy.</li>
+      <li><strong>Full version</strong>: joins the waiting list for the paid version. There is no price yet, and nothing is charged without your consent.</li>
+      <li><strong>Help</strong>: the typed commands, for people who like typing. Buttons are enough for everything.</li>
+    </ul>
+
+    <h2>What a summary looks like</h2>
+    <div class="sample">NewsTide, summary for 22.11.2026
+
+↑ BTC Growth expected
+↔ ETH No clear direction for now
+↓ SOL Correction risk
+
+⚠ The verdict flipped: SOL (up → down)</div>
+    <p>Under the summary there is a button for each coin. Tap it to see the reasons step by step and the links to the news they rest on.</p>
+    <ul>
+      <li><strong>↑</strong> the news point up. <strong>↓</strong> they point down. <strong>↔</strong> there is no clear direction: it is quiet, or the news pull both ways.</li>
+      <li>It is a view for the next day, built from two weeks of news.</li>
+      <li><strong>⚠ The verdict flipped</strong> means it was up and is now down, or the other way round. A move to or from sideways is not treated as a flip.</li>
+    </ul>
+
+    <h2>Instant flip alerts</h2>
+    <p>Every few hours the bot rereads the news for the coins you follow. If a verdict flipped, it writes at once, in the daytime. Not at night (23:00 to 07:00 in your time zone): then the flip waits in the morning summary. Not more than once per coin in 6 hours. You can switch this off in Settings or in the alert itself.</p>
+
+    <h2>Where the news come from</h2>
+    <p>For each coin: the project's own blog and forum, developer releases on GitHub and a news search about the coin. For all coins: Cointelegraph, CoinDesk, the US Federal Reserve, Investing and MarketWatch, plus world events (wars, sanctions, strikes, relations between states) from BBC World, Al Jazeera and a geopolitics search.</p>
+    <p>Not read yet: X, Discord, Telegram channels and Reddit. X is planned for the Full version, the rest is not connected. Some coins have little news of their own, and then the verdict leans on the general market background.</p>
+
+    <h2>Light and Full</h2>
+    <ul>
+      <li><strong>Light, free:</strong> this site and the morning summary in Telegram, up to 10 coins from 40.</li>
+      <li><strong>Full, in preparation:</strong> X and other platforms, your own accounts, a deeper analysis. No price yet.</li>
+    </ul>
+
+    <h2>Privacy</h2>
+    <p>The bot writes only to people who started it. It does not read your chats, channels or accounts. It stores your chat number, picked coins, time, time zone, language and the last verdict per coin. You can delete everything at any time: Menu, About, Privacy, Delete my data (or the command /stop).</p>
+
+    <h2>If something is off</h2>
+    <ul>
+      <li><strong>No summary in the morning:</strong> check the time and time zone in Settings. If the bot was blocked or stopped, press Start again.</li>
+      <li><strong>A coin is missing:</strong> the bot knows 40 coins for now. The coin list is in the grid and in /coins.</li>
+      <li><strong>Verdict says "no clear direction":</strong> that is an answer too. The news are quiet or pull both ways, so nothing backs a move right now.</li>
+    </ul>
+    <p class="note">Not financial advice. NewsTide reads the news background; it does not know the future. Trade on your own judgment.</p>
+    <a class="back" href="./">Back to the paper</a>
+  </div>
+
+  <!-- RUSSIAN -->
+  <div lang="ru" data-l="ru" hidden>
+    <h2>Что это за бот</h2>
+    <p>Бот NewsTide это газета у вас в кармане. Вы один раз выбираете до 10 монет. Каждое утро бот присылает одну короткую сводку: куда новости тянут каждую монету, вверх, вниз или никуда в частности. Если днём вердикт развернулся с «вверх» на «вниз» (или наоборот), бот напишет сразу.</p>
+    <p class="note">Это не прогноз цены и не совет по торговле. Бот читает новости и показывает, на что они похожи.</p>
+    <div class="go"><a class="press" href="https://t.me/newstide_bot?start=site" target="_blank" rel="noopener">Подключить Telegram</a><span>Откроется бот в Telegram. Регистрироваться на сайте не нужно.</span></div>
+
+    <h2>Подключение за минуту</h2>
+    <ol>
+      <li>Нажмите <strong>Подключить Telegram</strong>. Откроется Telegram на боте NewsTide. Если Telegram ещё нет, установите его или откройте web.telegram.org.</li>
+      <li>Нажмите <strong>Запустить</strong>. Бот в двух предложениях объяснит, что он такое.</li>
+      <li>Нажмите <strong>Выбрать монеты</strong> и отметьте нужные, вкладки: Основные, L1, L2, DeFi, Мемы. Или нажмите <strong>Быстрый старт</strong>: BTC, ETH и SOL.</li>
+      <li>Нажмите <strong>Готово</strong>, затем <strong>Выпуск сейчас</strong>, чтобы сразу увидеть первую сводку. Дальше она приходит каждое утро в 08:00 по Киеву. Время меняется в настройках.</li>
+    </ol>
+
+    <h2>Меню, кнопка за кнопкой</h2>
+    <ul>
+      <li><strong>Выпуск сейчас</strong>: сводка по вашим монетам прямо сейчас.</li>
+      <li><strong>Мои монеты</strong>: сетка монет с галочками. Нажали на монету, и она добавилась или убралась. До 10.</li>
+      <li><strong>Настройки</strong>: время утренней сводки, часовой пояс (8 городов), язык (русский или английский) и выключатель срочных уведомлений о перевороте.</li>
+      <li><strong>О боте</strong>: что бот делает и чего не делает, как читать сводку, откуда новости, приватность.</li>
+      <li><strong>Версия Full</strong>: запись в лист ожидания платной версии. Цены пока нет, и без вашего согласия ничего не списывается.</li>
+      <li><strong>Помощь</strong>: команды для тех, кто любит печатать. Для всего хватает кнопок.</li>
+    </ul>
+
+    <h2>Как выглядит сводка</h2>
+    <div class="sample">NewsTide, сводка за 22.11.2026
+
+↑ BTC Рост ожидается
+↔ ETH Пока без ясного направления
+↓ SOL Риск коррекции
+
+⚠ Вердикт перевернулся: SOL (вверх → вниз)</div>
+    <p>Под сводкой есть кнопка для каждой монеты. Нажмёте, и откроются причины по шагам и ссылки на новости, на которых они стоят.</p>
+    <ul>
+      <li><strong>↑</strong> новости тянут вверх. <strong>↓</strong> вниз. <strong>↔</strong> ясного направления нет: тихо или новости спорят друг с другом.</li>
+      <li>Это оценка на ближайшие сутки по новостям за две недели.</li>
+      <li><strong>⚠ Вердикт перевернулся</strong> значит, что было вверх, а стало вниз, или наоборот. Переход в «в сторону» и обратно переворотом не считается.</li>
+    </ul>
+
+    <h2>Срочные уведомления о перевороте</h2>
+    <p>Каждые несколько часов бот заново читает новости по вашим монетам. Если вердикт развернулся, он напишет сразу, днём. Ночью (с 23:00 до 07:00 по вашему поясу) не беспокоит: тогда переворот будет в утренней сводке. По одной монете не чаще раза в 6 часов. Выключить можно в настройках или прямо в уведомлении.</p>
+
+    <h2>Откуда новости</h2>
+    <p>По каждой монете: собственный блог и форум проекта, релизы разработчиков на GitHub и поиск новостей про монету. Для всех монет сразу: Cointelegraph, CoinDesk, ФРС США, Investing и MarketWatch, а также мировые события (войны, санкции, удары, отношения между странами) из BBC World, Al Jazeera и поиска по геополитике.</p>
+    <p>Пока не читаю: X, Discord, Telegram-каналы и Reddit. X планируется в версии Full, остальное не подключено. У части монет собственных новостей мало, тогда вердикт опирается на общий фон рынка.</p>
+
+    <h2>Light и Full</h2>
+    <ul>
+      <li><strong>Light, бесплатно:</strong> этот сайт и утренняя сводка в Telegram, до 10 монет из 40.</li>
+      <li><strong>Full, в разработке:</strong> X и другие площадки, ваши аккаунты, более глубокий разбор. Цены пока нет.</li>
+    </ul>
+
+    <h2>Приватность</h2>
+    <p>Бот пишет только тем, кто сам его запустил. Он не читает ваши чаты, каналы и аккаунты. Хранится номер вашего чата, выбранные монеты, время, часовой пояс, язык и последний вердикт по монетам. Удалить всё можно в любой момент: Меню, О боте, Приватность, «Удалить мои данные» (или командой /stop).</p>
+
+    <h2>Если что-то не так</h2>
+    <ul>
+      <li><strong>Утром не пришла сводка:</strong> проверьте время и часовой пояс в настройках. Если бот был заблокирован или остановлен, нажмите «Запустить» заново.</li>
+      <li><strong>Нет нужной монеты:</strong> пока бот знает 40 монет. Список есть в сетке и в команде /coins.</li>
+      <li><strong>Вердикт «ясного направления нет»:</strong> это тоже ответ. Новости тихие или тянут в разные стороны, поэтому сейчас ничто не подкрепляет движение.</li>
+    </ul>
+    <p class="note">Не является финансовым советом. NewsTide читает новостной фон и не знает будущего. Решения о сделках принимайте сами.</p>
+    <a class="back" href="./">Вернуться к газете</a>
+  </div>
+  </main>
+</div>
+</div>
+<script>
+let lang = 'en', night = false;
+try { lang = localStorage.getItem('newstide-lang') === 'ru' ? 'ru' : 'en'; night = localStorage.getItem('newstide-theme') === 'night'; } catch {}
+if (night) document.documentElement.dataset.theme = 'night';
+const show = () => {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-l]').forEach(el => { el.hidden = el.dataset.l !== lang; });
+  const b = document.getElementById('langToggle');
+  b.textContent = lang === 'en' ? 'Русский' : 'English';
+  b.lang = lang === 'en' ? 'ru' : 'en';
+  document.title = lang === 'en' ? 'NewsTide bot guide' : 'NewsTide: инструкция по боту';
+};
+document.getElementById('langToggle').addEventListener('click', () => {
+  lang = lang === 'en' ? 'ru' : 'en';
+  try { localStorage.setItem('newstide-lang', lang); } catch {}
+  show();
+});
+show();
+</script>
+</body>
+</html>

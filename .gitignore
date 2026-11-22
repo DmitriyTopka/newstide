@@ -7,3 +7,5 @@ runs/*
 !runs/example-run.json
 .DS_Store
 .vercel
+data/journal/
+data/bot/

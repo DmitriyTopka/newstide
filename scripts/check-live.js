@@ -10,7 +10,7 @@ const coins = JSON.parse(await readFile(path.join(root, 'config/coins.json'), 'u
 const marketFeeds = JSON.parse(await readFile(path.join(root, 'config/feeds.json'), 'utf8'));
 
 for (const coin of coins) {
-  for (const timeframe of ['1h', '1d']) {
+  for (const timeframe of ['4h', '1d']) {
     const r = await collect({ coin, marketFeeds, timeframe, mode: 'live', root });
     const bySource = {};
     for (const it of r.items) bySource[it.source] = (bySource[it.source] ?? 0) + 1;

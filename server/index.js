@@ -7,12 +7,12 @@ import { check, expectedFit } from './check.js';
 import { horizonOf } from './collect.js';
 import { saveRun } from './log.js';
 import { market } from './market.js';
+import { recordVerdict } from './journal.js';
+import { getEdition, MODEL, DAILY_LIMIT_USD, RESERVE_USD, spend, costOf, resetSpendDay } from './edition.js';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const allCoins = JSON.parse(await readFile(path.join(root, 'config/coins.json'), 'utf8'));
 const marketFeeds = JSON.parse(await readFile(path.join(root, 'config/feeds.json'), 'utf8'));
-const prices = JSON.parse(await readFile(path.join(root, 'config/prices.json'), 'utf8'));
-const MODEL = process.env.MODEL || 'claude-haiku-5-5';
 const DATA_MODE = process.env.DATA_MODE === 'live' ? 'live' : 'sample';
 // REPLAY=1: the public demo. Serves archived editions (real runs on live news) and never calls the AI.
 const REPLAY = process.env.REPLAY === '1';
@@ -22,12 +22,6 @@ const coins = REPLAY ? allCoins.filter(c => Object.keys(replay.editions).some(k 
 // PUBLIC_LIVE=1: the public live site. One fresh edition per coin and horizon, shared by every reader
 // for 30 minutes (server memory + CDN cache), and a daily spending limit, so visitors cannot run up the bill.
 const PUBLIC_LIVE = process.env.PUBLIC_LIVE === '1';
-const EDITION_TTL_MS = 30 * 60 * 1000;
-const DAILY_LIMIT_USD = Number(process.env.DAILY_LIMIT_USD || 0.5);
-const editions = new Map();
-const inFlight = new Map(); // one print run per coin and horizon at a time
-const RESERVE_USD = 0.002;   // set aside before each call so parallel requests cannot pass the limit
-const spend = { day: '', usd: 0 };
 // When no fresh edition can be printed, readers are sent to the archived demo instead of a dead end.
 const DEMO_URL = 'https://newstide-paper.vercel.app';
 // The AI client is loaded only when it is needed, so the demo runs without any key.
@@ -36,7 +30,8 @@ const translate = async (...args) => (await import('./translate.js')).translate(
 // The demo has no key: it borrows the Russian news columns from the live site, which translates them.
 const LIVE_URL = 'https://newstide-live.vercel.app';
 
-const TIMEFRAMES = ['15m', '1h', '4h', '1d'];
+// Minutes-long timeframes were dropped: news moves the market over hours and days, not minutes.
+const TIMEFRAMES = ['4h', '1d'];
 
 const app = express();
 app.use(express.json());
@@ -46,79 +41,21 @@ app.use(express.static(path.join(root, 'public')));
 app.get('/api/mode', (req, res) => res.json({ replay: REPLAY, public_live: PUBLIC_LIVE }));
 
 // Public live edition: the same answer for every reader of a coin and horizon for 30 minutes.
+// The printing itself (cache, daily limit, AI call) lives in edition.js, shared with the Telegram bot.
 app.get('/api/edition', async (req, res) => {
   if (!PUBLIC_LIVE) return res.status(404).json({ error: 'Not available.' });
   const symbol = String(req.query.coin ?? '').trim().toUpperCase();
   const timeframe = String(req.query.timeframe ?? '');
   const coin = coins.find(c => c.symbol === symbol);
   if (!coin || !TIMEFRAMES.includes(timeframe)) return res.status(400).json({ error: 'Pick a coin from the list and a timeframe.' });
-  const horizon = horizonOf(timeframe);
-  const key = `${symbol}|${horizon}`;
-  const cached = editions.get(key);
-  const sendCached = c => {
-    res.set('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=600');
-    return res.json(c.data);
-  };
-  if (cached && Date.now() - cached.at < EDITION_TTL_MS) return sendCached(cached);
-
-  const today = new Date().toISOString().slice(0, 10);
-  if (spend.day !== today) { spend.day = today; spend.usd = 0; }
-  if (spend.usd >= DAILY_LIMIT_USD) {
-    if (cached) return sendCached(cached);
-    return res.status(503).json({ error: 'Today\'s free editions are used up. Come back tomorrow, or read the archived editions in the demo.', reason: 'limit', demo: DEMO_URL });
-  }
-  if (inFlight.has(key)) {
-    try { return sendCached({ data: await inFlight.get(key) }); }
-    catch { return res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.', reason: 'print', demo: DEMO_URL }); }
-  }
-  spend.usd += RESERVE_USD;
-  let finish;
-  const run = new Promise((resolve, reject) => { finish = { resolve, reject }; });
-  run.catch(() => {});
-  inFlight.set(key, run);
   try {
-    const gathered = await collect({ coin, marketFeeds, timeframe, mode: 'live', root });
-    if (gathered.items.length < 3) throw Object.assign(new Error('few'), { status: 422 });
-    const { answer, usage, model } = await analyze({ coin, plan: 'long', horizon, items: gathered.items, model: MODEL });
-    const checked = check(answer, { plan: 'long', items: gathered.items });
-    const usd = costOf(usage, MODEL);
-    spend.usd += usd - RESERVE_USD;
-    const byNumber = new Map(gathered.items.map(it => [it.n, it]));
-    const cited = [...new Set(checked.answer.chain.flatMap(c => c.cites))].sort((a, b) => a - b);
-    // Russian titles for the cited dispatches; if the translator fails the titles stay in English.
-    // This runs inside the edition's own print run, so it is already one call per coin and horizon.
-    let titlesRu = new Map(), trUsd = RESERVE_USD;
-    spend.usd += RESERVE_USD;
-    try {
-      const tr = await translate(cited.map(n => byNumber.get(n).title));
-      titlesRu = tr.ru;
-      trUsd = costOf(tr.usage, tr.model);
-    } catch (err) { console.error('[translate edition]', err.message); }
-    spend.usd += trUsd - RESERVE_USD;
-    const data = {
-      edition: { at: new Date().toISOString(), model, items: gathered.items.length, shared_minutes: 30 },
-      direction: checked.answer.direction,
-      verdict: checked.answer.verdict,
-      verdict_ru: checked.answer.verdict_ru,
-      spot_futures_note: checked.answer.spot_futures_note,
-      spot_futures_note_ru: checked.answer.spot_futures_note_ru,
-      horizon,
-      notes: { chain: checked.answer.chain, dispatches: cited.map(n => ({ n, title: byNumber.get(n).title, title_ru: titlesRu.get(byNumber.get(n).title), source: byNumber.get(n).source, link: byNumber.get(n).link })) },
-      x_connected: false,
-      missing_sources: gathered.missing,
-      cost: { usd: usd + trUsd, model, shared: true }
-    };
-    editions.set(key, { at: Date.now(), data });
-    finish.resolve(data);
-    sendCached({ data });
+    const data = await getEdition(coin, timeframe, { root, marketFeeds });
+    res.set('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=600');
+    return res.json(data);
   } catch (err) {
-    finish.reject(err);
-    if (err.status === 422) return res.status(422).json({ error: 'Not enough news to judge right now. Try again later.' });
-    console.error('[edition]', err);
-    if (cached) return sendCached(cached);
-    res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.', reason: 'print', demo: DEMO_URL });
-  } finally {
-    inFlight.delete(key);
+    if (err.reason === 'few') return res.status(422).json({ error: 'Not enough news to judge right now. Try again later.' });
+    if (err.reason === 'limit') return res.status(503).json({ error: 'Today\'s free editions are used up. Come back tomorrow, or read the archived editions in the demo.', reason: 'limit', demo: DEMO_URL });
+    return res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.', reason: 'print', demo: DEMO_URL });
   }
 });
 
@@ -155,8 +92,7 @@ async function withRussian(data) {
   const list = [...(data.today ?? []), ...(data.week ?? [])];
   const texts = list.flatMap(n => [n.title, n.summary]).filter(Boolean);
   if (!texts.length) return;
-  const today = new Date().toISOString().slice(0, 10);
-  if (spend.day !== today) { spend.day = today; spend.usd = 0; }
+  resetSpendDay();
   if (spend.usd >= DAILY_LIMIT_USD || Date.now() < marketTr.pauseUntil) return;
   // One translation at a time: parallel requests wait for the same call. A reserve is set aside
   // before the call and settled to the real cost after; a failed call pauses retries for 2 minutes.
@@ -176,13 +112,6 @@ async function withRussian(data) {
 }
 const marketTr = { run: null, pauseUntil: 0 };
 
-function costOf(usage, model) {
-  const p = prices[model] ?? prices[MODEL];
-  if (!p || !usage) return 0;
-  const input = (usage.input_tokens ?? 0) + (usage.cache_creation_input_tokens ?? 0) + (usage.cache_read_input_tokens ?? 0);
-  return (input * p.input + (usage.output_tokens ?? 0) * p.output) / 1e6;
-}
-
 app.post('/api/analyze', async (req, res) => {
   // On the public live site every analysis must go through the shared, limited /api/edition.
   if (PUBLIC_LIVE) return res.status(404).json({ error: 'Not available.' });
@@ -190,7 +119,7 @@ app.post('/api/analyze', async (req, res) => {
   const symbol = String(req.body?.coin ?? '').trim().toUpperCase();
   const coin = coins.find(c => c.symbol === symbol);
   if (!coin || !['long', 'short'].includes(plan) || !TIMEFRAMES.includes(timeframe)) {
-    const what = !coin ? 'Pick a coin from the list.' : !['long', 'short'].includes(plan) ? 'Choose Long or Short.' : 'Choose a timeframe: 15m, 1h, 4h or 1d.';
+    const what = !coin ? 'Pick a coin from the list.' : !['long', 'short'].includes(plan) ? 'Choose Long or Short.' : 'Choose a timeframe: 4h or 1d.';
     return res.status(400).json({ error: what });
   }
   if (REPLAY) {
@@ -230,6 +159,7 @@ app.post('/api/analyze', async (req, res) => {
       checker: { problems: checked.problems, cites_ok: checked.citesOk }, usage, cost_usd: usd
     };
     const logFile = await saveRun(root, run);
+    if (!gathered.sample) recordVerdict(root, { coin, plan, timeframe, direction: checked.answer.direction, verdict: checked.answer.verdict, model });
     if (checked.problems.length) console.warn(`[checker] ${symbol}: ${checked.problems.join('; ')}`);
     res.json({
       sample: gathered.sample,

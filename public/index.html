@@ -52,9 +52,7 @@
     <fieldset class="field">
       <legend data-i18n="timeframe">Timeframe</legend>
       <div class="choices">
-        <label><input type="radio" name="timeframe" value="15m" required> 15m</label>
-        <label><input type="radio" name="timeframe" value="1h"> 1h</label>
-        <label><input type="radio" name="timeframe" value="4h"> 4h</label>
+        <label><input type="radio" name="timeframe" value="4h" required> 4h</label>
         <label><input type="radio" name="timeframe" value="1d"> 1d</label>
       </div>
     </fieldset>
@@ -62,6 +60,7 @@
     <p class="hint" data-i18n="hint">Long: you expect the price to rise. Short: you expect it to fall. Below 4h the paper reads today's news, from 4h the last two weeks. The stamp says whether the news favours your plan.</p>
     <p class="form-error" id="formError" role="alert"></p>
   </form>
+  <p class="tg-strip"><span data-i18n="stripText">Want this every morning, without opening the site?</span> <a href="#telegram" data-i18n="stripLink">Get it in Telegram</a></p>
 
   <main class="front">
     <aside class="column" aria-labelledby="todayHead">
@@ -120,6 +119,26 @@
       <ol class="briefs" id="week"></ol>
     </aside>
   </main>
+
+  <section class="tg-connect" id="telegram" aria-labelledby="tgHead">
+    <h2 class="section-head" id="tgHead" data-i18n="tgHead">The morning summary in Telegram</h2>
+    <p class="tg-lead" data-i18n="tgLead">The same news reading, delivered to you. Pick your coins once, and every morning the bot sends one short summary, and writes at once if a verdict flips.</p>
+    <ol class="tg-steps">
+      <li><strong data-i18n="tgS1h">Press the button</strong><span data-i18n="tgS1">Telegram opens on the NewsTide bot. No account on this site is needed.</span></li>
+      <li><strong data-i18n="tgS2h">Press Start and pick coins</strong><span data-i18n="tgS2">Up to 10 coins from a grid with checkmarks. Or take the quick start: BTC, ETH, SOL.</span></li>
+      <li><strong data-i18n="tgS3h">Read it with your coffee</strong><span data-i18n="tgS3">One line per coin: an arrow and the verdict. Tap a coin to see the reasons and the news links.</span></li>
+    </ol>
+    <p class="offer-links"><a class="press tg-button" href="https://t.me/newstide_bot?start=site" target="_blank" rel="noopener" data-i18n="tgButton">Connect Telegram</a> <a href="bot.html" data-i18n="guideLink">Full guide to the bot</a></p>
+  </section>
+
+  <section class="editions-offer" aria-labelledby="offerHead">
+    <h2 class="section-head" id="offerHead" data-i18n="offerHead">Two editions of the paper</h2>
+    <div class="offer-cols">
+      <div><h3 data-i18n="lightHead">Light, free</h3><p data-i18n="lightText">This page and the daily Telegram edition: up to 10 coins from 40, built from blogs, forums and news feeds.</p></div>
+      <div><h3 data-i18n="fullHead">Full, in preparation</h3><p data-i18n="fullText">X and other platforms, your own accounts, a deeper analysis. No price yet: costs are still being counted. Nothing is charged without your consent.</p></div>
+    </div>
+    <p class="offer-links"><a href="https://t.me/newstide_bot?start=full" target="_blank" rel="noopener" data-i18n="waitLink">Join the Full waiting list</a></p>
+  </section>
 
   <footer class="colophon">
     <p class="disclaimer" data-i18n="disclaimer">Not financial advice. NewsTide reads the news background; it does not know the future. Trade on your own judgment.</p>

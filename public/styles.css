@@ -223,6 +223,21 @@ body {
 .hint { flex-basis: 100%; margin: 0; font-size: 13px; color: var(--ink-faded); }
 .form-error { flex-basis: 100%; color: var(--lamp-red); margin: 0; font-size: 15px; }
 .form-error:empty { display: none; }
+.tg-strip { margin: 10px 0 0; font-size: 15px; font-style: italic; color: var(--ink-faded); }
+.tg-strip a, .guide a:not(.press) { color: var(--ink); }
+.tg-connect { margin: 28px 0 8px; padding-top: 14px; border-top: 3px double var(--ink-faded); }
+.tg-lead { margin: 0 0 12px; font-size: 16px; max-width: 70ch; }
+.tg-steps { margin: 0 0 14px; padding-left: 22px; }
+.tg-steps li { margin: 0 0 8px; font-size: 16px; }
+.tg-steps strong { display: block; }
+.tg-steps span { color: var(--ink-faded); }
+.tg-button { display: inline-block; text-decoration: none; }
+.editions-offer { margin: 28px 0 8px; padding-top: 14px; border-top: 3px double var(--ink-faded); }
+.offer-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.offer-cols h3 { margin: 0 0 4px; font-size: 18px; }
+.offer-cols p, .offer-links { margin: 0; font-size: 15px; }
+.offer-links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px 22px; }
+@media (max-width: 640px) { .offer-cols { grid-template-columns: 1fr; gap: 12px; } }
 .x-note { font-size: 13px; color: var(--ink-faded); font-style: italic; margin: 14px 0 0; }
 
 /* The lead story: the one loud thing on the page */

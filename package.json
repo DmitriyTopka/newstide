@@ -8,7 +8,8 @@
     "start": "node --env-file-if-exists=.env server/index.js",
     "test": "node --test test/*.test.js",
     "check:live": "node scripts/check-live.js",
-    "snapshot": "node scripts/snapshot.js"
+    "snapshot": "node scripts/snapshot.js",
+    "bot": "MODEL=claude-haiku-5-5 node --env-file-if-exists=.env bot/index.js"
   },
   "engines": {
     "node": ">=24"

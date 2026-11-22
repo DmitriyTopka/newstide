@@ -1,6 +1,7 @@
 [
   {
     "symbol": "BTC",
+    "group": "top",
     "name": "Bitcoin",
     "coingecko": "bitcoin",
     "feeds": [
@@ -16,6 +17,7 @@
   },
   {
     "symbol": "ETH",
+    "group": "top",
     "name": "Ethereum",
     "coingecko": "ethereum",
     "feeds": [
@@ -36,6 +38,7 @@
   },
   {
     "symbol": "BNB",
+    "group": "top",
     "name": "BNB Chain",
     "coingecko": "binancecoin",
     "feeds": [
@@ -51,6 +54,7 @@
   },
   {
     "symbol": "SOL",
+    "group": "top",
     "name": "Solana",
     "coingecko": "solana",
     "feeds": [
@@ -70,9 +74,20 @@
   },
   {
     "symbol": "XRP",
+    "group": "top",
     "name": "XRP",
     "coingecko": "ripple",
-    "feeds": [],
+    "feeds": [
+      {
+        "name": "XRP Ledger releases",
+        "url": "https://github.com/XRPLF/rippled/releases.atom"
+      },
+      {
+        "name": "XRP in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=XRP+Ripple+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
     "keywords": [
       "xrp",
       "ripple"
@@ -80,6 +95,7 @@
   },
   {
     "symbol": "DOGE",
+    "group": "meme",
     "name": "Dogecoin",
     "coingecko": "dogecoin",
     "feeds": [
@@ -95,6 +111,7 @@
   },
   {
     "symbol": "ADA",
+    "group": "l1",
     "name": "Cardano",
     "coingecko": "cardano",
     "feeds": [
@@ -110,6 +127,7 @@
   },
   {
     "symbol": "TRX",
+    "group": "l1",
     "name": "TRON",
     "coingecko": "tron",
     "feeds": [
@@ -125,6 +143,7 @@
   },
   {
     "symbol": "TON",
+    "group": "l1",
     "name": "Toncoin",
     "coingecko": "the-open-network",
     "feeds": [
@@ -141,6 +160,7 @@
   },
   {
     "symbol": "AVAX",
+    "group": "l1",
     "name": "Avalanche",
     "coingecko": "avalanche-2",
     "feeds": [
@@ -156,6 +176,7 @@
   },
   {
     "symbol": "LINK",
+    "group": "defi",
     "name": "Chainlink",
     "coingecko": "chainlink",
     "feeds": [
@@ -171,6 +192,7 @@
   },
   {
     "symbol": "AAVE",
+    "group": "defi",
     "name": "Aave",
     "coingecko": "aave",
     "feeds": [
@@ -181,6 +203,547 @@
     ],
     "keywords": [
       "aave"
+    ]
+  },
+  {
+    "symbol": "LTC",
+    "group": "l1",
+    "name": "Litecoin",
+    "coingecko": "litecoin",
+    "feeds": [
+      {
+        "name": "Litecoin releases",
+        "url": "https://github.com/litecoin-project/litecoin/releases.atom"
+      },
+      {
+        "name": "Litecoin in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Litecoin+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "litecoin",
+      " ltc "
+    ]
+  },
+  {
+    "symbol": "BCH",
+    "group": "l1",
+    "name": "Bitcoin Cash",
+    "coingecko": "bitcoin-cash",
+    "feeds": [
+      {
+        "name": "Bitcoin Cash Node releases",
+        "url": "https://github.com/bitcoin-cash-node/bitcoin-cash-node/releases.atom"
+      },
+      {
+        "name": "Bitcoin Cash in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Bitcoin+Cash+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "bitcoin cash",
+      " bch "
+    ]
+  },
+  {
+    "symbol": "DOT",
+    "group": "l1",
+    "name": "Polkadot",
+    "coingecko": "polkadot",
+    "feeds": [
+      {
+        "name": "Polkadot Blog",
+        "url": "https://polkadot.com/blog/rss.xml"
+      },
+      {
+        "name": "Polkadot forum",
+        "url": "https://forum.polkadot.network/latest.rss"
+      },
+      {
+        "name": "Polkadot SDK releases",
+        "url": "https://github.com/paritytech/polkadot-sdk/releases.atom"
+      }
+    ],
+    "keywords": [
+      "polkadot"
+    ]
+  },
+  {
+    "symbol": "POL",
+    "group": "l2",
+    "name": "Polygon",
+    "coingecko": "polygon-ecosystem-token",
+    "feeds": [
+      {
+        "name": "Polygon forum",
+        "url": "https://forum.polygon.technology/latest.rss"
+      },
+      {
+        "name": "Polygon Bor releases",
+        "url": "https://github.com/maticnetwork/bor/releases.atom"
+      }
+    ],
+    "keywords": [
+      "polygon",
+      " pol "
+    ]
+  },
+  {
+    "symbol": "NEAR",
+    "group": "l1",
+    "name": "NEAR Protocol",
+    "coingecko": "near",
+    "feeds": [
+      {
+        "name": "NEAR governance forum",
+        "url": "https://gov.near.org/latest.rss"
+      },
+      {
+        "name": "NEAR core releases",
+        "url": "https://github.com/near/nearcore/releases.atom"
+      }
+    ],
+    "keywords": [
+      "near protocol",
+      " near "
+    ]
+  },
+  {
+    "symbol": "ATOM",
+    "group": "l1",
+    "name": "Cosmos",
+    "coingecko": "cosmos",
+    "feeds": [
+      {
+        "name": "Cosmos forum",
+        "url": "https://forum.cosmos.network/latest.rss"
+      },
+      {
+        "name": "Cosmos SDK releases",
+        "url": "https://github.com/cosmos/cosmos-sdk/releases.atom"
+      }
+    ],
+    "keywords": [
+      "cosmos hub",
+      "cosmos"
+    ]
+  },
+  {
+    "symbol": "UNI",
+    "group": "defi",
+    "name": "Uniswap",
+    "coingecko": "uniswap",
+    "feeds": [
+      {
+        "name": "Uniswap governance forum",
+        "url": "https://gov.uniswap.org/latest.rss"
+      },
+      {
+        "name": "Uniswap in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Uniswap+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "uniswap",
+      " uni "
+    ]
+  },
+  {
+    "symbol": "XLM",
+    "group": "l1",
+    "name": "Stellar",
+    "coingecko": "stellar",
+    "feeds": [
+      {
+        "name": "Stellar Blog",
+        "url": "https://stellar.org/blog/rss.xml"
+      },
+      {
+        "name": "Stellar developers blog",
+        "url": "https://stellar.org/blog/developers/rss.xml"
+      },
+      {
+        "name": "Stellar Core releases",
+        "url": "https://github.com/stellar/stellar-core/releases.atom"
+      }
+    ],
+    "keywords": [
+      "stellar",
+      " xlm "
+    ]
+  },
+  {
+    "symbol": "ICP",
+    "group": "l1",
+    "name": "Internet Computer",
+    "coingecko": "internet-computer",
+    "feeds": [
+      {
+        "name": "DFINITY forum",
+        "url": "https://forum.dfinity.org/latest.rss"
+      },
+      {
+        "name": "Internet Computer releases",
+        "url": "https://github.com/dfinity/ic/releases.atom"
+      }
+    ],
+    "keywords": [
+      "internet computer",
+      " icp ",
+      "dfinity"
+    ]
+  },
+  {
+    "symbol": "APT",
+    "group": "l1",
+    "name": "Aptos",
+    "coingecko": "aptos",
+    "feeds": [
+      {
+        "name": "Aptos core releases",
+        "url": "https://github.com/aptos-labs/aptos-core/releases.atom"
+      },
+      {
+        "name": "Aptos in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Aptos+crypto+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "aptos"
+    ]
+  },
+  {
+    "symbol": "ARB",
+    "group": "l2",
+    "name": "Arbitrum",
+    "coingecko": "arbitrum",
+    "feeds": [
+      {
+        "name": "Arbitrum forum",
+        "url": "https://forum.arbitrum.foundation/latest.rss"
+      },
+      {
+        "name": "Arbitrum Nitro releases",
+        "url": "https://github.com/OffchainLabs/nitro/releases.atom"
+      }
+    ],
+    "keywords": [
+      "arbitrum"
+    ]
+  },
+  {
+    "symbol": "OP",
+    "group": "l2",
+    "name": "Optimism",
+    "coingecko": "optimism",
+    "feeds": [
+      {
+        "name": "Optimism governance forum",
+        "url": "https://gov.optimism.io/latest.rss"
+      },
+      {
+        "name": "Optimism releases",
+        "url": "https://github.com/ethereum-optimism/optimism/releases.atom"
+      }
+    ],
+    "keywords": [
+      "optimism pbc",
+      "op mainnet",
+      "op stack",
+      " op "
+    ]
+  },
+  {
+    "symbol": "FIL",
+    "group": "defi",
+    "name": "Filecoin",
+    "coingecko": "filecoin",
+    "feeds": [
+      {
+        "name": "Filecoin Blog",
+        "url": "https://filecoin.io/blog/rss.xml"
+      },
+      {
+        "name": "Filecoin Lotus releases",
+        "url": "https://github.com/filecoin-project/lotus/releases.atom"
+      }
+    ],
+    "keywords": [
+      "filecoin"
+    ]
+  },
+  {
+    "symbol": "SUI",
+    "group": "l1",
+    "name": "Sui",
+    "coingecko": "sui",
+    "feeds": [
+      {
+        "name": "Sui Blog",
+        "url": "https://blog.sui.io/rss/"
+      },
+      {
+        "name": "Sui releases",
+        "url": "https://github.com/MystenLabs/sui/releases.atom"
+      }
+    ],
+    "keywords": [
+      "sui network",
+      " sui "
+    ]
+  },
+  {
+    "symbol": "HBAR",
+    "group": "l1",
+    "name": "Hedera",
+    "coingecko": "hedera-hashgraph",
+    "feeds": [
+      {
+        "name": "Hedera Blog",
+        "url": "https://hedera.com/blog/rss.xml"
+      },
+      {
+        "name": "Hedera services releases",
+        "url": "https://github.com/hashgraph/hedera-services/releases.atom"
+      }
+    ],
+    "keywords": [
+      "hedera",
+      "hbar"
+    ]
+  },
+  {
+    "symbol": "ALGO",
+    "group": "l1",
+    "name": "Algorand",
+    "coingecko": "algorand",
+    "feeds": [
+      {
+        "name": "Algorand Blog",
+        "url": "https://algorand.co/blog/rss.xml"
+      },
+      {
+        "name": "Algorand releases",
+        "url": "https://github.com/algorand/go-algorand/releases.atom"
+      }
+    ],
+    "keywords": [
+      "algorand",
+      " algo "
+    ]
+  },
+  {
+    "symbol": "MKR",
+    "group": "defi",
+    "name": "Maker (Sky)",
+    "coingecko": "maker",
+    "feeds": [
+      {
+        "name": "Maker forum",
+        "url": "https://forum.makerdao.com/latest.rss"
+      },
+      {
+        "name": "Sky forum",
+        "url": "https://forum.sky.money/latest.rss"
+      }
+    ],
+    "keywords": [
+      "makerdao",
+      " mkr ",
+      "sky protocol"
+    ]
+  },
+  {
+    "symbol": "GRT",
+    "group": "defi",
+    "name": "The Graph",
+    "coingecko": "the-graph",
+    "feeds": [
+      {
+        "name": "The Graph forum",
+        "url": "https://forum.thegraph.com/latest.rss"
+      }
+    ],
+    "keywords": [
+      "the graph",
+      " grt "
+    ]
+  },
+  {
+    "symbol": "STX",
+    "group": "l2",
+    "name": "Stacks",
+    "coingecko": "blockstack",
+    "feeds": [
+      {
+        "name": "Stacks forum",
+        "url": "https://forum.stacks.org/latest.rss"
+      }
+    ],
+    "keywords": [
+      "stacks blockchain",
+      " stx "
+    ]
+  },
+  {
+    "symbol": "TIA",
+    "group": "l2",
+    "name": "Celestia",
+    "coingecko": "celestia",
+    "feeds": [
+      {
+        "name": "Celestia forum",
+        "url": "https://forum.celestia.org/latest.rss"
+      },
+      {
+        "name": "Celestia node releases",
+        "url": "https://github.com/celestiaorg/celestia-node/releases.atom"
+      }
+    ],
+    "keywords": [
+      "celestia"
+    ]
+  },
+  {
+    "symbol": "SEI",
+    "group": "l1",
+    "name": "Sei",
+    "coingecko": "sei-network",
+    "feeds": [
+      {
+        "name": "Sei Blog",
+        "url": "https://blog.sei.io/rss/"
+      },
+      {
+        "name": "Sei chain releases",
+        "url": "https://github.com/sei-protocol/sei-chain/releases.atom"
+      }
+    ],
+    "keywords": [
+      "sei network",
+      " sei "
+    ]
+  },
+  {
+    "symbol": "RUNE",
+    "group": "defi",
+    "name": "THORChain",
+    "coingecko": "thorchain",
+    "feeds": [
+      {
+        "name": "THORChain on Medium",
+        "url": "https://medium.com/feed/thorchain"
+      }
+    ],
+    "keywords": [
+      "thorchain",
+      " rune "
+    ]
+  },
+  {
+    "symbol": "SHIB",
+    "group": "meme",
+    "name": "Shiba Inu",
+    "coingecko": "shiba-inu",
+    "feeds": [
+      {
+        "name": "Shiba Inu in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Shiba+Inu+crypto+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "shiba inu",
+      " shib "
+    ]
+  },
+  {
+    "symbol": "PEPE",
+    "group": "meme",
+    "name": "Pepe",
+    "coingecko": "pepe",
+    "feeds": [
+      {
+        "name": "Pepe in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=PEPE+memecoin+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "pepe coin",
+      " pepe "
+    ]
+  },
+  {
+    "symbol": "ETC",
+    "group": "l1",
+    "name": "Ethereum Classic",
+    "coingecko": "ethereum-classic",
+    "feeds": [
+      {
+        "name": "Ethereum Classic in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Ethereum+Classic+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "ethereum classic",
+      " etc "
+    ]
+  },
+  {
+    "symbol": "INJ",
+    "group": "defi",
+    "name": "Injective",
+    "coingecko": "injective-protocol",
+    "feeds": [
+      {
+        "name": "Injective in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Injective+INJ+crypto+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "injective",
+      " inj "
+    ]
+  },
+  {
+    "symbol": "IMX",
+    "group": "l2",
+    "name": "Immutable",
+    "coingecko": "immutable-x",
+    "feeds": [
+      {
+        "name": "Immutable in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=Immutable+IMX+crypto+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "immutable",
+      " imx "
+    ]
+  },
+  {
+    "symbol": "VET",
+    "group": "l1",
+    "name": "VeChain",
+    "coingecko": "vechain",
+    "feeds": [
+      {
+        "name": "VeChain in the news",
+        "kind": "coin",
+        "url": "https://news.google.com/rss/search?q=VeChain+when:7d&hl=en-US&gl=US&ceid=US:en"
+      }
+    ],
+    "keywords": [
+      "vechain",
+      " vet "
     ]
   }
 ]
