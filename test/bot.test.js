@@ -404,3 +404,21 @@ test('stocks: top 50 US stocks in two pages with colours and no data marks', asy
   await h.bot.handle(msg('/stocks'));
   assert.match(h.sent.at(-1).text, /\(1\/2\)/);
 });
+
+import { translateBatch } from '../server/edition.js';
+test('security: the buttons that fetch are rate limited per chat', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  for (let i = 0; i < 9; i++) await h.bot.handleCallback(press('mk', 11));
+  assert.match(h.acks.at(-1).text, /Не так быстро/);
+  await h.bot.handleCallback(press('mk', 12));
+  assert.match(h.acks.at(-1).text, /Загружаю рынки/, 'another chat is not affected');
+});
+
+test('security: news translations have their own small budget', async () => {
+  let calls = 0;
+  const big = { translate: async texts => { calls++; return { ru: new Map(texts.map(t => [t, `RU ${t}`])), usage: { input_tokens: 5e7, output_tokens: 0 }, model: 'claude-haiku-5-5' }; } };
+  assert.equal((await translateBatch(['one'], { deps: big })).get('one'), 'RU one');
+  assert.equal((await translateBatch(['two'], { deps: big })).size, 0, 'sub-budget spent: English stays');
+  assert.equal(calls, 1);
+});

@@ -13,6 +13,9 @@ export const EDITION_TTL_MS = 30 * 60 * 1000;
 export const DAILY_LIMIT_USD = Number(process.env.DAILY_LIMIT_USD || 0.5);
 export const RESERVE_USD = 0.002; // set aside before each call so parallel requests cannot pass the limit
 export const spend = { day: '', usd: 0 };
+// News translations get their own small daily sub-budget, so they can never use up what editions need.
+export const TRANSLATE_LIMIT_USD = Number(process.env.TRANSLATE_LIMIT_USD || 0.1);
+const transSpend = { day: '', usd: 0 };
 
 const editions = new Map();
 const inFlight = new Map(); // one print run per coin and horizon at a time
@@ -112,14 +115,19 @@ export async function translateBatch(texts, { deps = {} } = {}) {
   const list = [...new Set(texts.filter(Boolean))];
   if (!list.length) return new Map();
   resetSpendDay();
-  if (spend.usd >= DAILY_LIMIT_USD) return new Map();
+  if (transSpend.day !== spend.day) { transSpend.day = spend.day; transSpend.usd = 0; }
+  if (spend.usd >= DAILY_LIMIT_USD || transSpend.usd >= TRANSLATE_LIMIT_USD) return new Map();
   spend.usd += RESERVE_USD;
+  transSpend.usd += RESERVE_USD;
   try {
     const tr = await translate(list);
-    spend.usd += costOf(tr.usage, tr.model) - RESERVE_USD;
+    const cost = costOf(tr.usage, tr.model);
+    spend.usd += cost - RESERVE_USD;
+    transSpend.usd += cost - RESERVE_USD;
     return tr.ru;
   } catch (err) {
     spend.usd -= RESERVE_USD;
+    transSpend.usd -= RESERVE_USD;
     console.error('[translate batch]', err.message);
     return new Map();
   }

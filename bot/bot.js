@@ -28,6 +28,7 @@ const T = {
     pickedNote: 'Готово. Нажмите «Выпуск сейчас», чтобы увидеть первую сводку.', quickNote: c => `Добавил ${c.join(', ')}. Нажмите «Выпуск сейчас», чтобы увидеть первую сводку.`,
     limitReached: `Лимит ${MAX_COINS} монет. Уберите что-нибудь.`, empty: 'Сначала выберите монеты.',
     bStocks: 'Топ-50 акций США', stocksFail: 'Не удалось получить котировки акций, попробуйте позже.', stocksLoading: 'Загружаю акции...',
+    slowdown: 'Не так быстро, подождите несколько секунд.',
     bNews: 'Новости', bMarkets: 'Рынки', newsHead: 'Новости: что показать?', newsMine: 'Мои монеты', newsCrypto: 'Крипторынок', newsWorld: 'Мир и макро (войны, ФРС)',
     newsTitles: { mine: 'Новости по вашим монетам', crypto: 'Новости крипторынка', world: 'Мировые новости и макро' }, newsMore: 'Ещё ›', newsPrev: '‹ Назад', newsSections: 'Разделы', newsLoading: 'Загружаю новости...',
     newsHint: 'Заголовки ведут на сайты источников. Полный текст читайте там.', newsNoCoins: 'Сначала выберите монеты, тогда покажу новости по ним.', marketsLoading: 'Загружаю рынки...', marketsFail: 'Не удалось получить котировки, попробуйте позже.',
@@ -65,6 +66,7 @@ const T = {
     pickedNote: 'Done. Press "Summary now" to see the first one.', quickNote: c => `Added ${c.join(', ')}. Press "Summary now" to see the first one.`,
     limitReached: `Limit is ${MAX_COINS} coins. Remove one first.`, empty: 'Pick some coins first.',
     bStocks: 'Top 50 US stocks', stocksFail: 'Could not get the stock quotes, try later.', stocksLoading: 'Loading the stocks...',
+    slowdown: 'Not so fast, wait a few seconds.',
     bNews: 'News', bMarkets: 'Markets', newsHead: 'News: what to show?', newsMine: 'My coins', newsCrypto: 'Crypto market', newsWorld: 'World and macro (wars, the Fed)',
     newsTitles: { mine: 'News about your coins', crypto: 'Crypto market news', world: 'World news and macro' }, newsMore: 'More ›', newsPrev: '‹ Back', newsSections: 'Sections', newsLoading: 'Loading the news...',
     newsHint: 'Headlines link to the source sites. Read the full text there.', newsNoCoins: 'Pick some coins first and I will show the news about them.', marketsLoading: 'Loading the markets...', marketsFail: 'Could not get the quotes, try later.',
@@ -100,6 +102,15 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
   const bySymbol = new Map(coins.map(c => [c.symbol, c]));
   const known = new Set(bySymbol.keys());
   const lastNow = new Map();
+  // Per-chat limit for the buttons that fetch feeds, quotes or translations: 8 presses per 10 seconds.
+  const presses = new Map();
+  const allowed = chatId => {
+    const t = Date.now();
+    const recent = (presses.get(chatId) ?? []).filter(x => t - x < 10000);
+    if (recent.length >= 8) { presses.set(chatId, recent); return false; }
+    presses.set(chatId, [...recent, t]);
+    return true;
+  };
   const shown = new Map(); // "chat:SYM" -> the edition shown in the latest summary, for the details button
   const tx = u => T[u.lang] ?? T.ru;
   const L = (u, i) => (u.lang === 'en' ? TZS[i][2] : TZS[i][1]);
@@ -350,12 +361,15 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
       case 'aloff':
         u.alerts = false; await save(users); await ack(t.alertsOffDone); return;
       case 'full': await ack(); return joinWaitlist(chatId, u);
-      case 'mk': await ack(t.marketsLoading); return showMarkets(chatId, mid, u);
-      case 'st': await ack(t.stocksLoading); return getStocks ? showStocks(chatId, mid, u, Math.max(0, Number(arg) || 0)) : undefined;
+      case 'mk': if (!allowed(chatId)) return ack(t.slowdown);
+        await ack(t.marketsLoading); return showMarkets(chatId, mid, u);
+      case 'st': if (!allowed(chatId)) return ack(t.slowdown);
+        await ack(t.stocksLoading); return getStocks ? showStocks(chatId, mid, u, Math.max(0, Number(arg) || 0)) : undefined;
       case 'news': await ack(); return show(chatId, mid, newsSections(u));
       case 'nw': {
         const [scope, page] = arg.split(':');
         if (!['mine', 'crypto', 'world'].includes(scope)) return ack();
+        if (!allowed(chatId)) return ack(t.slowdown);
         await ack(t.newsLoading);
         return showNews(chatId, mid, u, scope, Math.max(0, Number(page) || 0));
       }
