@@ -1,0 +1,62 @@
+[
+  {
+    "name": "CNBC Top News",
+    "kind": "market",
+    "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  {
+    "name": "CNBC Markets",
+    "kind": "market",
+    "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html"
+  },
+  {
+    "name": "WSJ Markets",
+    "kind": "market",
+    "url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  {
+    "name": "MarketWatch Market Pulse",
+    "kind": "market",
+    "url": "https://feeds.content.dowjones.io/public/rss/mw_marketpulse"
+  },
+  {
+    "name": "Bloomberg Markets",
+    "kind": "market",
+    "url": "https://feeds.bloomberg.com/markets/news.rss"
+  },
+  {
+    "name": "Seeking Alpha Market Currents",
+    "kind": "market",
+    "url": "https://seekingalpha.com/market_currents.xml"
+  },
+  {
+    "name": "Benzinga",
+    "kind": "market",
+    "url": "https://www.benzinga.com/feed"
+  },
+  {
+    "name": "Federal Reserve",
+    "kind": "macro",
+    "url": "https://www.federalreserve.gov/feeds/press_all.xml"
+  },
+  {
+    "name": "SEC Press Releases",
+    "kind": "macro",
+    "url": "https://www.sec.gov/news/pressreleases.rss"
+  },
+  {
+    "name": "BBC World",
+    "kind": "geo",
+    "url": "https://feeds.bbci.co.uk/news/world/rss.xml"
+  },
+  {
+    "name": "Al Jazeera",
+    "kind": "geo",
+    "url": "https://www.aljazeera.com/xml/rss/all.xml"
+  },
+  {
+    "name": "Geopolitics search",
+    "kind": "geo",
+    "url": "https://news.google.com/rss/search?q=Iran+OR+Israel+OR+Russia+OR+China+OR+Ukraine+OR+Taiwan+sanctions+OR+strike+OR+war+OR+ceasefire+when:3d&hl=en-US&gl=US&ceid=US:en"
+  }
+]

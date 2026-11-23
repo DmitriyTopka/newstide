@@ -1,8 +1,8 @@
 // NewsTide Bot: buttons first, commands as a fallback. Daily summary with "details" buttons and flip notes.
 // Everything outside (Telegram, the printer, the clock, the disk) is passed in, so the whole thing
 // can be tested without a token.
-import { addCoins, removeCoins, newUser, validTime, validTz, MAX_COINS } from './store.js';
-import { digestMessage, summaryMessage, quotesMessage, newsPage, NEWS_PAGE, stocksPage, flipped, isDue, localClock, esc } from './format.js';
+import { addCoins, removeCoins, addStocks, removeStocks, resolveStock, newUser, validTime, validTz, MAX_COINS, MAX_STOCKS } from './store.js';
+import { digestMessage, summaryMessage, quotesMessage, newsPage, NEWS_PAGE, stocksPage, stockDetailMessage, flipped, isDue, localClock, esc } from './format.js';
 
 // Flip alerts: never at night (the morning summary carries the flip), and not more than once per coin per 6 hours.
 const QUIET_FROM = 23 * 60, QUIET_TO = 7 * 60, ALERT_COOLDOWN_MS = 6 * 3600e3;
@@ -13,6 +13,7 @@ const TZS = [
   ['Europe/Kyiv', 'Киев', 'Kyiv'], ['Europe/Warsaw', 'Варшава', 'Warsaw'], ['Europe/Prague', 'Прага', 'Prague'], ['Europe/London', 'Лондон', 'London'],
   ['America/New_York', 'Нью-Йорк', 'New York'], ['Asia/Dubai', 'Дубай', 'Dubai'], ['Europe/Istanbul', 'Стамбул', 'Istanbul'], ['Asia/Singapore', 'Сингапур', 'Singapore']
 ];
+const SGROUPS = [['tech', 'Технологии', 'Tech'], ['finance', 'Финансы', 'Finance'], ['health', 'Здоровье', 'Health'], ['consumer', 'Потребление', 'Consumer'], ['energy', 'Энергия', 'Energy'], ['industrial', 'Промышленность', 'Industrial'], ['crypto', 'Крипто-связь', 'Crypto-linked']];
 const GROUPS = [['top', 'Основные', 'Top'], ['l1', 'L1', 'L1'], ['l2', 'L2', 'L2'], ['defi', 'DeFi', 'DeFi'], ['meme', 'Мемы', 'Memes']];
 
 const T = {
@@ -27,16 +28,25 @@ const T = {
     pickHead: n => `Выберите монеты, до ${MAX_COINS}. Выбрано: ${n}.`, pickHint: 'Нужной монеты нет в списке? Напишите её тикер командой /add.',
     pickedNote: 'Готово. Нажмите «Выпуск сейчас», чтобы увидеть первую сводку.', quickNote: c => `Добавил ${c.join(', ')}. Нажмите «Выпуск сейчас», чтобы увидеть первую сводку.`,
     limitReached: `Лимит ${MAX_COINS} монет. Уберите что-нибудь.`, empty: 'Сначала выберите монеты.',
-    bStocks: 'Топ-50 акций США', stocksFail: 'Не удалось получить котировки акций, попробуйте позже.', stocksLoading: 'Загружаю акции...',
+    bStocks: 'Таблица цен: топ-100', stocksFail: 'Не удалось получить котировки акций, попробуйте позже.', stocksLoading: 'Загружаю акции...',
     slowdown: 'Не так быстро, подождите несколько секунд.',
+    bStk: 'Акции США', stkHead: 'Акции США', stkMine: s => `Ваши акции: ${s.join(', ')}`, stkNone: 'Акций пока нет.',
+    stkDesc: 'Сводка по акциям приходит вместе с утренней сводкой по монетам. Берутся раскрытия SEC (форма 8-K), заголовки о компании и рыночные новости за последние 24 часа. Не инвестиционный совет.',
+    bPickStocks: 'Выбрать акции', bStockNow: 'Сводка по акциям', bStockNews: 'Новости по акциям', bStockTable: 'Таблица цен: топ-100',
+    stockPickHead: n => `Выберите акции, до ${MAX_STOCKS}. Выбрано: ${n}.`, stockPickHint: 'Нужной нет во вкладках? Напишите /add Apple или /add AAPL: работают тикер, название и название по-русски.',
+    stockMoreHint: 'Нажмите на компанию, чтобы увидеть причины, цену и ссылки.',
+    stockPicked: 'Готово. Нажмите «Сводка по акциям», чтобы увидеть первую.', stockLimit: `Лимит ${MAX_STOCKS} акций. Уберите что-нибудь.`, stockEmpty: 'Сначала выберите акции.',
+    stockAdded: a => `Акции добавлены: ${a.join(', ')}.`, stockHead: d => `NewsTide: акции США за ${d}`,
+    stockClosed: 'Рынок США сейчас закрыт: оценка по новостям с прошлой сессии, ход может случиться на открытии.',
+    newsStocks: 'Мои акции', newsMarket: 'Фондовый рынок', newsNoStocks: 'Сначала выберите акции, тогда покажу новости по ним.',
     bNews: 'Новости', bMarkets: 'Рынки', newsHead: 'Новости: что показать?', newsMine: 'Мои монеты', newsCrypto: 'Крипторынок', newsWorld: 'Мир и макро (войны, ФРС)',
-    newsTitles: { mine: 'Новости по вашим монетам', crypto: 'Новости крипторынка', world: 'Мировые новости и макро' }, newsMore: 'Ещё ›', newsPrev: '‹ Назад', newsSections: 'Разделы', newsLoading: 'Загружаю новости...',
+    newsTitles: { mine: 'Новости по вашим монетам', crypto: 'Новости крипторынка', world: 'Мировые новости и макро', stocks: 'Новости по вашим акциям', market: 'Новости фондового рынка' }, newsMore: 'Ещё ›', newsPrev: '‹ Назад', newsSections: 'Разделы', newsLoading: 'Загружаю новости...',
     newsHint: 'Заголовки ведут на сайты источников. Полный текст читайте там.', newsNoCoins: 'Сначала выберите монеты, тогда покажу новости по ним.', marketsLoading: 'Загружаю рынки...', marketsFail: 'Не удалось получить котировки, попробуйте позже.',
     moodUp: 'Бык: новости по вашим монетам в основном тянут вверх', moodDown: 'Медведь: новости по вашим монетам в основном тянут вниз', moodFlat: 'Хомяк: ясного направления нет',
     bAbout: 'О боте', bRead: 'Как читать сводку', bSources: 'Откуда новости', bPriv: 'Приватность', bDelete: 'Удалить мои данные',
-    aboutText: '<b>О боте</b>\nNewsTide читает новости и показывает, куда они сейчас тянут вашу монету. Вы выбираете монеты (до ' + MAX_COINS + '), бот каждое утро присылает одну короткую сводку и сам пишет, если вердикт развернулся.\n\n<b>Что он делает.</b> Читает блоги и форумы проектов, релизы разработчиков, крупные крипто-СМИ и макро-новости. Модель сводит это в один вердикт на монету, со ссылками на новости, на которых он стоит.\n\n<b>Чего он не делает.</b> Не предсказывает цену, не даёт торговых советов, не знает будущего.',
+    aboutText: '<b>О боте</b>\nNewsTide читает новости и показывает, куда они сейчас тянут вашу монету или акцию США из топ-100. Вы выбираете монеты (до ' + MAX_COINS + '), бот каждое утро присылает одну короткую сводку и сам пишет, если вердикт развернулся.\n\n<b>Что он делает.</b> Читает блоги и форумы проектов, релизы разработчиков, крупные крипто-СМИ и макро-новости. Модель сводит это в один вердикт на монету, со ссылками на новости, на которых он стоит.\n\n<b>Чего он не делает.</b> Не предсказывает цену, не даёт торговых советов, не знает будущего.',
     readText: '<b>Как читать сводку</b>\n🟢📈 новости тянут вверх\n🔴📉 новости тянут вниз\n🔵↔️ ясного направления нет: тихо или новости спорят друг с другом\n\n<b>Long и Short</b> показывают, что это значит для вашей идеи: покупаете (Long) или продаёте в шорт (Short), новостной фон за вас, против вас или неясен.\n\n<b>Срок:</b> ближайшие сутки. Берутся только новости за последние 24 часа на момент запроса. Отдельной оценки для 4-часового и более коротких графиков нет.\n\nКнопка с монетой под сводкой открывает причины по шагам и ссылки на новости.\n\n⚠ <b>Вердикт перевернулся</b> значит, что было вверх, а стало вниз (или наоборот). Это пришлю сразу, днём. Ночью не беспокою, тогда переворот будет в утренней сводке.',
-    srcText: '<b>Откуда новости</b>\nПо каждой монете: блог и форум проекта, релизы разработчиков на GitHub и поиск новостей про неё. Для всех сразу: Cointelegraph, CoinDesk, ФРС США, Investing, MarketWatch, а также мировые события (войны, санкции, удары, отношения между странами): BBC World, Al Jazeera и поиск по геополитике.\n\nПока не читаю: X, Discord, Telegram-каналы, Reddit. X планируется в версии Full, остальное пока не подключено. У части монет собственных новостей мало, тогда вердикт опирается на общий фон рынка.',
+    srcText: '<b>Откуда новости</b>\nПо каждой монете: блог и форум проекта, релизы разработчиков на GitHub и поиск новостей про неё. По акциям: раскрытия SEC (форма 8-K) и заголовки Yahoo Finance по каждой компании, пресс-релизы компаний там, где они читаются, CNBC, WSJ, Bloomberg, MarketWatch, Seeking Alpha, Benzinga. Для всех сразу: Cointelegraph, CoinDesk, ФРС США, Investing, MarketWatch, а также мировые события (войны, санкции, удары, отношения между странами): BBC World, Al Jazeera и поиск по геополитике.\n\nПока не читаю: X, Discord, Telegram-каналы, Reddit. X планируется в версии Full, остальное пока не подключено. У части монет собственных новостей мало, тогда вердикт опирается на общий фон рынка.',
     privText: '<b>Приватность</b>\nБот пишет только тем, кто сам его запустил. Он не читает ваши чаты, каналы и аккаунты.\n\nХранится: номер вашего чата, выбранные монеты, время, часовой пояс, язык и последний вердикт по монетам. Ничего больше.\n\nУдалить всё можно в любой момент кнопкой ниже или командой /stop.',
     settingsHead: 'Настройки', time: 'Время', tz: 'Часовой пояс', lang: 'Язык',
     alertsLine: on => `Срочные уведомления о перевороте: ${on ? 'включены' : 'выключены'}`, alertsBtn: on => `Уведомления: ${on ? 'вкл' : 'выкл'}`, alertHead: x => `Развернулся вердикт: ${x}`, alertOff: 'Выключить такие уведомления', alertsOffDone: 'Срочные уведомления выключены. Включить: Настройки.', alertsOnDone: 'Срочные уведомления включены.',
@@ -44,8 +54,8 @@ const T = {
     timeSet: t => `Время: ${t}.`, tzSet: z => `Пояс: ${z}.`, langSet: 'Язык: русский.',
     wait: 'Печатаю сводку, это займёт до минуты.', slow: 'Не так часто, подождите полминуты.',
     detail: 'Подробнее', moreHint: 'Нажмите на монету, чтобы увидеть причины и ссылки.',
-    helpText: `Всё делается кнопками в /menu. Команды для тех, кто любит печатать:\n\n/add BTC ETH - добавить монеты\n/remove BTC - убрать\n/list - мои монеты\n/coins - все монеты\n/now - сводка сейчас\n/news - новости\n/markets - рынки\n/stocks - топ-50 акций США\n/time 08:00 - время\n/tz Europe/Kyiv - пояс\n/lang en - язык\n/full - лист ожидания Full\n/stop - удалить мои данные\n\nСводка строится только по открытым новостям и не является советом по торговле.`,
-    added: a => `Добавлено: ${a.join(', ')}.`, unknown: u => `Не знаю таких монет: ${u.join(', ')}. Список: /coins`,
+    helpText: `Всё делается кнопками в /menu. Команды для тех, кто любит печатать:\n\n/add BTC ETH - добавить монеты\n/remove BTC - убрать\n/list - мои монеты\n/coins - все монеты\n/now - сводка сейчас\n/news - новости\n/markets - рынки\n/stocks - акции США: выбор, сводка, таблица цен\n/time 08:00 - время\n/tz Europe/Kyiv - пояс\n/lang en - язык\n/full - лист ожидания Full\n/stop - удалить мои данные\n\nСводка строится только по открытым новостям и не является советом по торговле.`,
+    added: a => `Добавлено: ${a.join(', ')}.`, unknown: u => `Не знаю таких монет или компаний: ${u.join(', ')}. Списки: /coins и /stocks`,
     removed: g => `Убрано: ${g.join(', ')}.`, nothingRemoved: 'Такой монеты нет в вашем списке.',
     coinsAll: c => `Доступные монеты (${c.length}): ${c.join(' ')}`,
     waitlist: 'Записал вас в лист ожидания версии Full (X и другие площадки, глубокий разбор). Цены пока нет: сначала считаем расходы. Напишу, когда будет что показать, и ничего не спишу без вашего согласия.', waitlistAgain: 'Вы уже в листе ожидания Full.',
@@ -65,16 +75,25 @@ const T = {
     pickHead: n => `Pick coins, up to ${MAX_COINS}. Selected: ${n}.`, pickHint: 'Coin not in the list? Send its ticker with /add.',
     pickedNote: 'Done. Press "Summary now" to see the first one.', quickNote: c => `Added ${c.join(', ')}. Press "Summary now" to see the first one.`,
     limitReached: `Limit is ${MAX_COINS} coins. Remove one first.`, empty: 'Pick some coins first.',
-    bStocks: 'Top 50 US stocks', stocksFail: 'Could not get the stock quotes, try later.', stocksLoading: 'Loading the stocks...',
+    bStocks: 'Price table: top 100', stocksFail: 'Could not get the stock quotes, try later.', stocksLoading: 'Loading the stocks...',
     slowdown: 'Not so fast, wait a few seconds.',
+    bStk: 'US stocks', stkHead: 'US stocks', stkMine: s => `Your stocks: ${s.join(', ')}`, stkNone: 'No stocks yet.',
+    stkDesc: 'The stock summary arrives with the morning crypto summary. It reads SEC filings (form 8-K), headlines about the company and the market news of the last 24 hours. Not investment advice.',
+    bPickStocks: 'Pick stocks', bStockNow: 'Stock summary', bStockNews: 'Stock news', bStockTable: 'Price table: top 100',
+    stockPickHead: n => `Pick stocks, up to ${MAX_STOCKS}. Selected: ${n}.`, stockPickHint: 'Not in the tabs? Send /add Apple or /add AAPL: a ticker or a company name works.',
+    stockMoreHint: 'Tap a company to see the reasons, the price and the links.',
+    stockPicked: 'Done. Press "Stock summary" to see the first one.', stockLimit: `Limit is ${MAX_STOCKS} stocks. Remove one first.`, stockEmpty: 'Pick some stocks first.',
+    stockAdded: a => `Stocks added: ${a.join(', ')}.`, stockHead: d => `NewsTide: US stocks for ${d}`,
+    stockClosed: 'The US market is closed now: the read covers the news since the last session, and the next move may come at the open.',
+    newsStocks: 'My stocks', newsMarket: 'Stock market', newsNoStocks: 'Pick some stocks first and I will show the news about them.',
     bNews: 'News', bMarkets: 'Markets', newsHead: 'News: what to show?', newsMine: 'My coins', newsCrypto: 'Crypto market', newsWorld: 'World and macro (wars, the Fed)',
-    newsTitles: { mine: 'News about your coins', crypto: 'Crypto market news', world: 'World news and macro' }, newsMore: 'More ›', newsPrev: '‹ Back', newsSections: 'Sections', newsLoading: 'Loading the news...',
+    newsTitles: { mine: 'News about your coins', crypto: 'Crypto market news', world: 'World news and macro', stocks: 'News about your stocks', market: 'Stock market news' }, newsMore: 'More ›', newsPrev: '‹ Back', newsSections: 'Sections', newsLoading: 'Loading the news...',
     newsHint: 'Headlines link to the source sites. Read the full text there.', newsNoCoins: 'Pick some coins first and I will show the news about them.', marketsLoading: 'Loading the markets...', marketsFail: 'Could not get the quotes, try later.',
     moodUp: 'The bull: the news on your coins mostly point up', moodDown: 'The bear: the news on your coins mostly point down', moodFlat: 'The hamster: no clear direction',
     bAbout: 'About', bRead: 'How to read it', bSources: 'Where news come from', bPriv: 'Privacy', bDelete: 'Delete my data',
-    aboutText: '<b>About the bot</b>\nNewsTide reads the news and shows where they point your coin right now. You pick coins (up to ' + MAX_COINS + '), the bot sends one short summary every morning and writes on its own if a verdict flips.\n\n<b>What it does.</b> Reads project blogs and forums, developer releases, big crypto media and macro news. A model turns that into one verdict per coin, with links to the news it rests on.\n\n<b>What it does not do.</b> It does not predict the price, give trading advice or know the future.',
+    aboutText: '<b>About the bot</b>\nNewsTide reads the news and shows where they point your coin or a top-100 US stock right now. You pick coins (up to ' + MAX_COINS + '), the bot sends one short summary every morning and writes on its own if a verdict flips.\n\n<b>What it does.</b> Reads project blogs and forums, developer releases, big crypto media and macro news. A model turns that into one verdict per coin, with links to the news it rests on.\n\n<b>What it does not do.</b> It does not predict the price, give trading advice or know the future.',
     readText: '<b>How to read the summary</b>\n🟢📈 the news point up\n🔴📉 the news point down\n🔵↔️ no clear direction: quiet, or the news pull both ways\n\n<b>Long and Short</b> say what this means for your idea: if you buy (Long) or sell short (Short), is the news background for you, against you or unclear.\n\n<b>Horizon:</b> the next day. Only the news of the last 24 hours at the moment of the request is used. There is no separate read for the 4-hour or shorter charts.\n\nThe coin button under a summary opens the reasons step by step and the news links.\n\n⚠ <b>The verdict flipped</b> means it was up and is now down (or the other way). I send that at once, in the daytime. Not at night: then the flip is in the morning summary.',
-    srcText: '<b>Where the news come from</b>\nFor every coin: the project blog and forum, developer releases on GitHub and a news search about it. For all: Cointelegraph, CoinDesk, the US Fed, Investing, MarketWatch, plus world events (wars, sanctions, strikes, relations between states): BBC World, Al Jazeera and a geopolitics search.\n\nNot read yet: X, Discord, Telegram channels, Reddit. X is planned for the Full version, the rest is not connected yet. Some coins have little news of their own; then the verdict leans on the general market background.',
+    srcText: '<b>Where the news come from</b>\nFor every coin: the project blog and forum, developer releases on GitHub and a news search about it. For stocks: SEC filings (form 8-K) and Yahoo Finance headlines for each company, company press releases where they can be read, CNBC, WSJ, Bloomberg, MarketWatch, Seeking Alpha, Benzinga. For all: Cointelegraph, CoinDesk, the US Fed, Investing, MarketWatch, plus world events (wars, sanctions, strikes, relations between states): BBC World, Al Jazeera and a geopolitics search.\n\nNot read yet: X, Discord, Telegram channels, Reddit. X is planned for the Full version, the rest is not connected yet. Some coins have little news of their own; then the verdict leans on the general market background.',
     privText: '<b>Privacy</b>\nThe bot writes only to people who started it. It does not read your chats, channels or accounts.\n\nStored: your chat number, picked coins, time, time zone, language and the last verdict per coin. Nothing else.\n\nYou can delete it all at any time with the button below or /stop.',
     settingsHead: 'Settings', time: 'Time', tz: 'Time zone', lang: 'Language',
     alertsLine: on => `Instant flip alerts: ${on ? 'on' : 'off'}`, alertsBtn: on => `Alerts: ${on ? 'on' : 'off'}`, alertHead: x => `The verdict flipped: ${x}`, alertOff: 'Turn these alerts off', alertsOffDone: 'Instant alerts are off. Turn them on in Settings.', alertsOnDone: 'Instant alerts are on.',
@@ -82,8 +101,8 @@ const T = {
     timeSet: t => `Time: ${t}.`, tzSet: z => `Zone: ${z}.`, langSet: 'Language: English.',
     wait: 'Printing the summary, up to a minute.', slow: 'Not so fast, wait half a minute.',
     detail: 'Details', moreHint: 'Tap a coin to see the reasons and links.',
-    helpText: `Everything works with the buttons in /menu. Commands for those who like typing:\n\n/add BTC ETH - add coins\n/remove BTC - remove\n/list - my coins\n/coins - all coins\n/now - summary now\n/news - news\n/markets - markets\n/stocks - top 50 US stocks\n/time 08:00 - time\n/tz Europe/Kyiv - zone\n/lang ru - language\n/full - Full waiting list\n/stop - delete my data\n\nThe summary is built from public news only and is not trading advice.`,
-    added: a => `Added: ${a.join(', ')}.`, unknown: u => `Unknown coins: ${u.join(', ')}. See /coins`,
+    helpText: `Everything works with the buttons in /menu. Commands for those who like typing:\n\n/add BTC ETH - add coins\n/remove BTC - remove\n/list - my coins\n/coins - all coins\n/now - summary now\n/news - news\n/markets - markets\n/stocks - US stocks: pick, summary, price table\n/time 08:00 - time\n/tz Europe/Kyiv - zone\n/lang ru - language\n/full - Full waiting list\n/stop - delete my data\n\nThe summary is built from public news only and is not trading advice.`,
+    added: a => `Added: ${a.join(', ')}.`, unknown: u => `Unknown coins or companies: ${u.join(', ')}. See /coins and /stocks`,
     removed: g => `Removed: ${g.join(', ')}.`, nothingRemoved: 'That coin is not on your list.',
     coinsAll: c => `Available coins (${c.length}): ${c.join(' ')}`,
     waitlist: 'You are on the waiting list for Full (X and other platforms, deeper analysis). There is no price yet: we are still counting costs. I will write when there is something to show, and charge nothing without your consent.', waitlistAgain: 'You are already on the Full waiting list.',
@@ -98,8 +117,9 @@ const btn = (text, data) => ({ text, callback_data: data });
 const kb = rows => ({ inline_keyboard: rows });
 const chunk = (list, n) => Array.from({ length: Math.ceil(list.length / n) }, (_, i) => list.slice(i * n, i * n + n));
 
-export function createBot({ tg, users, save, coins, getEdition, getNews, getQuotes, getStocks, translateTexts, photos = {}, now = () => new Date(), log = console }) {
+export function createBot({ tg, users, save, coins, stocks = [], getStockEdition, getEdition, getNews, getQuotes, getStocks, translateTexts, photos = {}, now = () => new Date(), log = console }) {
   const bySymbol = new Map(coins.map(c => [c.symbol, c]));
+  const stockBy = new Map(stocks.map(s => [s.symbol, s]));
   const known = new Set(bySymbol.keys());
   const lastNow = new Map();
   // Per-chat limit for the buttons that fetch feeds, quotes or translations: 8 presses per 10 seconds.
@@ -123,8 +143,8 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
   // ---------- screens: { text, markup } ----------
   const menuScreen = (u, note) => {
     const t = tx(u);
-    const text = [`<b>${t.menuHead}</b>`, note ? esc(note) : '', u.coins.length ? esc(t.yourCoins(u.coins)) : esc(t.noCoins), esc(t.schedule(u.time, u.tz))].filter(x => x !== '').join('\n');
-    return { text, markup: kb([[btn(t.bNow, 'now'), btn(t.bCoins, 'pick')], [btn(t.bNews, 'news'), btn(t.bMarkets, 'mk')], [btn(t.bSettings, 'set'), btn(t.bAbout, 'about')], [btn(t.bFull, 'full'), btn(t.bHelp, 'help')]]) };
+    const text = [`<b>${t.menuHead}</b>`, note ? esc(note) : '', u.coins.length ? esc(t.yourCoins(u.coins)) : esc(t.noCoins), u.stocks?.length ? esc(t.stkMine(u.stocks)) : '', esc(t.schedule(u.time, u.tz))].filter(x => x !== '').join('\n');
+    return { text, markup: kb([[btn(t.bNow, 'now'), btn(t.bCoins, 'pick')], [btn(t.bStk, 'stk'), btn(t.bNews, 'news')], [btn(t.bMarkets, 'mk'), btn(t.bSettings, 'set')], [btn(t.bAbout, 'about'), btn(t.bFull, 'full')], [btn(t.bHelp, 'help')]]) };
   };
   const welcomeScreen = u => {
     const t = tx(u);
@@ -138,6 +158,22 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
     return {
       text: `${esc(t.pickHead(u.coins.length))}${u.coins.length ? `\n${esc(u.coins.join(', '))}` : ''}\n\n<i>${esc(t.pickHint)}</i>`,
       markup: kb([tabs, ...grid, [btn(t.bDone(u.coins.length), 'pdone')]])
+    };
+  };
+  const stocksHub = (u, note) => {
+    const t = tx(u);
+    u.stocks ??= [];
+    const text = [`<b>${t.stkHead}</b>`, note ? esc(note) : '', u.stocks.length ? esc(t.stkMine(u.stocks)) : esc(t.stkNone), `<i>${esc(t.stkDesc)}</i>`].filter(Boolean).join('\n');
+    return { text, markup: kb([[btn(t.bPickStocks, 'sp'), btn(t.bStockNow, 'snow')], [btn(t.bStockNews, 'nw:stocks:0'), btn(t.bStockTable, 'st:0')], [btn(t.bBack, 'menu')]]) };
+  };
+  const stockPickScreen = (u, group = 'tech') => {
+    const t = tx(u);
+    u.stocks ??= [];
+    const tabs = chunk(SGROUPS.map(([id, ru, en]) => btn(`${id === group ? '• ' : ''}${u.lang === 'en' ? en : ru}`, `sg:${id}`)), 4);
+    const grid = chunk(stocks.filter(x => x.group === group).map(x => btn(`${u.stocks.includes(x.symbol) ? '✅ ' : ''}${x.symbol}`, `sc:${x.symbol}:${group}`)), 4);
+    return {
+      text: `${esc(t.stockPickHead(u.stocks.length))}${u.stocks.length ? `\n${esc(u.stocks.join(', '))}` : ''}\n\n<i>${esc(t.stockPickHint)}</i>`,
+      markup: kb([...tabs, ...grid, [btn(t.bDone(u.stocks.length), 'sdone')]])
     };
   };
   const settingsScreen = u => {
@@ -179,6 +215,7 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
   // ---------- the summary ----------
   async function sendDigest(chatId, user, { markSent = false } = {}) {
     const t = tx(user);
+    user.stocks ??= [];
     const { date } = localClock(user.tz, now());
     const [y, mo, d] = date.split('-');
     const results = [];
@@ -193,14 +230,51 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
         results.push({ sym, ed: null, err: t[err.reason] ?? t.print });
       }
     }
-    await sendMood(chatId, user, results);
-    const rows = chunk(results.filter(r => r.ed).map(r => btn(`${r.sym} ›`, `m:${r.sym}`)), 4);
-    rows.push([btn(t.menuHead, 'menu')]);
-    await tg.send(chatId, `${summaryMessage(results, { lang: user.lang, head: t.head(`${d}.${mo}.${y}`) })}\n\n${esc(t.moreHint)}`, kb(rows));
-    const failed = results.find(r => !r.ed);
-    if (failed) await tg.send(chatId, esc(`${failed.sym}: ${failed.err}`));
+    if (results.length) {
+      await sendMood(chatId, user, results);
+      const rows = chunk(results.filter(r => r.ed).map(r => btn(`${r.sym} ›`, `m:${r.sym}`)), 4);
+      rows.push([btn(t.menuHead, 'menu')]);
+      await tg.send(chatId, `${summaryMessage(results, { lang: user.lang, head: t.head(`${d}.${mo}.${y}`) })}\n\n${esc(t.moreHint)}`, kb(rows));
+      const failed = results.find(r => !r.ed);
+      if (failed) await tg.send(chatId, esc(`${failed.sym}: ${failed.err}`));
+    }
+    await sendStockDigest(chatId, user, `${d}.${mo}.${y}`);
     if (markSent) user.lastSent = date;
     await save(users);
+  }
+
+  // The stock summary: its own message, because stocks are another market with its own trading hours.
+  async function sendStockDigest(chatId, user, dateText) {
+    if (!user.stocks?.length || !getStockEdition) return;
+    const t = tx(user);
+    const results = [];
+    let closed = false;
+    for (const sym of user.stocks) {
+      try {
+        const ed = await getStockEdition(stockBy.get(sym), '1d');
+        results.push({ sym, ed });
+        remember(chatId, `s:${sym}`, ed);
+        if (ed.market_open === false) closed = true;
+      } catch (err) {
+        log.error('[bot stock digest]', sym, err.message);
+        results.push({ sym, ed: null, err: t[err.reason] ?? t.print });
+      }
+    }
+    const rows = chunk(results.filter(r => r.ed).map(r => btn(`${r.sym} ›`, `ms:${r.sym}`)), 4);
+    rows.push([btn(t.menuHead, 'menu')]);
+    await tg.send(chatId, `${summaryMessage(results, { lang: user.lang, head: t.stockHead(dateText), asset: 'stock', note: closed ? t.stockClosed : undefined })}\n\n${esc(t.stockMoreHint)}`, kb(rows));
+    const failed = results.find(r => !r.ed);
+    if (failed) await tg.send(chatId, esc(`${failed.sym}: ${failed.err}`));
+  }
+
+  async function sendStockDetail(chatId, u, sym) {
+    const t = tx(u);
+    const stock = stockBy.get(sym);
+    if (!stock || !getStockEdition) return;
+    let ed = shown.get(`${chatId}:s:${sym}`);
+    try { ed ??= await getStockEdition(stock, '1d'); }
+    catch (err) { return tg.send(chatId, esc(`${sym}: ${t[err.reason] ?? t.print}`)); }
+    return tg.send(chatId, stockDetailMessage(stock, ed, { lang: u.lang }));
   }
 
   // A woodcut before the summary: the bull, the bear or the hamster, by what most of the coins say.
@@ -241,16 +315,18 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
   }
   const newsSections = u => {
     const t = tx(u);
-    return { text: `<b>${esc(t.newsHead)}</b>\n<i>${esc(t.newsHint)}</i>`, markup: kb([[btn(t.newsMine, 'nw:mine:0')], [btn(t.newsCrypto, 'nw:crypto:0')], [btn(t.newsWorld, 'nw:world:0')], [btn(t.bBack, 'menu')]]) };
+    return { text: `<b>${esc(t.newsHead)}</b>\n<i>${esc(t.newsHint)}</i>`, markup: kb([[btn(t.newsMine, 'nw:mine:0')], [btn(t.newsCrypto, 'nw:crypto:0')], [btn(t.newsWorld, 'nw:world:0')], [btn(t.newsStocks, 'nw:stocks:0')], [btn(t.newsMarket, 'nw:market:0')], [btn(t.bBack, 'menu')]]) };
   };
   async function showNews(chatId, mid, u, scope, page) {
     const t = tx(u);
     if (!getNews) return;
+    u.stocks ??= [];
+    if (scope === 'stocks' && !u.stocks.length) return show(chatId, mid, { text: esc(t.newsNoStocks), markup: kb([[btn(t.bPickStocks, 'sp')], [btn(t.bBack, 'news')]]) });
     if (scope === 'mine' && !u.coins.length) return show(chatId, mid, { text: esc(t.newsNoCoins), markup: kb([[btn(t.pickCoins, 'pick')], [btn(t.bBack, 'news')]]) });
     let c = newsCache.get(chatId);
     if (!c || c.scope !== scope || page === 0) {
       let items = [];
-      try { items = await getNews(scope, { coins: u.coins.map(s => bySymbol.get(s)).filter(Boolean) }); } catch (err) { log.error('[bot news]', err.message); }
+      try { items = await getNews(scope, { coins: u.coins.map(s => bySymbol.get(s)).filter(Boolean), stocks: u.stocks.map(s => stockBy.get(s)).filter(Boolean) }); } catch (err) { log.error('[bot news]', err.message); }
       c = { scope, items, ruMap: new Map() };
       newsCache.set(chatId, c);
     }
@@ -278,12 +354,23 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
 
   async function printNow(chatId, u) {
     const t = tx(u);
-    if (!u.coins.length) return tg.send(chatId, esc(t.empty));
+    if (!u.coins.length && !u.stocks?.length) return tg.send(chatId, esc(t.empty));
     const prevAt = lastNow.get(chatId) ?? 0;
     if (Date.now() - prevAt < 30000) return tg.send(chatId, esc(t.slow));
     lastNow.set(chatId, Date.now());
     await tg.send(chatId, esc(t.wait));
     return sendDigest(chatId, u);
+  }
+
+  async function printStocksNow(chatId, u) {
+    const t = tx(u);
+    const prevAt = lastNow.get(`s:${chatId}`) ?? 0;
+    if (Date.now() - prevAt < 30000) return tg.send(chatId, esc(t.slow));
+    lastNow.set(`s:${chatId}`, Date.now());
+    await tg.send(chatId, esc(t.wait));
+    const { date } = localClock(u.tz, now());
+    const [y, mo, d] = date.split('-');
+    return sendStockDigest(chatId, u, `${d}.${mo}.${y}`);
   }
 
   async function joinWaitlist(chatId, u) {
@@ -306,6 +393,7 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
     const ack = text => tg.answer(cb.id, text).catch(() => {});
     if (!chatId || cb.message.chat.type !== 'private') return ack();
     const u = await ensureUser(chatId, cb.from);
+    u.stocks ??= [];
     const t = tx(u);
     const data = String(cb.data ?? '');
     const i = data.indexOf(':');
@@ -335,6 +423,29 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
       case 'ex': await ack(); return tg.send(chatId, `<b>${esc(t.exampleTitle)}</b>\n\n${t.exampleBody.join('\n')}`);
       case 'now': await ack(t.wait); return printNow(chatId, u);
       case 'm': await ack(); return sendDetail(chatId, u, arg);
+      case 'stk': await ack(); return show(chatId, mid, stocksHub(u));
+      case 'sp': await ack(); return show(chatId, mid, stockPickScreen(u));
+      case 'sg': await ack(); return show(chatId, mid, stockPickScreen(u, SGROUPS.some(g => g[0] === arg) ? arg : 'tech'));
+      case 'sc': {
+        const [sym, group] = arg.split(':');
+        u.stocks ??= [];
+        if (!stockBy.has(sym)) return ack();
+        if (u.stocks.includes(sym)) removeStocks(u, [sym]);
+        else if (u.stocks.length >= MAX_STOCKS) return ack(t.stockLimit);
+        else addStocks(u, [sym]);
+        await save(users);
+        await ack();
+        return show(chatId, mid, stockPickScreen(u, group));
+      }
+      case 'sdone':
+        if (!u.stocks?.length) return ack(t.stockEmpty);
+        await ack(); return show(chatId, mid, stocksHub(u, t.stockPicked));
+      case 'snow':
+        if (!allowed(chatId)) return ack(t.slowdown);
+        if (!u.stocks?.length) return ack(t.stockEmpty);
+        await ack(t.wait);
+        return printStocksNow(chatId, u);
+      case 'ms': await ack(); return sendStockDetail(chatId, u, arg);
       case 'set': await ack(); return show(chatId, mid, settingsScreen(u));
       case 'tm': await ack(); return show(chatId, mid, timeScreen(u));
       case 't':
@@ -368,7 +479,7 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
       case 'news': await ack(); return show(chatId, mid, newsSections(u));
       case 'nw': {
         const [scope, page] = arg.split(':');
-        if (!['mine', 'crypto', 'world'].includes(scope)) return ack();
+        if (!['mine', 'crypto', 'world', 'stocks', 'market'].includes(scope)) return ack();
         if (!allowed(chatId)) return ack(t.slowdown);
         await ack(t.newsLoading);
         return showNews(chatId, mid, u, scope, Math.max(0, Number(page) || 0));
@@ -403,29 +514,41 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
     }
     const u = users[chatId];
     if (!u) return reply(chatId, welcomeScreen({ lang: langOf(msg.from) }));
+    u.stocks ??= [];
     const t = tx(u);
     switch (cmd) {
       case '/menu': return reply(chatId, menuScreen(u));
       case '/help': return reply(chatId, helpScreen(u));
       case '/about': return reply(chatId, aboutScreen(u));
       case '/markets': return showMarkets(chatId, null, u);
-      case '/stocks': return getStocks ? showStocks(chatId, null, u, 0) : undefined;
+      case '/stocks': return reply(chatId, stocksHub(u));
       case '/news': return reply(chatId, newsSections(u));
       case '/coins': return tg.send(chatId, esc(t.coinsAll([...known])));
       case '/list': return reply(chatId, menuScreen(u));
       case '/add': {
-        const r = addCoins(u, args.map(a => a.replace(/[^A-Za-z0-9]/g, '')).filter(Boolean), known);
+        const tokens = args.map(a => a.replace(/[^A-Za-z0-9А-Яа-яЁё.&-]/g, '')).filter(Boolean);
+        const coinTokens = tokens.filter(a => known.has(a.toUpperCase()));
+        const rc = addCoins(u, coinTokens, known);
+        const stockSyms = [], unknownTokens = [];
+        for (const a of tokens.filter(a => !known.has(a.toUpperCase()))) {
+          const sym = resolveStock(stocks, a);
+          if (sym) stockSyms.push(sym); else unknownTokens.push(a.toUpperCase());
+        }
+        const rs = addStocks(u, stockSyms);
         await save(users);
         const out = [];
-        if (r.added.length) out.push(t.added(r.added));
-        if (r.unknown.length) out.push(t.unknown(r.unknown));
-        if (r.skipped.length && u.coins.length >= MAX_COINS) out.push(t.limitReached);
+        if (rc.added.length) out.push(t.added(rc.added));
+        if (rs.added.length) out.push(t.stockAdded(rs.added));
+        if (unknownTokens.length) out.push(t.unknown(unknownTokens));
+        if (rc.skipped.length && u.coins.length >= MAX_COINS) out.push(t.limitReached);
+        if (rs.skipped.length && u.stocks.length >= MAX_STOCKS) out.push(t.stockLimit);
         return args.length ? tg.send(chatId, esc(out.join('\n'))) : reply(chatId, pickScreen(u));
       }
       case '/remove': {
         const gone = removeCoins(u, args);
+        const goneStocks = removeStocks(u, args.map(a => resolveStock(stocks, a) ?? a));
         await save(users);
-        return tg.send(chatId, esc(gone.length ? t.removed(gone) : t.nothingRemoved));
+        return tg.send(chatId, esc(gone.length || goneStocks.length ? t.removed([...gone, ...goneStocks]) : t.nothingRemoved));
       }
       case '/time':
         if (!args[0]) return reply(chatId, timeScreen(u));

@@ -18,6 +18,8 @@ if (!token) {
 }
 const coins = JSON.parse(await readFile(path.join(root, 'config/coins.json'), 'utf8'));
 const marketFeeds = JSON.parse(await readFile(path.join(root, 'config/feeds.json'), 'utf8'));
+const stockFeeds = JSON.parse(await readFile(path.join(root, 'config/stock_feeds.json'), 'utf8'));
+const stocks = JSON.parse(await readFile(path.join(root, 'config/stocks.json'), 'utf8')).stocks.map(s => ({ ...s, class: 'stock' }));
 const file = path.join(process.env.BOT_DATA_DIR || path.join(root, 'data/bot'), 'users.json');
 const users = await loadUsers(file);
 const tg = telegram(token);
@@ -32,10 +34,11 @@ await tg.setCommands([
   { command: 'help', description: 'Help / Помощь' }
 ]);
 const bot = createBot({
-  tg, users, coins,
+  tg, users, coins, stocks,
   save: u => saveUsers(file, u),
   getEdition: (coin, timeframe) => getEdition(coin, timeframe, { root, marketFeeds }),
-  getNews: (scope, opts) => getNews(scope, { ...opts, marketFeeds }),
+  getStockEdition: (stock, timeframe) => getEdition(stock, timeframe, { root, marketFeeds: stockFeeds }),
+  getNews: (scope, opts) => getNews(scope, { ...opts, marketFeeds, stockFeeds }),
   getQuotes: () => marketQuotes(),
   getStocks: () => stockQuotes(),
   translateTexts: texts => translateBatch(texts),

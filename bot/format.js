@@ -44,7 +44,7 @@ export function digestMessage(coin, ed, { lang = 'ru', prev } = {}) {
 }
 
 // The morning summary: one line per coin, flips on top, a legend once. results: [{ sym, ed | null, prev }]
-export function summaryMessage(results, { lang = 'ru', head } = {}) {
+export function summaryMessage(results, { lang = 'ru', head, asset = 'crypto', note } = {}) {
   const w = WORD[lang] ?? WORD.ru;
   const ru = lang === 'ru';
   const lines = [`<b>${esc(head)}</b>`, ''];
@@ -54,9 +54,11 @@ export function summaryMessage(results, { lang = 'ru', head } = {}) {
   }
   const flips = results.filter(r => r.ed && flipped(r.prev, r.ed.direction));
   if (flips.length) lines.push('', `⚠ <b>${w.flip}:</b> ` + flips.map(r => `${esc(r.sym)} (${w[r.prev]} → ${w[r.ed.direction]})`).join(', '));
+  if (note) lines.push('', `<i>${esc(note)}</i>`);
+  const stock = asset === 'stock';
   lines.push('', ru
-    ? `<i>🟢📈 новости тянут вверх, 🔴📉 вниз, 🔵↔️ ясного направления нет. Long и Short: за или против вашей идеи. ${HORIZON.ru} Это крипторынок, не совет по торговле.</i>`
-    : `<i>🟢📈 the news point up, 🔴📉 down, 🔵↔️ no clear direction. Long and Short: for or against your idea. ${HORIZON.en} This is the crypto market, not trading advice.</i>`);
+    ? `<i>🟢📈 новости тянут вверх, 🔴📉 вниз, 🔵↔️ ясного направления нет. Long и Short: за или против вашей идеи. ${stock ? 'Срок оценки: ближайшая торговая сессия, новости за последние 24 часа. Это акции США, не инвестиционный совет.' : HORIZON.ru + ' Это крипторынок, не совет по торговле.'}</i>`
+    : `<i>🟢📈 the news point up, 🔴📉 down, 🔵↔️ no clear direction. Long and Short: for or against your idea. ${stock ? 'Horizon: the next trading session, from the news of the last 24 hours. These are US stocks, not investment advice.' : HORIZON.en + ' This is the crypto market, not trading advice.'}</i>`);
   return lines.join('\n');
 }
 
@@ -70,7 +72,7 @@ export function localClock(tz, date = new Date()) {
 export const CATCH_UP_MIN = 180; // a bot that was off at 08:00 still sends until 11:00, then skips the day
 
 export function isDue(user, date = new Date()) {
-  if (!user.coins.length) return false;
+  if (!user.coins.length && !user.stocks?.length) return false;
   const { date: today, minutes } = localClock(user.tz, date);
   if (user.lastSent === today) return false;
   const [h, m] = user.time.split(':').map(Number);
@@ -108,12 +110,32 @@ export function quotesMessage(quotes, { lang = 'ru' } = {}) {
   return out.join('\n');
 }
 
+// One company in detail: the edition card, then the price move, the official site and the market status.
+export function stockDetailMessage(stock, ed, { lang = 'ru' } = {}) {
+  const ru = lang === 'ru';
+  const title = `${ICON[ed.direction] ?? ''} <b>${esc(stock.symbol)}</b> ${esc((ru && ed.verdict_ru) || ed.verdict)}`;
+  let body;
+  if (ed.quiet || !ed.notes?.chain?.length) {
+    body = [title, '', ru ? 'За последние 24 часа по этой компании нет свежих новостей и раскрытий, поэтому оценку я не строю. Тихая акция всё равно может открыться гэпом из-за общего фона рынка.'
+      : 'There are no fresh news or filings about this company in the last 24 hours, so there is no read. A quiet stock can still gap at the open on the market-wide news.'].join('\n');
+  } else {
+    body = digestMessage({ symbol: stock.symbol }, ed, { lang });
+    body = body.replace(/^.*\n/, `${title}\n`);
+  }
+  const extra = [];
+  if (ed.price) extra.push(`${ru ? 'Цена' : 'Price'}: $${esc(ed.price.value)}${ed.price.change == null ? '' : `, ${ed.price.change >= 0 ? '▲ +' : '▼ '}${ed.price.change.toFixed(1)}% ${ru ? 'за прошлую сессию' : 'in the last session'}`}`);
+  if (ed.market_open === false) extra.push(ru ? 'Рынок США сейчас закрыт: оценка по новостям с прошлой сессии.' : 'The US market is closed now: the read covers the news since the last session.');
+  if (stock.site) extra.push(`${ru ? 'Официальный сайт' : 'Official site'}: <a href="${esc(stock.site)}">${esc(stock.site.replace(/^https?:\/\//, ''))}</a>`);
+  extra.push(`<i>${ru ? 'Не инвестиционный совет.' : 'Not investment advice.'}</i>`);
+  return `${body}\n\n${extra.join('\n')}`;
+}
+
 export const STOCKS_PAGE = 25;
 // The top-50 US stocks, 25 per page: colour, rank, ticker, company, price, day change.
 export function stocksPage(list, { page = 0, lang = 'ru' } = {}) {
   const ru = lang === 'ru';
   const pages = Math.max(1, Math.ceil(list.length / STOCKS_PAGE));
-  const out = [`<b>${ru ? 'Акции США: топ-50 по капитализации' : 'US stocks: the top 50 by market value'}</b> (${page + 1}/${pages})`, ''];
+  const out = [`<b>${ru ? 'Акции США: топ-100 по капитализации' : 'US stocks: the top 100 by market value'}</b> (${page + 1}/${pages})`, ''];
   for (const s of list.slice(page * STOCKS_PAGE, page * STOCKS_PAGE + STOCKS_PAGE)) {
     if (s.change == null) { out.push(`⚪ ${s.rank}. <b>${esc(s.symbol)}</b> ${esc(s.name)} ${ru ? 'нет данных' : 'no data'}`); continue; }
     const dot = s.change > 0.05 ? '🟢' : s.change < -0.05 ? '🔴' : '🔵';

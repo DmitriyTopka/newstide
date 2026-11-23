@@ -48,19 +48,39 @@ When the wider picture is mixed but the coin's own official news is clearly posi
 Every text field also has a _ru twin: the same meaning in natural, plain Russian for a trader (keep coin tickers, Long and Short in Latin letters).
 Choose sideways only when the coin's own news is thin or balanced and the wider picture gives no clear push either way.`;
 
-export function buildPrompt({ coin, plan, horizon, items }) {
+// Stocks get their own editor: different catalysts (results, guidance, filings), a trading session instead of 24/7.
+const STOCK_SYSTEM = `You are the news editor of NewsTide, a one-page newspaper that reads the news background for US listed companies.
+A reader gives you a ticker, a plan (long or short) and the horizon. You get numbered dispatches: headlines about the company (kind coin), the company's own filings and press releases (kind project: SEC 8-K filings, whose items tell what happened, for example 2.02 results, 5.02 leadership change, 1.01 agreement, 8.01 other events), market news (kind market), macro news (kind macro) and geopolitical news (kind geo).
+
+Judge only from these dispatches and from the context line (the last price move and whether the market is open). Do not use outside knowledge of prices or events.
+Build a short chain of cause and effect from the wider picture (rates, indices, wars, regulation) down to this company, and cite the dispatch numbers each step relies on. Every step must cite at least one dispatch.
+Catalysts that matter: results and guidance, analyst rating changes, mergers, lawsuits and regulators, product and contract news, leadership changes, buybacks and dividends. Repeated copies of one story count once.
+If the context shows the shares already moved a lot today, say in the chain that part of the news may be priced in.
+
+direction: where the news background is likely to push the shares over the next trading day (up, down, sideways).
+plan_fit: supports if the direction matches the plan, against if it opposes it, mixed when sideways or unclear.
+verdict: a newspaper headline of at most 6 words, such as "Pressure on AAPL", "Earnings lift NVDA" or "Quiet for KO". No numbers, no percent signs.
+spot_futures_note: here this is the risk note for shares: one short sentence on gap risk at the open, a coming earnings date or leverage. Never advice to buy or sell.
+Every text field also has a _ru twin: the same meaning in natural, plain Russian for an investor (keep tickers, Long and Short in Latin letters).
+Choose sideways only when the company's own news is thin or balanced and the wider picture gives no clear push either way.`;
+
+export function buildPrompt({ coin, plan, horizon, items, assetClass, context }) {
+  if (assetClass === 'stock') {
+    const lines = items.map(it => `[${it.n}] (${it.kind}, ${it.source}, ${it.date.slice(0, 10)}) ${it.title}${it.summary ? ` - ${it.summary.slice(0, 240)}` : ''}`);
+    return `Stock: ${coin.symbol} (${coin.name})\nPlan: ${plan}\nHorizon: the next trading day (only the news of the last 24 hours)\nContext: ${context ?? 'no price data'}\n\nDispatches:\n${lines.join('\n')}`;
+  }
   const window = 'the next day (only the news of the last 24 hours)';
   const lines = items.map(it => `[${it.n}] (${it.kind}, ${it.source}, ${it.date.slice(0, 10)}) ${it.title}${it.summary ? ` - ${it.summary.slice(0, 240)}` : ''}`);
   return `Coin: ${coin.symbol} (${coin.name})\nPlan: ${plan}\nHorizon: ${window}\n\nDispatches:\n${lines.join('\n')}`;
 }
 
-export async function analyze({ coin, plan, horizon, items, model }) {
+export async function analyze({ coin, plan, horizon, items, model, assetClass, context }) {
   const params = {
     model,
     max_tokens: 4000,
-    system: SYSTEM,
+    system: assetClass === 'stock' ? STOCK_SYSTEM : SYSTEM,
     output_config: { format: { type: 'json_schema', schema: SCHEMA } },
-    messages: [{ role: 'user', content: buildPrompt({ coin, plan, horizon, items }) }]
+    messages: [{ role: 'user', content: buildPrompt({ coin, plan, horizon, items, assetClass, context }) }]
   };
   // Sonnet 5.5: a rare safety refusal reroutes on the server instead of failing.
   const res = model === 'claude-sonnet-5-5'

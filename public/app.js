@@ -5,6 +5,8 @@ const $ = id => document.getElementById(id);
 const money = usd => `$${usd.toFixed(usd > 0 && usd < 0.01 ? 4 : 3)}`;
 let sessionSpend = 0;
 let coins = [];
+let stockList = [];   // the 100 companies, loaded when the stock tab is first opened
+let asset = 'crypto'; // 'crypto' or 'stock'
 let lang = 'en';
 try { lang = localStorage.getItem('newstide-lang') === 'ru' ? 'ru' : 'en'; } catch {}
 const T = () => TEXT[lang];
@@ -59,7 +61,60 @@ $('langToggle').addEventListener('click', () => {
 // Coin suggestions
 async function loadCoins() {
   coins = await (await fetch('/api/coins')).json();
-  $('coinList').innerHTML = coins.map(c => `<option value="${c.symbol}">${c.name}</option>`).join('');
+  fillList();
+}
+
+// Search list under the field: coins, or companies by ticker, name and Russian name.
+function fillList() {
+  $('coinList').innerHTML = asset === 'stock'
+    ? stockList.map(s => `<option value="${escapeHtml(s.symbol)}" label="${escapeHtml(`${s.name} ${s.ru ?? ''}`.trim())}"></option>`).join('')
+    : coins.map(c => `<option value="${c.symbol}">${c.name}</option>`).join('');
+}
+
+// Stock mode: a company can be typed (ticker, name, Russian name) or picked from the popular row and the sector chips.
+const POPULAR = ['AAPL', 'NVDA', 'TSLA', 'MSFT', 'AMZN', 'GOOGL', 'META', 'COIN'];
+function renderStockPicker(group) {
+  const chip = (text, attrs) => `<button type="button" class="chip" ${attrs}>${escapeHtml(text)}</button>`;
+  $('stockPopular').innerHTML = `<span class="chips-label">${escapeHtml(T().popular)}</span>` + POPULAR.map(sym => chip(sym, `data-sym="${sym}"`)).join('');
+  $('stockGroups').innerHTML = Object.entries(T().stockGroups).map(([id, label]) => chip(label, `data-group="${id}"${id === group ? ' aria-pressed="true"' : ''}`)).join('');
+  $('stockGrid').innerHTML = group ? stockList.filter(s => s.group === group).map(s => chip(s.symbol, `data-sym="${escapeHtml(s.symbol)}" title="${escapeHtml(s.name)}"`)).join('') : '';
+}
+async function setAsset(next) {
+  asset = next;
+  const stock = asset === 'stock';
+  if (stock && !stockList.length) {
+    try { stockList = await (await fetch('/api/stock-list')).json(); } catch { stockList = []; }
+  }
+  $('stockPicker').hidden = !stock;
+  $('coinLabel').dataset.i18n = stock ? 'company' : 'coin';
+  $('coin').dataset.i18nPlaceholder = stock ? 'companyPlaceholder' : 'coinPlaceholder';
+  $('hintText').dataset.i18n = stock ? 'hintStock' : 'hint';
+  $('coin').value = '';
+  $('formError').textContent = '';
+  fillList();
+  if (stock) renderStockPicker('');
+  applyLanguage();
+}
+document.querySelectorAll('input[name="asset"]').forEach(r => r.addEventListener('change', () => setAsset(r.value)));
+$('stockPicker').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.sym) { $('coin').value = b.dataset.sym; $('formError').textContent = ''; }
+  if (b.dataset.group) renderStockPicker(b.getAttribute('aria-pressed') === 'true' ? '' : b.dataset.group);
+});
+// A typed name or Russian name finds the ticker: "apple", "Эппл", "nvidia".
+function resolveStock(text) {
+  const v = text.trim().toLowerCase();
+  if (!v) return null;
+  const exact = stockList.find(s => s.symbol.toLowerCase() === v);
+  if (exact) return exact.symbol;
+  if (v.length < 3) return null;
+  const words = s => `${s.name} ${s.ru ?? ''}`.toLowerCase().split(/[^a-zа-яё0-9]+/).filter(Boolean);
+  // A whole word wins ("эппл" is Apple, not Applied Materials); otherwise the prefix must point to one company.
+  const whole = stockList.filter(s => words(s).includes(v)).sort((a, b) => a.rank - b.rank);
+  if (whole.length) return whole[0].symbol;
+  const hits = stockList.filter(s => words(s).some(w => w.startsWith(v)));
+  return hits.length === 1 ? hits[0].symbol : null;
 }
 
 // Market tape (running line) and the two news columns
@@ -157,7 +212,13 @@ function showResult(r, plan, reprint = false) {
 
   $('missing').hidden = !r.missing_sources?.length;
   $('missing').textContent = r.missing_sources?.length ? t.unavailable(r.missing_sources.join(', ')) : '';
-  $('xNote').hidden = r.x_connected;
+  $('xNote').hidden = r.x_connected || r.asset === 'stock';
+  // Stocks: the price move, and a note when the US market is closed (weekends, nights).
+  const mkt = [];
+  if (r.asset === 'stock' && r.price) mkt.push(t.priceLine(r.symbol ?? '', r.price.value, r.price.change));
+  if (r.asset === 'stock' && r.market_open === false) mkt.push(t.mktClosed);
+  $('mktNote').hidden = !mkt.length;
+  $('mktNote').textContent = mkt.join(' ');
   $('resultSample').hidden = !r.sample && !r.archived && !r.edition;
   if (r.sample) $('resultSample').textContent = t.sample;
   if (r.edition) {
@@ -208,11 +269,12 @@ function stopCountdown() {
 $('askForm').addEventListener('submit', async e => {
   e.preventDefault();
   const form = new FormData(e.target);
-  const coin = String(form.get('coin') ?? '').trim().toUpperCase();
+  const stock = asset === 'stock';
+  const coin = stock ? (resolveStock(String(form.get('coin') ?? '')) ?? '') : String(form.get('coin') ?? '').trim().toUpperCase();
   const plan = form.get('plan');
   const timeframe = '1d'; // one read for everyone: the news of the last 24 hours, judged for the next day
   $('formError').textContent = '';
-  if (!coins.some(c => c.symbol === coin)) return ($('formError').textContent = T().errCoin);
+  if (stock ? !coin : !coins.some(c => c.symbol === coin)) return ($('formError').textContent = stock ? T().errCompany : T().errCoin);
   if (!plan) return ($('formError').textContent = T().errPlan);
 
   $('getData').disabled = true;
@@ -225,7 +287,9 @@ $('askForm').addEventListener('submit', async e => {
   try {
     const ctrl = new AbortController();
     const cut = setTimeout(() => ctrl.abort(), 62000);
-    const res = mode.public_live
+    const res = stock
+      ? await fetch(`/api/stock-edition?symbol=${encodeURIComponent(coin)}`, { signal: ctrl.signal })
+      : mode.public_live
       ? await fetch(`/api/edition?coin=${encodeURIComponent(coin)}&timeframe=${encodeURIComponent(timeframe)}`, { signal: ctrl.signal })
       : await fetch('/api/analyze', {
           method: 'POST',
@@ -236,7 +300,8 @@ $('askForm').addEventListener('submit', async e => {
     clearTimeout(cut);
     const body = await res.json();
     if (!res.ok) throw Object.assign(new Error(body.error || T().errPrint), { reason: body.reason, demo: body.demo });
-    if (mode.public_live) body.plan_fit = fitOf(plan, body.direction);
+    if (stock) body.symbol = coin;
+    if (mode.public_live || stock) body.plan_fit = fitOf(plan, body.direction);
     showResult(body, plan);
   } catch (err) {
     const t = T();
@@ -264,6 +329,7 @@ loadMarket();
 fetch('/api/mode').then(r => r.json()).then(m => {
   mode = m;
   $('demoBanner').hidden = !(m.replay || m.public_live);
+  $('assetField').hidden = m.replay; // the archived demo has crypto editions only
   applyLanguage();
 }).catch(() => {});
 

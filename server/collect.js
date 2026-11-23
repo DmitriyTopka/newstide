@@ -6,6 +6,8 @@ import path from 'node:path';
 
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) NewsTide/0.1';
+// SEC asks automated readers to name themselves with a contact; a plain browser-like agent gets HTTP 403.
+const SEC_UA = 'NewsTide/0.1 (+https://newstide.xyz)';
 const MAX_ITEMS = 30;
 // Only the news of the last 24 hours at the moment of the request: what happened today is what moves the market now.
 const HOURS = { intraday: 24, medium: 24 };
@@ -55,7 +57,7 @@ export function parseFeed(xml, feed) {
 }
 
 async function fetchFeed(feed, timeoutMs = 12000) {
-  const res = await fetch(feed.url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(timeoutMs) });
+  const res = await fetch(feed.url, { headers: { 'User-Agent': /(^|\.)sec\.gov/i.test(new URL(feed.url).hostname) ? SEC_UA : UA }, signal: AbortSignal.timeout(timeoutMs) });
   if (!res.ok) throw new Error(`${feed.name}: HTTP ${res.status}`);
   return parseFeed(await res.text(), feed);
 }
@@ -110,7 +112,7 @@ export function select(items, { horizon, now = Date.now() }) {
 export function markCoinNews(items, coin) {
   const words = (coin.keywords ?? []).map(w => w.toLowerCase());
   return items.map(it => {
-    if (it.kind !== 'crypto' || !words.length) return it;
+    if (!['crypto', 'market'].includes(it.kind) || !words.length) return it;
     const text = ` ${it.title} ${it.summary} `.toLowerCase().replace(/[^a-z0-9 ]/g, ' ');
     return words.some(w => text.includes(w)) ? { ...it, kind: 'coin' } : it;
   });

@@ -91,6 +91,17 @@ function harness(over = {}) {
     },
     photos: { up: '/img/bull.jpg', down: '/img/bear.jpg', sideways: '/img/hamster.jpg' },
     getNews: async scope => Array.from({ length: 7 }, (_, i) => ({ title: `Headline ${scope} ${i}`, summary: `Summary ${i}`, link: `https://example.com/${i}`, source: 'Src', date: '2026-11-22T10:00:00Z', ...(scope === 'mine' ? { sym: 'XRP' } : {}) })),
+    stocks: [
+      { rank: 1, symbol: 'AAPL', name: 'Apple', ru: 'Эппл', group: 'tech', site: 'https://www.apple.com' },
+      { rank: 2, symbol: 'MSFT', name: 'Microsoft', ru: 'Майкрософт', group: 'tech', site: 'https://www.microsoft.com' },
+      { rank: 3, symbol: 'JPM', name: 'JPMorgan Chase', ru: 'Джей Пи Морган', group: 'finance', site: 'https://www.jpmorganchase.com' },
+      { rank: 4, symbol: 'AMAT', name: 'Applied Materials', ru: 'Эпплайд Матириалс', group: 'tech', site: 'https://www.appliedmaterials.com' },
+      { rank: 5, symbol: 'BRK-B', name: 'Berkshire Hathaway', ru: 'Беркшир Хатауэй', group: 'finance', site: 'https://www.berkshirehathaway.com' }
+    ],
+    getStockEdition: async stock => {
+      if (stock.symbol === 'MSFT') return { quiet: true, market_open: false, price: { value: '480.0', change: -0.1 }, direction: 'sideways', verdict: 'No fresh news for MSFT', verdict_ru: 'Свежих новостей по MSFT нет', notes: { chain: [], dispatches: [] } };
+      return { ...edition(over.direction ?? 'up'), asset: 'stock', market_open: true, price: { value: '342.6', change: 1.2 } };
+    },
     getStocks: async () => Array.from({ length: 50 }, (_, i) => ({ rank: i + 1, symbol: `S${i + 1}`, name: `Company ${i + 1}`, value: '100.0', change: i === 3 ? null : (i % 2 ? -1.5 : 2.5) })),
     getQuotes: async () => [{ name: 'Bitcoin', value: '$60,000', change: 1.2 }, { name: 'S&P 500', value: '6,900', change: -3.7 }, { name: 'VIX', value: '35.9', change: 26.2 }, { name: 'Gold', value: 'x', change: null }],
     translateTexts: async texts => new Map(texts.map(t => [t, `RU ${t}`])),
@@ -108,7 +119,7 @@ test('commands: start, add, list, time, lang', async () => {
   await h.bot.handle(msg('/add xrp btc fake'));
   assert.deepEqual(h.users['7'].coins, ['XRP', 'BTC']);
   assert.match(h.sent.at(-1).text, /Добавлено: XRP, BTC/);
-  assert.match(h.sent.at(-1).text, /Не знаю таких монет: FAKE/);
+  assert.match(h.sent.at(-1).text, /Не знаю таких монет или компаний: FAKE/);
   await h.bot.handle(msg('/time 25:00'));
   assert.match(h.sent.at(-1).text, /Другое время: \/time/);
   await h.bot.handle(msg('/time 09:30'));
@@ -390,7 +401,7 @@ test('stocks: top 50 US stocks in two pages with colours and no data marks', asy
   assert.ok(h.sent.at(-1).markup.inline_keyboard.flat().some(b => b.callback_data === 'st:0'));
   await h.bot.handleCallback(press('st:0'));
   let m = h.sent.at(-1);
-  assert.match(m.text, /Акции США: топ-50.*\(1\/2\)/);
+  assert.match(m.text, /Акции США: топ-100.*\(1\/2\)/);
   assert.match(m.text, /🟢 1\. <b>S1<\/b> Company 1 \$100.0 ▲ \+2.5%/);
   assert.match(m.text, /🔴 2\. <b>S2<\/b>/);
   assert.match(m.text, /⚪ 4\. <b>S4<\/b>.*нет данных/);
@@ -402,7 +413,7 @@ test('stocks: top 50 US stocks in two pages with colours and no data marks', asy
   assert.match(m.text, /26\. <b>S26<\/b>/);
   assert.ok(!m.markup.inline_keyboard.flat().some(b => b.callback_data === 'st:2'));
   await h.bot.handle(msg('/stocks'));
-  assert.match(h.sent.at(-1).text, /\(1\/2\)/);
+  assert.match(h.sent.at(-1).text, /Акции США/, '/stocks opens the stocks hub');
 });
 
 import { translateBatch } from '../server/edition.js';
@@ -438,4 +449,94 @@ test('source tags: the first plain tag after /start is kept, odd ones are not', 
   await h.bot.handle(msg('/start full', 25));
   assert.equal(h.users['25'].source, undefined, 'full is the waiting list, not a source');
   assert.ok(h.users['25'].wantsFull);
+});
+
+test('stocks: hub, picker by sector, toggling, done', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handleCallback(press('stk'));
+  assert.match(h.sent.at(-1).text, /Акции США/);
+  assert.ok(h.sent.at(-1).markup.inline_keyboard.flat().some(b => b.callback_data === 'sp'));
+  await h.bot.handleCallback(press('sp'));
+  let buttons = h.sent.at(-1).markup.inline_keyboard.flat();
+  assert.ok(buttons.some(b => b.callback_data === 'sc:AAPL:tech'));
+  assert.ok(!buttons.some(b => b.callback_data === 'sc:JPM:tech'), 'JPM is in finance, not tech');
+  await h.bot.handleCallback(press('sc:AAPL:tech'));
+  await h.bot.handleCallback(press('sg:finance'));
+  await h.bot.handleCallback(press('sc:BRK-B:finance'));
+  assert.deepEqual(h.users['7'].stocks, ['AAPL', 'BRK-B']);
+  assert.ok(h.sent.at(-1).markup.inline_keyboard.flat().some(b => b.text === '✅ BRK-B'));
+  await h.bot.handleCallback(press('sc:AAPL:tech'));
+  assert.deepEqual(h.users['7'].stocks, ['BRK-B']);
+  await h.bot.handleCallback(press('sdone'));
+  assert.match(h.sent.at(-1).text, /Ваши акции: BRK-B/);
+  for (const b of h.sent.flatMap(m => m.markup?.inline_keyboard.flat() ?? [])) assert.ok(Buffer.byteLength(b.callback_data) <= 64, b.callback_data);
+});
+
+test('stocks: /add understands a ticker, a name and a Russian name; /remove too; limit and unknown', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handle(msg('/add aapl эппл jpm fakeco btc'));
+  const u = h.users['7'];
+  assert.deepEqual(u.stocks, ['AAPL', 'JPM'], 'эппл is Apple, not Applied Materials, and a repeat is skipped');
+  assert.deepEqual(u.coins, ['BTC']);
+  assert.match(h.sent.at(-1).text, /Акции добавлены: AAPL, JPM/);
+  assert.match(h.sent.at(-1).text, /Не знаю таких монет или компаний: FAKECO/);
+  await h.bot.handle(msg('/add microsoft'));
+  assert.ok(u.stocks.includes('MSFT'));
+  await h.bot.handle(msg('/remove apple'));
+  assert.ok(!u.stocks.includes('AAPL'));
+  u.stocks = Array.from({ length: 10 }, (_, i) => `S${i}`);
+  await h.bot.handle(msg('/add jpm'));
+  assert.match(h.sent.at(-1).text, /Лимит 10 акций/);
+});
+
+test('stocks: summary with its own header, quiet company, market-closed note, details with the official site', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handle(msg('/add AAPL MSFT'));
+  h.sent.length = 0;
+  await h.bot.handleCallback(press('snow'));
+  const sum = h.sent.find(s => /акции США за/.test(s.text));
+  assert.ok(sum, 'a stock summary was sent');
+  assert.ok(sum.text.includes('🟢📈') && sum.text.includes('🔵↔️'));
+  assert.match(sum.text, /Свежих новостей по MSFT нет/);
+  assert.match(sum.text, /Рынок США сейчас закрыт/);
+  assert.match(sum.text, /Это акции США, не инвестиционный совет/);
+  assert.ok(sum.markup.inline_keyboard.flat().some(b => b.callback_data === 'ms:AAPL'));
+  await h.bot.handleCallback(press('ms:AAPL'));
+  assert.match(h.sent.at(-1).text, /Цена: \$342.6.*1.2%/);
+  assert.match(h.sent.at(-1).text, /apple.com/);
+  assert.match(h.sent.at(-1).text, /Не инвестиционный совет/);
+  await h.bot.handleCallback(press('ms:MSFT'));
+  assert.match(h.sent.at(-1).text, /нет свежих новостей/);
+});
+
+test('stocks: the morning digest sends the crypto summary and the stock summary, and works with stocks only', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handle(msg('/add BTC AAPL'));
+  h.sent.length = 0;
+  await h.bot.tick();
+  assert.ok(h.sent.some(s => /крипто-сводка/.test(s.text)));
+  assert.ok(h.sent.some(s => /акции США за/.test(s.text)));
+  const only = harness();
+  await only.bot.handle(msg('/start'));
+  await only.bot.handle(msg('/add AAPL'));
+  only.sent.length = 0;
+  await only.bot.tick();
+  assert.ok(only.sent.some(s => /акции США за/.test(s.text)));
+  assert.ok(!only.sent.some(s => /крипто-сводка/.test(s.text)), 'no crypto summary for someone with no coins');
+});
+
+test('stocks: news scopes for my stocks and the stock market', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handleCallback(press('nw:stocks:0'));
+  assert.match(h.sent.at(-1).text, /Сначала выберите акции/);
+  await h.bot.handle(msg('/add AAPL'));
+  await h.bot.handleCallback(press('nw:stocks:0'));
+  assert.match(h.sent.at(-1).text, /Новости по вашим акциям/);
+  await h.bot.handleCallback(press('nw:market:0'));
+  assert.match(h.sent.at(-1).text, /Новости фондового рынка/);
 });

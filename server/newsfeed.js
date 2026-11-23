@@ -4,7 +4,7 @@
 import { fetchAll, markCoinNews } from './collect.js';
 
 const TTL_MS = 10 * 60 * 1000;
-const DAYS = { mine: 1, crypto: 1, world: 1 }; // what happened in the last 24 hours
+const DAYS = { mine: 1, crypto: 1, world: 1, stocks: 1, market: 1 }; // what happened in the last 24 hours
 const MAX_ITEMS = 40;
 const cache = new Map(); // key -> { at, promise }
 
@@ -36,7 +36,12 @@ function tidy(items, days, now) {
   return out.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
 }
 
-export async function getNews(scope, { coins = [], marketFeeds, now = Date.now() }) {
+export async function getNews(scope, { coins = [], stocks = [], marketFeeds, stockFeeds = [], now = Date.now() }) {
+  if (scope === 'market') return tidy(await cached('stockmarket', stockFeeds.filter(f => f.kind !== 'geo')), DAYS.market, now);
+  if (scope === 'stocks') {
+    const lists = await Promise.all(stocks.map(async s => (await cached(`stock:${s.symbol}`, s.feeds.map(f => ({ ...f, kind: f.kind ?? 'project' })))).map(it => ({ ...it, sym: s.symbol }))));
+    return tidy(lists.flat(), DAYS.stocks, now);
+  }
   if (scope === 'crypto') return tidy(await cached('crypto', marketFeeds.filter(f => f.kind === 'crypto')), DAYS.crypto, now);
   if (scope === 'world') return tidy(await cached('world', marketFeeds.filter(f => f.kind !== 'crypto')), DAYS.world, now);
   // mine: each followed coin's own feeds plus crypto headlines that name it

@@ -18,7 +18,7 @@ async function load() {
     const part = await Promise.allSettled(list.slice(i, i + 10).map(s => yahoo(s.symbol, s.name)));
     part.forEach((r, j) => {
       const s = list[i + j];
-      out.push({ rank: i + j + 1, symbol: s.symbol, name: s.name, ...(r.status === 'fulfilled' ? { value: r.value.value, change: r.value.change } : { value: null, change: null }) });
+      out.push({ rank: i + j + 1, symbol: s.symbol, name: s.name, group: s.group, ru: s.ru, site: s.site, ...(r.status === 'fulfilled' ? { value: r.value.value, change: r.value.change } : { value: null, change: null }) });
     });
   }
   return out;

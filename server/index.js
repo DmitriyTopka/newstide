@@ -14,6 +14,8 @@ import { getEdition, MODEL, DAILY_LIMIT_USD, RESERVE_USD, spend, costOf, resetSp
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const allCoins = JSON.parse(await readFile(path.join(root, 'config/coins.json'), 'utf8'));
 const marketFeeds = JSON.parse(await readFile(path.join(root, 'config/feeds.json'), 'utf8'));
+const stockCfg = JSON.parse(await readFile(path.join(root, 'config/stocks.json'), 'utf8')).stocks.map(s => ({ ...s, class: 'stock' }));
+const stockFeeds = JSON.parse(await readFile(path.join(root, 'config/stock_feeds.json'), 'utf8'));
 const DATA_MODE = process.env.DATA_MODE === 'live' ? 'live' : 'sample';
 // REPLAY=1: the public demo. Serves archived editions (real runs on live news) and never calls the AI.
 const REPLAY = process.env.REPLAY === '1';
@@ -70,6 +72,28 @@ app.get('/api/stocks', async (req, res) => {
   } catch (err) {
     console.error('[stocks]', err);
     res.json({ stocks: [] });
+  }
+});
+
+// The company list for the picker (search by name, ticker or Russian name; groups).
+app.get('/api/stock-list', (req, res) => {
+  res.json(stockCfg.map(({ symbol, name, ru, group, site, rank }) => ({ symbol, name, ru, group, site, rank })));
+});
+
+// A stock edition: the news of the last 24 hours about one company, printed on demand and shared for 30 minutes.
+app.get('/api/stock-edition', async (req, res) => {
+  if (!PUBLIC_LIVE && !process.env.STOCKS_LOCAL) return res.status(404).json({ error: 'Not available.' });
+  const symbol = String(req.query.symbol ?? '').trim().toUpperCase();
+  const stock = stockCfg.find(s => s.symbol === symbol);
+  if (!stock) return res.status(400).json({ error: 'Pick a company from the list.' });
+  try {
+    const data = await getEdition(stock, TIMEFRAME, { root, marketFeeds: stockFeeds });
+    res.set('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=600');
+    return res.json(data);
+  } catch (err) {
+    if (err.reason === 'few') return res.status(422).json({ error: 'Not enough news to judge right now. Try again later.' });
+    if (err.reason === 'limit') return res.status(503).json({ error: 'Today\'s free stock editions are used up. Come back tomorrow.', reason: 'limit' });
+    return res.status(502).json({ error: 'The paper could not be printed this time. Try again in a moment.', reason: 'print' });
   }
 });
 

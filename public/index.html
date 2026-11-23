@@ -37,10 +37,22 @@
   <p class="demo-banner" id="demoBanner" hidden>Demo edition: real NewsTide runs on live news from 13 and 16 October 2026, replayed without calling the AI. The live public edition with 40 coins is at newstide.xyz.</p>
 
   <form id="askForm" class="ask" novalidate>
+    <fieldset class="field asset-field" id="assetField">
+      <legend data-i18n="assetLegend">What do you read?</legend>
+      <div class="choices">
+        <label><input type="radio" name="asset" value="crypto" checked> <span data-i18n="assetCrypto">Crypto</span></label>
+        <label><input type="radio" name="asset" value="stock"> <span data-i18n="assetStocks">US stocks</span></label>
+      </div>
+    </fieldset>
     <div class="field coin-field">
-      <label for="coin" data-i18n="coin">Coin</label>
+      <label for="coin" id="coinLabel" data-i18n="coin">Coin</label>
       <input id="coin" name="coin" list="coinList" autocomplete="off" placeholder="BTC, ETH, SOL... type to search" data-i18n-placeholder="coinPlaceholder" required>
       <datalist id="coinList"></datalist>
+    </div>
+    <div class="stock-picker" id="stockPicker" hidden>
+      <div class="chips" id="stockPopular" aria-label="Popular"></div>
+      <div class="chips" id="stockGroups"></div>
+      <div class="chips" id="stockGrid"></div>
     </div>
     <fieldset class="field">
       <legend data-i18n="yourPlan">Your plan</legend>
@@ -50,7 +62,7 @@
       </div>
     </fieldset>
     <button type="submit" class="press" id="getData" data-i18n="getData">Get data</button>
-    <p class="hint" data-i18n="hint">Long: you expect the price to rise. Short: you expect it to fall. The paper reads only the news of the last 24 hours. The stamp says whether the news favours your plan.</p>
+    <p class="hint" id="hintText" data-i18n="hint">Long: you expect the price to rise. Short: you expect it to fall. The paper reads only the news of the last 24 hours. The stamp says whether the news favours your plan.</p>
     <p class="form-error" id="formError" role="alert"></p>
   </form>
   <p class="tg-strip"><span data-i18n="stripText">Want this every morning, without opening the site?</span> <a href="#telegram" data-i18n="stripLink">Get it in Telegram</a></p>
@@ -95,6 +107,7 @@
         <p class="note quiet" id="quiet" hidden></p>
         <p class="note" id="sfNote"></p>
         <p class="note muted" id="missing" hidden></p>
+        <p class="note muted" id="mktNote" hidden></p>
         <details class="notes" id="notes">
           <summary data-i18n="notes">Show the editor's notes</summary>
           <ol id="chain"></ol>
