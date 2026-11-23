@@ -2,7 +2,7 @@
 // Everything outside (Telegram, the printer, the clock, the disk) is passed in, so the whole thing
 // can be tested without a token.
 import { addCoins, removeCoins, addStocks, removeStocks, resolveStock, newUser, validTime, validTz, MAX_COINS, MAX_STOCKS } from './store.js';
-import { digestMessage, summaryMessage, quotesMessage, newsPage, NEWS_PAGE, stocksPage, stockDetailMessage, flipped, isDue, localClock, esc } from './format.js';
+import { digestMessage, summaryMessage, quotesMessage, newsPage, NEWS_PAGE, stocksPage, stockDetailMessage, isPreOpenDue, nyClock, flipped, isDue, localClock, esc } from './format.js';
 
 // Flip alerts: never at night (the morning summary carries the flip), and not more than once per coin per 6 hours.
 const QUIET_FROM = 23 * 60, QUIET_TO = 7 * 60, ALERT_COOLDOWN_MS = 6 * 3600e3;
@@ -49,6 +49,8 @@ const T = {
     srcText: '<b>Откуда новости</b>\nПо каждой монете: блог и форум проекта, релизы разработчиков на GitHub и поиск новостей про неё. По акциям: раскрытия SEC (форма 8-K) и заголовки Yahoo Finance по каждой компании, пресс-релизы компаний там, где они читаются, CNBC, WSJ, Bloomberg, MarketWatch, Seeking Alpha, Benzinga. Для всех сразу: Cointelegraph, CoinDesk, ФРС США, Investing, MarketWatch, а также мировые события (войны, санкции, удары, отношения между странами): BBC World, Al Jazeera и поиск по геополитике.\n\nПока не читаю: X, Discord, Telegram-каналы, Reddit. X планируется в версии Full, остальное пока не подключено. У части монет собственных новостей мало, тогда вердикт опирается на общий фон рынка.',
     privText: '<b>Приватность</b>\nБот пишет только тем, кто сам его запустил. Он не читает ваши чаты, каналы и аккаунты.\n\nХранится: номер вашего чата, выбранные монеты, время, часовой пояс, язык и последний вердикт по монетам. Ничего больше.\n\nУдалить всё можно в любой момент кнопкой ниже или командой /stop.',
     settingsHead: 'Настройки', time: 'Время', tz: 'Часовой пояс', lang: 'Язык',
+    preLine: on => `Сводка по акциям перед открытием биржи (около 15:00 по Киеву): ${on ? 'включена' : 'выключена'}`, preBtn: on => `Перед открытием: ${on ? 'вкл' : 'выкл'}`, preOnDone: 'Буду присылать сводку по акциям за 30 минут до открытия биржи США по будням.', preOffDone: 'Сводка перед открытием выключена.',
+    stockPre: 'До открытия биржи США около 30 минут: вот новостной фон перед стартом торгов.',
     alertsLine: on => `Срочные уведомления о перевороте: ${on ? 'включены' : 'выключены'}`, alertsBtn: on => `Уведомления: ${on ? 'вкл' : 'выкл'}`, alertHead: x => `Развернулся вердикт: ${x}`, alertOff: 'Выключить такие уведомления', alertsOffDone: 'Срочные уведомления выключены. Включить: Настройки.', alertsOnDone: 'Срочные уведомления включены.',
     timeHead: 'Во сколько присылать сводку?', timeHint: 'Другое время: /time 08:30', tzHead: 'Ваш часовой пояс?', tzHint: 'Другого города нет: /tz Europe/Berlin', langHead: 'Язык сводок',
     timeSet: t => `Время: ${t}.`, tzSet: z => `Пояс: ${z}.`, langSet: 'Язык: русский.',
@@ -96,6 +98,8 @@ const T = {
     srcText: '<b>Where the news come from</b>\nFor every coin: the project blog and forum, developer releases on GitHub and a news search about it. For stocks: SEC filings (form 8-K) and Yahoo Finance headlines for each company, company press releases where they can be read, CNBC, WSJ, Bloomberg, MarketWatch, Seeking Alpha, Benzinga. For all: Cointelegraph, CoinDesk, the US Fed, Investing, MarketWatch, plus world events (wars, sanctions, strikes, relations between states): BBC World, Al Jazeera and a geopolitics search.\n\nNot read yet: X, Discord, Telegram channels, Reddit. X is planned for the Full version, the rest is not connected yet. Some coins have little news of their own; then the verdict leans on the general market background.',
     privText: '<b>Privacy</b>\nThe bot writes only to people who started it. It does not read your chats, channels or accounts.\n\nStored: your chat number, picked coins, time, time zone, language and the last verdict per coin. Nothing else.\n\nYou can delete it all at any time with the button below or /stop.',
     settingsHead: 'Settings', time: 'Time', tz: 'Time zone', lang: 'Language',
+    preLine: on => `Stock summary before the US market opens (about 08:00 New York): ${on ? 'on' : 'off'}`, preBtn: on => `Before the open: ${on ? 'on' : 'off'}`, preOnDone: 'I will send the stock summary 30 minutes before the US market opens, on weekdays.', preOffDone: 'The pre-open summary is off.',
+    stockPre: 'The US market opens in about 30 minutes: here is the news background before the bell.',
     alertsLine: on => `Instant flip alerts: ${on ? 'on' : 'off'}`, alertsBtn: on => `Alerts: ${on ? 'on' : 'off'}`, alertHead: x => `The verdict flipped: ${x}`, alertOff: 'Turn these alerts off', alertsOffDone: 'Instant alerts are off. Turn them on in Settings.', alertsOnDone: 'Instant alerts are on.',
     timeHead: 'When should I send the summary?', timeHint: 'Another time: /time 08:30', tzHead: 'Your time zone?', tzHint: 'City not listed: /tz Europe/Berlin', langHead: 'Summary language',
     timeSet: t => `Time: ${t}.`, tzSet: z => `Zone: ${z}.`, langSet: 'Language: English.',
@@ -113,11 +117,21 @@ const T = {
   }
 };
 
+// Runs fn over the list with at most n at once and keeps the order of the results.
+async function mapLimit(list, n, fn) {
+  const out = new Array(list.length);
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(n, list.length) }, async () => {
+    while (next < list.length) { const k = next++; out[k] = await fn(list[k]); }
+  }));
+  return out;
+}
+
 const btn = (text, data) => ({ text, callback_data: data });
 const kb = rows => ({ inline_keyboard: rows });
 const chunk = (list, n) => Array.from({ length: Math.ceil(list.length / n) }, (_, i) => list.slice(i * n, i * n + n));
 
-export function createBot({ tg, users, save, coins, stocks = [], getStockEdition, getEdition, getNews, getQuotes, getStocks, translateTexts, photos = {}, now = () => new Date(), log = console }) {
+export function createBot({ tg, users, save, coins, stocks = [], getStockEdition, isMarketOpen = () => false, getEdition, getNews, getQuotes, getStocks, translateTexts, photos = {}, now = () => new Date(), log = console }) {
   const bySymbol = new Map(coins.map(c => [c.symbol, c]));
   const stockBy = new Map(stocks.map(s => [s.symbol, s]));
   const known = new Set(bySymbol.keys());
@@ -178,8 +192,8 @@ export function createBot({ tg, users, save, coins, stocks = [], getStockEdition
   };
   const settingsScreen = u => {
     const t = tx(u);
-    const text = `<b>${t.settingsHead}</b>\n${esc(t.schedule(u.time, u.tz))}\n${esc(t.lang)}: ${u.lang === 'en' ? 'English' : 'Русский'}\n${esc(t.alertsLine(u.alerts !== false))}`;
-    return { text, markup: kb([[btn(t.time, 'tm'), btn(t.tz, 'tzp'), btn(t.lang, 'lg')], [btn(t.alertsBtn(u.alerts !== false), 'al')], [btn(t.bBack, 'menu')]]) };
+    const text = `<b>${t.settingsHead}</b>\n${esc(t.schedule(u.time, u.tz))}\n${esc(t.lang)}: ${u.lang === 'en' ? 'English' : 'Русский'}\n${esc(t.alertsLine(u.alerts !== false))}${u.stocks?.length ? `\n${esc(t.preLine(Boolean(u.preopen)))}` : ''}`;
+    return { text, markup: kb([[btn(t.time, 'tm'), btn(t.tz, 'tzp'), btn(t.lang, 'lg')], [btn(t.alertsBtn(u.alerts !== false), 'al')], ...(u.stocks?.length ? [[btn(t.preBtn(Boolean(u.preopen)), 'po')]] : []), [btn(t.bBack, 'menu')]]) };
   };
   const timeScreen = u => {
     const t = tx(u);
@@ -218,17 +232,19 @@ export function createBot({ tg, users, save, coins, stocks = [], getStockEdition
     user.stocks ??= [];
     const { date } = localClock(user.tz, now());
     const [y, mo, d] = date.split('-');
-    const results = [];
-    for (const sym of user.coins) {
+    const results = await mapLimit(user.coins, 4, async sym => {
       try {
         const ed = await getEdition(bySymbol.get(sym), '1d');
-        results.push({ sym, ed, prev: user.last[sym]?.direction });
-        remember(chatId, sym, ed);
-        user.last[sym] = { direction: ed.direction, verdict: ed.verdict, at: new Date().toISOString() };
+        return { sym, ed, prev: user.last[sym]?.direction };
       } catch (err) {
         log.error('[bot digest]', sym, err.message);
-        results.push({ sym, ed: null, err: t[err.reason] ?? t.print });
+        return { sym, ed: null, err: t[err.reason] ?? t.print };
       }
+    });
+    for (const r of results) {
+      if (!r.ed) continue;
+      remember(chatId, r.sym, r.ed);
+      user.last[r.sym] = { direction: r.ed.direction, verdict: r.ed.verdict, at: new Date().toISOString() };
     }
     if (results.length) {
       await sendMood(chatId, user, results);
@@ -244,25 +260,26 @@ export function createBot({ tg, users, save, coins, stocks = [], getStockEdition
   }
 
   // The stock summary: its own message, because stocks are another market with its own trading hours.
-  async function sendStockDigest(chatId, user, dateText) {
+  async function sendStockDigest(chatId, user, dateText, { pre = false } = {}) {
     if (!user.stocks?.length || !getStockEdition) return;
     const t = tx(user);
-    const results = [];
-    let closed = false;
-    for (const sym of user.stocks) {
-      try {
-        const ed = await getStockEdition(stockBy.get(sym), '1d');
-        results.push({ sym, ed });
-        remember(chatId, `s:${sym}`, ed);
-        if (ed.market_open === false) closed = true;
-      } catch (err) {
+    const results = await mapLimit(user.stocks, 4, async sym => {
+      try { return { sym, ed: await getStockEdition(stockBy.get(sym), '1d') }; }
+      catch (err) {
         log.error('[bot stock digest]', sym, err.message);
-        results.push({ sym, ed: null, err: t[err.reason] ?? t.print });
+        return { sym, ed: null, err: t[err.reason] ?? t.print };
       }
+    });
+    let closed = false;
+    for (const r of results) {
+      if (!r.ed) continue;
+      remember(chatId, `s:${r.sym}`, r.ed);
+      user.last[`s:${r.sym}`] = { direction: r.ed.direction, verdict: r.ed.verdict, at: new Date().toISOString() };
+      if (r.ed.market_open === false) closed = true;
     }
     const rows = chunk(results.filter(r => r.ed).map(r => btn(`${r.sym} ›`, `ms:${r.sym}`)), 4);
     rows.push([btn(t.menuHead, 'menu')]);
-    await tg.send(chatId, `${summaryMessage(results, { lang: user.lang, head: t.stockHead(dateText), asset: 'stock', note: closed ? t.stockClosed : undefined })}\n\n${esc(t.stockMoreHint)}`, kb(rows));
+    await tg.send(chatId, `${summaryMessage(results, { lang: user.lang, head: t.stockHead(dateText), asset: 'stock', note: pre ? t.stockPre : closed ? t.stockClosed : undefined })}\n\n${esc(t.stockMoreHint)}`, kb(rows));
     const failed = results.find(r => !r.ed);
     if (failed) await tg.send(chatId, esc(`${failed.sym}: ${failed.err}`));
   }
@@ -469,6 +486,11 @@ export function createBot({ tg, users, save, coins, stocks = [], getStockEdition
         await save(users); await ack(u.alerts ? t.alertsOnDone : t.alertsOffDone);
         return show(chatId, mid, settingsScreen(u));
       }
+      case 'po': {
+        u.preopen = !u.preopen;
+        await save(users); await ack(u.preopen ? t.preOnDone : t.preOffDone);
+        return show(chatId, mid, settingsScreen(u));
+      }
       case 'aloff':
         u.alerts = false; await save(users); await ack(t.alertsOffDone); return;
       case 'full': await ack(); return joinWaitlist(chatId, u);
@@ -576,7 +598,7 @@ export function createBot({ tg, users, save, coins, stocks = [], getStockEdition
   // Flip watch: prints an edition for every followed coin (the printer caches for 30 minutes and holds the
   // daily spending limit) and writes at once to anyone whose last seen verdict flipped up<->down.
   // Cost: about 0.0012 $ per coin print, so 40 coins every 4 hours is about 0.29 $ a day, in practice far less.
-  async function watch() {
+  async function watchCoins() {
     const subs = Object.entries(users).filter(([, u]) => u.alerts !== false && u.coins.length);
     const syms = [...new Set(subs.flatMap(([, u]) => u.coins))];
     let sent = 0;
@@ -605,8 +627,58 @@ export function createBot({ tg, users, save, coins, stocks = [], getStockEdition
     return sent;
   }
 
+  // The same watch for stocks, but only while the US market is open: that is when a news flip can still matter,
+  // and it keeps the stock budget for the readers. A stock is printed only if somebody follows it.
+  async function watchStocks() {
+    if (!getStockEdition || !isMarketOpen()) return 0;
+    const subs = Object.entries(users).filter(([, u]) => u.alerts !== false && u.stocks?.length);
+    const syms = [...new Set(subs.flatMap(([, u]) => u.stocks))];
+    let sent = 0;
+    for (const sym of syms) {
+      const stock = stockBy.get(sym);
+      if (!stock) continue;
+      let ed;
+      try { ed = await getStockEdition(stock, '1d'); }
+      catch (err) { if (err.reason === 'limit') return sent; continue; }
+      for (const [chatId, u] of subs) {
+        const key = `s:${sym}`;
+        const prev = u.last[key]?.direction;
+        if (!u.stocks.includes(sym) || !flipped(prev, ed.direction) || quiet(u)) continue;
+        if (now().getTime() - Date.parse(u.alertAt?.[key] ?? 0) < ALERT_COOLDOWN_MS) continue;
+        const t = tx(u);
+        try {
+          await tg.send(chatId, `<b>${esc(t.alertHead(sym))}</b>\n\n${stockDetailMessage(stock, ed, { lang: u.lang })}`, kb([[btn(t.menuHead, 'menu'), btn(t.alertOff, 'aloff')]]));
+          u.last[key] = { direction: ed.direction, verdict: ed.verdict, at: now().toISOString() };
+          (u.alertAt ??= {})[key] = now().toISOString();
+          remember(chatId, key, ed);
+          await save(users);
+          sent++;
+        } catch (err) {
+          log.error('[bot watch stock]', chatId, err.message);
+          if (err.code === 403) { delete users[chatId]; await save(users); }
+        }
+      }
+    }
+    return sent;
+  }
+
+  const watch = async () => (await watchCoins()) + (await watchStocks());
+
   // Called every half minute: sends the daily summary to everyone who is due.
   async function tick() {
+    for (const [chatId, u] of Object.entries(users)) {
+      if (!isPreOpenDue(u, now())) continue;
+      u.preSent = nyClock(now()).date; // mark first, so a slow print cannot send twice
+      try {
+        const { date } = localClock(u.tz, now());
+        const [y, mo, d] = date.split('-');
+        await sendStockDigest(chatId, u, `${d}.${mo}.${y}`, { pre: true });
+        await save(users);
+      } catch (err) {
+        log.error('[bot pre-open]', chatId, err.message);
+        if (err.code === 403) { delete users[chatId]; await save(users); }
+      }
+    }
     for (const [chatId, u] of Object.entries(users)) {
       if (!isDue(u, now())) continue;
       u.lastSent = localClock(u.tz, now()).date; // mark first, so a slow print cannot send twice

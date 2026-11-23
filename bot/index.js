@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { telegram } from './telegram.js';
 import { loadUsers, saveUsers } from './store.js';
 import { createBot } from './bot.js';
-import { getEdition, translateBatch } from '../server/edition.js';
+import { getEdition, translateBatch, usMarketOpen } from '../server/edition.js';
 import { getNews } from '../server/newsfeed.js';
 import { marketQuotes } from '../server/market.js';
 import { stockQuotes } from '../server/stocks.js';
@@ -37,6 +37,7 @@ const bot = createBot({
   tg, users, coins, stocks,
   save: u => saveUsers(file, u),
   getEdition: (coin, timeframe) => getEdition(coin, timeframe, { root, marketFeeds }),
+  isMarketOpen: () => usMarketOpen(),
   getStockEdition: (stock, timeframe) => getEdition(stock, timeframe, { root, marketFeeds: stockFeeds }),
   getNews: (scope, opts) => getNews(scope, { ...opts, marketFeeds, stockFeeds }),
   getQuotes: () => marketQuotes(),

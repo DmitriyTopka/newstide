@@ -136,6 +136,11 @@ const stocks = T.map(([symbol, name, group, ru, site, ir], i) => {
     { name: `${name} SEC filings (8-K)`, kind: 'project', url: `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${enc(symbol)}&type=8-K&dateb=&owner=include&count=10&output=atom` }
   ];
   if (ir) feeds.push({ name: `${name} press releases`, kind: 'project', url: ir });
+  // Companies that live on the crypto market also read the crypto media: a headline that names them counts as their news.
+  if (group === 'crypto') {
+    feeds.push({ name: 'Cointelegraph', kind: 'market', url: 'https://cointelegraph.com/rss' });
+    feeds.push({ name: 'CoinDesk', kind: 'market', url: 'https://www.coindesk.com/arc/outboundfeeds/rss/' });
+  }
   return { rank: i + 1, symbol, name, ru, group, site, keywords: keywordsOf(symbol, name), feeds };
 });
 

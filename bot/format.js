@@ -124,10 +124,29 @@ export function stockDetailMessage(stock, ed, { lang = 'ru' } = {}) {
   }
   const extra = [];
   if (ed.price) extra.push(`${ru ? 'Цена' : 'Price'}: $${esc(ed.price.value)}${ed.price.change == null ? '' : `, ${ed.price.change >= 0 ? '▲ +' : '▼ '}${ed.price.change.toFixed(1)}% ${ru ? 'за прошлую сессию' : 'in the last session'}`}`);
+  if (ed.earnings) {
+    const e = ed.earnings;
+    const day = e.offset === 0 ? (ru ? 'сегодня' : 'today') : e.offset === 1 ? (ru ? 'завтра' : 'tomorrow') : (ru ? `через ${e.offset} дн. (${e.date})` : `in ${e.offset} days (${e.date})`);
+    const when = e.when === 'pre' ? (ru ? ' до открытия' : ' before the open') : e.when === 'post' ? (ru ? ' после закрытия' : ' after the close') : '';
+    extra.push(`${ru ? 'Отчётность' : 'Earnings'}: ${day}${when}${e.eps ? (ru ? `, прогноз EPS ${esc(e.eps)}` : `, EPS forecast ${esc(e.eps)}`) : ''}`);
+  }
   if (ed.market_open === false) extra.push(ru ? 'Рынок США сейчас закрыт: оценка по новостям с прошлой сессии.' : 'The US market is closed now: the read covers the news since the last session.');
   if (stock.site) extra.push(`${ru ? 'Официальный сайт' : 'Official site'}: <a href="${esc(stock.site)}">${esc(stock.site.replace(/^https?:\/\//, ''))}</a>`);
   extra.push(`<i>${ru ? 'Не инвестиционный совет.' : 'Not investment advice.'}</i>`);
   return `${body}\n\n${extra.join('\n')}`;
+}
+
+// The New York wall clock: date, minutes since midnight and whether it is a weekday (holidays are not known).
+export function nyClock(date = new Date()) {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(date).map(x => [x.type, x.value]));
+  return { date: `${p.year}-${p.month}-${p.day}`, minutes: Number(p.hour) * 60 + Number(p.minute), weekday: !['Sat', 'Sun'].includes(p.weekday) };
+}
+
+// Is it time for the pre-open stock summary? 30 minutes before the bell on a weekday, with a 60 minute catch-up window.
+export function isPreOpenDue(user, date = new Date()) {
+  if (!user.preopen || !user.stocks?.length) return false;
+  const ny = nyClock(date);
+  return ny.weekday && user.preSent !== ny.date && ny.minutes >= 9 * 60 && ny.minutes <= 10 * 60 + 30;
 }
 
 export const STOCKS_PAGE = 25;

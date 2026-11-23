@@ -216,6 +216,7 @@ function showResult(r, plan, reprint = false) {
   // Stocks: the price move, and a note when the US market is closed (weekends, nights).
   const mkt = [];
   if (r.asset === 'stock' && r.price) mkt.push(t.priceLine(r.symbol ?? '', r.price.value, r.price.change));
+  if (r.asset === 'stock' && r.earnings) mkt.push(t.earnLine(r.earnings));
   if (r.asset === 'stock' && r.market_open === false) mkt.push(t.mktClosed);
   $('mktNote').hidden = !mkt.length;
   $('mktNote').textContent = mkt.join(' ');

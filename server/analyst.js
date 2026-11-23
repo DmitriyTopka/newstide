@@ -55,6 +55,8 @@ A reader gives you a ticker, a plan (long or short) and the horizon. You get num
 Judge only from these dispatches and from the context line (the last price move and whether the market is open). Do not use outside knowledge of prices or events.
 Build a short chain of cause and effect from the wider picture (rates, indices, wars, regulation) down to this company, and cite the dispatch numbers each step relies on. Every step must cite at least one dispatch.
 Catalysts that matter: results and guidance, analyst rating changes, mergers, lawsuits and regulators, product and contract news, leadership changes, buybacks and dividends. Repeated copies of one story count once.
+For companies that live on the crypto market (Coinbase, Strategy) the bitcoin and crypto headlines among the dispatches are part of their own news.
+If the context says the company reports earnings soon, mention it in the chain and in the risk note: results are the biggest scheduled catalyst.
 If the context shows the shares already moved a lot today, say in the chain that part of the news may be priced in.
 
 direction: where the news background is likely to push the shares over the next trading day (up, down, sideways).

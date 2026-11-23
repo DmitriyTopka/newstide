@@ -98,15 +98,17 @@ function harness(over = {}) {
       { rank: 4, symbol: 'AMAT', name: 'Applied Materials', ru: 'Эпплайд Матириалс', group: 'tech', site: 'https://www.appliedmaterials.com' },
       { rank: 5, symbol: 'BRK-B', name: 'Berkshire Hathaway', ru: 'Беркшир Хатауэй', group: 'finance', site: 'https://www.berkshirehathaway.com' }
     ],
+    isMarketOpen: () => over.marketOpen ?? true,
     getStockEdition: async stock => {
+      calls.stockEditions = (calls.stockEditions ?? 0) + 1;
       if (stock.symbol === 'MSFT') return { quiet: true, market_open: false, price: { value: '480.0', change: -0.1 }, direction: 'sideways', verdict: 'No fresh news for MSFT', verdict_ru: 'Свежих новостей по MSFT нет', notes: { chain: [], dispatches: [] } };
-      return { ...edition(over.direction ?? 'up'), asset: 'stock', market_open: true, price: { value: '342.6', change: 1.2 } };
+      return { ...edition(over.direction ?? 'up'), asset: 'stock', market_open: true, price: { value: '342.6', change: 1.2 }, earnings: { date: '2026-11-24', offset: 1, when: 'pre', eps: '$1.50' } };
     },
     getStocks: async () => Array.from({ length: 50 }, (_, i) => ({ rank: i + 1, symbol: `S${i + 1}`, name: `Company ${i + 1}`, value: '100.0', change: i === 3 ? null : (i % 2 ? -1.5 : 2.5) })),
     getQuotes: async () => [{ name: 'Bitcoin', value: '$60,000', change: 1.2 }, { name: 'S&P 500', value: '6,900', change: -3.7 }, { name: 'VIX', value: '35.9', change: 26.2 }, { name: 'Gold', value: 'x', change: null }],
     translateTexts: async texts => new Map(texts.map(t => [t, `RU ${t}`])),
     users, coins, save: async () => {},
-    getEdition: async () => { calls.editions++; if (over.fail) throw Object.assign(new Error('x'), { reason: over.fail }); return edition(over.direction ?? 'up'); },
+    getEdition: async c => { calls.editions++; if (over.delays?.[c.symbol]) await new Promise(r => setTimeout(r, over.delays[c.symbol])); if (over.fail) throw Object.assign(new Error('x'), { reason: over.fail }); return edition(over.direction ?? 'up'); },
     now: () => clock, log: { error() {} }
   });
   return { bot, sent, acks, photosSent, users, calls, setClock: d => { clock = d; } };
@@ -539,4 +541,98 @@ test('stocks: news scopes for my stocks and the stock market', async () => {
   assert.match(h.sent.at(-1).text, /Новости по вашим акциям/);
   await h.bot.handleCallback(press('nw:market:0'));
   assert.match(h.sent.at(-1).text, /Новости фондового рынка/);
+});
+
+test('stocks: a flip is pushed at once while the US market is open, then held back by quiet hours, cooldown and a closed market', async () => {
+  const h = harness({ direction: 'up' });
+  await h.bot.handle(msg('/start'));
+  await h.bot.handle(msg('/add AAPL'));
+  const u = h.users['7'];
+  h.sent.length = 0;
+  u.last['s:AAPL'] = { direction: 'down' };
+  h.setClock(new Date('2026-11-23T21:30:00Z')); // 23:30 in Kyiv
+  assert.equal(await h.bot.watch(), 0, 'quiet hours');
+  h.setClock(new Date('2026-11-23T14:00:00Z'));
+  assert.equal(await h.bot.watch(), 1);
+  assert.match(h.sent.at(-1).text, /Развернулся вердикт: AAPL/);
+  assert.match(h.sent.at(-1).text, /apple.com/);
+  assert.equal(u.last['s:AAPL'].direction, 'up');
+  u.last['s:AAPL'] = { direction: 'down' };
+  assert.equal(await h.bot.watch(), 0, 'cooldown');
+  const closed = harness({ direction: 'up', marketOpen: false });
+  await closed.bot.handle(msg('/start'));
+  await closed.bot.handle(msg('/add AAPL'));
+  closed.users['7'].last['s:AAPL'] = { direction: 'down' };
+  const before = closed.calls.stockEditions ?? 0;
+  assert.equal(await closed.bot.watch(), 0);
+  assert.equal(closed.calls.stockEditions ?? 0, before, 'a closed market costs nothing: no editions are printed');
+});
+
+test('digest prints in parallel but keeps the order of the coins', async () => {
+  const h = harness({ delays: { BTC: 60, XRP: 5 } });
+  await h.bot.handle(msg('/start'));
+  await h.bot.handle(msg('/add BTC XRP'));
+  h.sent.length = 0;
+  await h.bot.handleCallback(press('now'));
+  const sum = h.sent.find(s => /крипто-сводка/.test(s.text)).text;
+  assert.ok(sum.indexOf('BTC') < sum.indexOf('XRP'), 'BTC stays first even though XRP printed sooner');
+});
+
+import { isPreOpenDue, nyClock } from '../bot/format.js';
+import { nextEarnings } from '../server/earnings.js';
+
+test('stocks: the card carries the earnings line', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handle(msg('/add AAPL'));
+  await h.bot.handleCallback(press('snow'));
+  await h.bot.handleCallback(press('ms:AAPL'));
+  assert.match(h.sent.at(-1).text, /Отчётность: завтра до открытия, прогноз EPS \$1.50/);
+});
+
+test('earnings calendar: finds the next report within three days, says before or after the market', async () => {
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async url => ({ ok: true, json: async () => ({ data: { rows: String(url).endsWith('2026-12-02') ? [{ symbol: 'ADI', time: 'time-pre-market', epsForecast: '$3.89' }, { symbol: 'BRK/B', time: 'time-after-hours', epsForecast: 'N/A' }] : [] } }) });
+  try {
+    const now = Date.parse('2026-12-01T15:00:00Z');
+    const e = await nextEarnings('ADI', { now });
+    assert.deepEqual(e, { date: '2026-12-02', offset: 1, when: 'pre', eps: '$3.89' });
+    const b = await nextEarnings('BRK-B', { now });
+    assert.equal(b.when, 'post');
+    assert.equal(b.eps, null);
+    assert.equal(await nextEarnings('ZZZZ', { now }), null);
+  } finally { globalThis.fetch = realFetch; }
+});
+
+test('pre-open: due 30 minutes before the bell on weekdays, once a day, only with stocks and the switch on', () => {
+  const u = { preopen: true, stocks: ['AAPL'] };
+  assert.equal(isPreOpenDue(u, new Date('2026-11-23T14:00:00Z')), true, 'Monday 09:00 New York');
+  assert.equal(isPreOpenDue(u, new Date('2026-11-23T13:00:00Z')), false, 'too early');
+  assert.equal(isPreOpenDue(u, new Date('2026-11-23T16:00:00Z')), false, 'after the catch-up window');
+  assert.equal(isPreOpenDue(u, new Date('2026-11-21T14:00:00Z')), false, 'Saturday');
+  assert.equal(isPreOpenDue({ ...u, preSent: '2026-11-23' }, new Date('2026-11-23T14:00:00Z')), false, 'already sent');
+  assert.equal(isPreOpenDue({ ...u, stocks: [] }, new Date('2026-11-23T14:00:00Z')), false);
+  assert.equal(isPreOpenDue({ ...u, preopen: false }, new Date('2026-11-23T14:00:00Z')), false);
+  assert.equal(nyClock(new Date('2026-11-23T14:00:00Z')).date, '2026-11-23');
+});
+
+test('pre-open: the switch is in settings only with stocks, and tick sends the summary once', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start'));
+  await h.bot.handleCallback(press('set'));
+  assert.ok(!h.sent.at(-1).markup.inline_keyboard.flat().some(b => b.callback_data === 'po'), 'no stocks, no switch');
+  await h.bot.handle(msg('/add AAPL'));
+  await h.bot.handleCallback(press('set'));
+  assert.ok(h.sent.at(-1).markup.inline_keyboard.flat().some(b => b.callback_data === 'po'));
+  await h.bot.handleCallback(press('po'));
+  assert.equal(h.users['7'].preopen, true);
+  h.users['7'].lastSent = '2026-11-23'; // the morning summary is done
+  h.setClock(new Date('2026-11-23T14:05:00Z'));
+  h.sent.length = 0;
+  await h.bot.tick();
+  const msgs = h.sent.filter(s => /акции США за/.test(s.text));
+  assert.equal(msgs.length, 1);
+  assert.match(msgs[0].text, /около 30 минут/);
+  await h.bot.tick();
+  assert.equal(h.sent.filter(s => /акции США за/.test(s.text)).length, 1, 'only once a day');
 });

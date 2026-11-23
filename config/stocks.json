@@ -2843,6 +2843,16 @@
           "name": "Coinbase SEC filings (8-K)",
           "kind": "project",
           "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=COIN&type=8-K&dateb=&owner=include&count=10&output=atom"
+        },
+        {
+          "name": "Cointelegraph",
+          "kind": "market",
+          "url": "https://cointelegraph.com/rss"
+        },
+        {
+          "name": "CoinDesk",
+          "kind": "market",
+          "url": "https://www.coindesk.com/arc/outboundfeeds/rss/"
         }
       ]
     },
@@ -2873,6 +2883,16 @@
           "name": "Strategy (MicroStrategy) SEC filings (8-K)",
           "kind": "project",
           "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=MSTR&type=8-K&dateb=&owner=include&count=10&output=atom"
+        },
+        {
+          "name": "Cointelegraph",
+          "kind": "market",
+          "url": "https://cointelegraph.com/rss"
+        },
+        {
+          "name": "CoinDesk",
+          "kind": "market",
+          "url": "https://www.coindesk.com/arc/outboundfeeds/rss/"
         }
       ]
     }

@@ -8,6 +8,7 @@ import { collect, horizonOf } from './collect.js';
 import { check } from './check.js';
 import { recordVerdict } from './journal.js';
 import { yahoo } from './market.js';
+import { nextEarnings } from './earnings.js';
 
 export const MODEL = process.env.MODEL || 'claude-haiku-5-5';
 export const EDITION_TTL_MS = 30 * 60 * 1000;
@@ -82,17 +83,19 @@ export async function getEdition(coin, timeframe, { root, marketFeeds, deps = {}
     if (gathered.items.length < 3) throw Object.assign(new Error('few'), { status: 422 });
     // Stocks: price context for the model, and an honest "no fresh news" answer without calling the model at all
     // when the company itself has fewer than two items in the last 24 hours.
-    let quote = null, context;
+    let quote = null, earnings = null, context;
     if (stock) {
       // One quote for this company only (about a second); the price is context for the model, never a reason to fail.
       try { quote = await yahoo(coin.symbol, coin.name); } catch { /* no price */ }
       const open = usMarketOpen(new Date(now()));
-      context = `the US market is ${open ? 'open' : 'closed'} now${quote?.change != null ? `; the shares moved ${quote.change >= 0 ? '+' : ''}${quote.change.toFixed(1)}% in the last session` : ''}`;
+      try { earnings = await nextEarnings(coin.symbol, { now: now() }); } catch { /* no calendar */ }
+      const e = earnings;
+      context = `the US market is ${open ? 'open' : 'closed'} now${quote?.change != null ? `; the shares moved ${quote.change >= 0 ? '+' : ''}${quote.change.toFixed(1)}% in the last session` : ''}${e ? `; the company reports earnings ${e.offset === 0 ? 'today' : e.offset === 1 ? 'tomorrow' : `in ${e.offset} days`}${e.when === 'pre' ? ' before the open' : e.when === 'post' ? ' after the close' : ''}` : ''}`;
       const own = gathered.items.filter(it => it.kind === 'project' || it.kind === 'coin').length;
       if (own < 2) {
         const data = {
           edition: { at: new Date(now()).toISOString(), model: null, items: gathered.items.length, shared_minutes: 30 },
-          asset: 'stock', quiet: true, market_open: open, price: quote ? { value: quote.value, change: quote.change } : null,
+          asset: 'stock', quiet: true, market_open: open, earnings, price: quote ? { value: quote.value, change: quote.change } : null,
           direction: 'sideways', verdict: `No fresh news for ${coin.symbol}`, verdict_ru: `Свежих новостей по ${coin.symbol} нет`,
           spot_futures_note: 'Quiet companies can still gap at the open on market-wide news.', spot_futures_note_ru: 'Тихие компании всё равно могут дать гэп на открытии из-за общего фона рынка.',
           horizon, notes: { chain: [], dispatches: [] }, x_connected: false, missing_sources: gathered.missing, cost: { usd: 0, model: null, shared: true }
@@ -126,7 +129,7 @@ export async function getEdition(coin, timeframe, { root, marketFeeds, deps = {}
       spot_futures_note: checked.answer.spot_futures_note,
       spot_futures_note_ru: checked.answer.spot_futures_note_ru,
       horizon,
-      ...(stock ? { asset: 'stock', market_open: usMarketOpen(new Date(now())), price: quote ? { value: quote.value, change: quote.change } : null } : {}),
+      ...(stock ? { asset: 'stock', earnings, market_open: usMarketOpen(new Date(now())), price: quote ? { value: quote.value, change: quote.change } : null } : {}),
       notes: { chain: checked.answer.chain, dispatches: cited.map(n => ({ n, title: byNumber.get(n).title, title_ru: titlesRu.get(byNumber.get(n).title), source: byNumber.get(n).source, link: byNumber.get(n).link })) },
       x_connected: false,
       missing_sources: gathered.missing,
