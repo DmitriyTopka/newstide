@@ -392,7 +392,9 @@ export function createBot({ tg, users, save, coins, getEdition, getNews, getQuot
     const cmd = cmdRaw.toLowerCase().replace(/@.*$/, '');
     if (cmd === '/start') {
       const u = await ensureUser(chatId, msg.from);
-      if (args[0] === 'site') u.source ??= 'site'; // came from the website button
+      // A link like t.me/newstide_bot?start=chat remembers where the person came from (counted by waitlist.js).
+      // Only short plain tags are kept, and only the first one: the link text is typed by anyone.
+      if (/^[a-z0-9_-]{1,24}$/i.test(args[0] ?? '') && args[0] !== 'full') u.source ??= args[0].toLowerCase();
       const joined = args[0] === 'full' && !u.wantsFull;
       if (joined) u.wantsFull = new Date().toISOString();
       await save(users);

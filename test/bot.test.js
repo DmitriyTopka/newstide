@@ -422,3 +422,20 @@ test('security: news translations have their own small budget', async () => {
   assert.equal((await translateBatch(['two'], { deps: big })).size, 0, 'sub-budget spent: English stays');
   assert.equal(calls, 1);
 });
+
+test('source tags: the first plain tag after /start is kept, odd ones are not', async () => {
+  const h = harness();
+  await h.bot.handle(msg('/start chat', 21));
+  assert.equal(h.users['21'].source, 'chat');
+  await h.bot.handle(msg('/start friends', 21));
+  assert.equal(h.users['21'].source, 'chat', 'the first tag stays');
+  await h.bot.handle(msg('/start Site', 22));
+  assert.equal(h.users['22'].source, 'site', 'tags are lower-cased');
+  await h.bot.handle(msg('/start <script>alert(1)</script>', 23));
+  assert.equal(h.users['23'].source, undefined);
+  await h.bot.handle(msg('/start ' + 'x'.repeat(40), 24));
+  assert.equal(h.users['24'].source, undefined);
+  await h.bot.handle(msg('/start full', 25));
+  assert.equal(h.users['25'].source, undefined, 'full is the waiting list, not a source');
+  assert.ok(h.users['25'].wantsFull);
+});
