@@ -41,7 +41,7 @@ function applyLanguage() {
   if (mode.public_live) $('demoBanner').textContent = T().bannerLive;
   else if (mode.replay) {
     // The live site address in the demo banner is a real link.
-    const live = 'newstide-live.vercel.app';
+    const live = 'newstide.xyz';
     const [before, after] = T().bannerReplay.split(live);
     const a = document.createElement('a');
     a.href = `https://${live}`; a.textContent = live; a.target = '_blank'; a.rel = 'noopener';

@@ -6,7 +6,7 @@ Before a trade you pick a coin and Long or Short. NewsTide reads the news behind
 
 ![The NewsTide front page: Bull Edition, "Growth expected for SOL", the stamp favours a Long plan, editor's notes open](docs/screenshot-verdict.jpg)
 
-**Live public edition:** https://newstide-live.vercel.app (12 coins, live news, English and Russian, each coin printed at most every 30 minutes and shared by every reader)  
+**Live public edition:** https://newstide.xyz (40 coins, live news, English and Russian, each coin printed at most every 30 minutes and shared by every reader)  
 **Demo for judges:** https://newstide-paper.vercel.app (replays archived real editions from 13 and 16 October 2026, no AI calls, always the same answers)  
 **Demo video:** https://youtu.be/9dTlaGs665U
 
@@ -50,7 +50,7 @@ If a feed is down, it is skipped and the page says so. If nothing usable comes b
 | Geopolitics | [BBC World](https://feeds.bbci.co.uk/news/world/rss.xml), [Al Jazeera](https://www.aljazeera.com/xml/rss/all.xml), a Google News search on wars, sanctions and strikes (Iran, Israel, Russia, China, Ukraine, Taiwan) |
 | Prices | [CoinGecko](https://docs.coingecko.com/) for Bitcoin and Ether, Yahoo Finance chart data (unofficial) for the S&P 500 and the dollar index |
 
-The live site covers 12 coins (BTC, ETH, BNB, SOL, XRP, DOGE, ADA, TRX, TON, AVAX, LINK, AAVE). Each coin's official blog or forum is read where it has a feed (see [`config/coins.json`](config/coins.json)); XRP has none, and DOGE, TON, AVAX and LINK post rarely, so for them crypto headlines that name the coin count as coin news. Official Telegram channels are not open to read, so blogs and forums are used instead. X is not connected yet: reading X costs money per post, so it is planned for later.
+The live site covers 40 coins (see [`config/coins.json`](config/coins.json)). For each coin the official blog, forum or developer releases are read where they exist, plus a Google News search about the coin over the last 24 hours; crypto headlines that name the coin count as coin news too. Official Telegram channels are not open to read, so blogs and forums are used instead. X is not connected yet: reading X costs money per post, so it is planned for later.
 
 ## Public demo
 
@@ -58,7 +58,7 @@ The demo at https://newstide-paper.vercel.app runs with `REPLAY=1`: it serves si
 
 ## Live public edition
 
-https://newstide-live.vercel.app runs with `PUBLIC_LIVE=1` and Claude Haiku 5.5 (the archived demo editions were printed with Claude Sonnet 5.5). Each coin and horizon is cached for 30 minutes and shared by readers (CDN cache plus server memory), one print run per coin happens at a time within a server instance, and a daily limit per instance stops new runs. On top of that, the key lives in a separate Anthropic workspace with a hard monthly spend limit. Coins: BTC, ETH, BNB, SOL, XRP, DOGE, ADA, TRX, TON, AVAX, LINK, AAVE. Official project feeds are used where they exist; crypto headlines that name the coin count as coin news.
+https://newstide.xyz (also newstide-live.vercel.app) runs with `PUBLIC_LIVE=1` and Claude Haiku 5.5 (the archived demo editions were printed with Claude Sonnet 5.5). Each coin and horizon is cached for 30 minutes and shared by readers (CDN cache plus server memory), one print run per coin happens at a time within a server instance, and a daily limit per instance stops new runs. On top of that, the key lives in a separate Anthropic workspace with a hard monthly spend limit. Coins: 40 (see `config/coins.json`). Official project feeds are used where they exist; crypto headlines that name the coin count as coin news.
 
 ## Run it
 
@@ -89,7 +89,7 @@ npm run check:live   # read every feed now and test what happens when feeds fail
 - The model is not deterministic. The same request on the same news can come back with a different verdict. That is one more reason the editor's notes are there: you can see what the verdict rests on.
 - On a quiet weekend many verdicts are "Neutral for now". When the wider picture is mixed, the coin's own official news decides: on the saved Sunday snapshot Solana came out "Growth expected" (strong ecosystem news), while Ethereum and Aave stayed neutral.
 - The public live site has no accounts. Editions are cached for 30 minutes by the CDN and in each server instance's memory, and each instance keeps a daily spending limit. On serverless hosting instances restart, so the real safety net is the hard monthly spend limit on the site's own Anthropic workspace. When the free editions are used up, it shows the last edition it has or points to the archived demo.
-- 12 coins for now. Adding a coin is one entry in `config/coins.json` with its official feeds.
+- 40 coins for now. Adding a coin is one entry in `config/coins.json` with its feeds.
 - The archived demo editions are in English only; the live site prints English and Russian.
 
 ## Later
