@@ -96,8 +96,8 @@ export async function getEdition(coin, timeframe, { root, marketFeeds, deps = {}
         const data = {
           edition: { at: new Date(now()).toISOString(), model: null, items: gathered.items.length, shared_minutes: 30 },
           asset: 'stock', quiet: true, market_open: open, earnings, price: quote ? { value: quote.value, change: quote.change } : null,
-          direction: 'sideways', verdict: `No fresh news for ${coin.symbol}`, verdict_ru: `Свежих новостей по ${coin.symbol} нет`,
-          spot_futures_note: 'Quiet companies can still gap at the open on market-wide news.', spot_futures_note_ru: 'Тихие компании всё равно могут дать гэп на открытии из-за общего фона рынка.',
+          direction: 'sideways', verdict: `No fresh news for ${coin.symbol}`, verdict_ru: `Свежих новостей по ${coin.symbol} нет`, verdict_uk: `Свіжих новин по ${coin.symbol} немає`,
+          spot_futures_note: 'Quiet companies can still gap at the open on market-wide news.', spot_futures_note_ru: 'Тихие компании всё равно могут дать гэп на открытии из-за общего фона рынка.', spot_futures_note_uk: 'Тихі компанії все одно можуть дати гел на відкритті через загальний фон ринку.',
           horizon, notes: { chain: [], dispatches: [] }, x_connected: false, missing_sources: gathered.missing, cost: { usd: 0, model: null, shared: true }
         };
         budget.usd -= RESERVE_USD;
@@ -113,11 +113,12 @@ export async function getEdition(coin, timeframe, { root, marketFeeds, deps = {}
     const byNumber = new Map(gathered.items.map(it => [it.n, it]));
     const cited = [...new Set(checked.answer.chain.flatMap(c => c.cites))].sort((a, b) => a - b);
     // Russian titles for the cited dispatches; if the translator fails the titles stay in English.
-    let titlesRu = new Map(), trUsd = RESERVE_USD;
+    let titlesRu = new Map(), titlesUk = new Map(), trUsd = RESERVE_USD;
     budget.usd += RESERVE_USD;
     try {
       const tr = await translate(cited.map(n => byNumber.get(n).title));
       titlesRu = tr.ru;
+      titlesUk = tr.uk;
       trUsd = costOf(tr.usage, tr.model);
     } catch (err) { console.error('[translate edition]', err.message); }
     budget.usd += trUsd - RESERVE_USD;
@@ -126,11 +127,13 @@ export async function getEdition(coin, timeframe, { root, marketFeeds, deps = {}
       direction: checked.answer.direction,
       verdict: checked.answer.verdict,
       verdict_ru: checked.answer.verdict_ru,
+      verdict_uk: checked.answer.verdict_uk,
       spot_futures_note: checked.answer.spot_futures_note,
       spot_futures_note_ru: checked.answer.spot_futures_note_ru,
+      spot_futures_note_uk: checked.answer.spot_futures_note_uk,
       horizon,
       ...(stock ? { asset: 'stock', earnings, market_open: usMarketOpen(new Date(now())), price: quote ? { value: quote.value, change: quote.change } : null } : {}),
-      notes: { chain: checked.answer.chain, dispatches: cited.map(n => ({ n, title: byNumber.get(n).title, title_ru: titlesRu.get(byNumber.get(n).title), source: byNumber.get(n).source, link: byNumber.get(n).link })) },
+      notes: { chain: checked.answer.chain, dispatches: cited.map(n => ({ n, title: byNumber.get(n).title, title_ru: titlesRu.get(byNumber.get(n).title), title_uk: titlesUk.get(byNumber.get(n).title), source: byNumber.get(n).source, link: byNumber.get(n).link })) },
       x_connected: false,
       missing_sources: gathered.missing,
       cost: { usd: usd + trUsd, model, shared: true }

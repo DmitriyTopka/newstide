@@ -38,7 +38,19 @@ const LIVE_URL = 'https://newstide-live.vercel.app';
 const TIMEFRAME = '1d';
 
 const app = express();
-app.use(express.json());
+app.disable('x-powered-by');
+// Basic browser protections on every answer: no content-type guessing, no framing of the site by other pages,
+// no referrer leaking beyond the origin, and no access to camera, microphone or location.
+app.use((req, res, next) => {
+  res.set({
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'
+  });
+  next();
+});
+app.use(express.json({ limit: '20kb' }));
 app.use(express.static(path.join(root, 'public')));
 
 // The coin list for the suggestions under the coin field.
@@ -146,6 +158,8 @@ async function withRussian(data) {
   for (const n of list) {
     if (tr.ru.has(n.title)) n.title_ru = tr.ru.get(n.title);
     if (n.summary && tr.ru.has(n.summary)) n.summary_ru = tr.ru.get(n.summary);
+    if (tr.uk?.has(n.title)) n.title_uk = tr.uk.get(n.title);
+    if (n.summary && tr.uk?.has(n.summary)) n.summary_uk = tr.uk.get(n.summary);
   }
 }
 const marketTr = { run: null, pauseUntil: 0 };
@@ -171,8 +185,10 @@ app.post('/api/analyze', async (req, res) => {
       plan_fit: expectedFit(plan, ed.direction),
       verdict: ed.verdict,
       verdict_ru: ed.verdict_ru,
+      verdict_uk: ed.verdict_uk,
       spot_futures_note: ed.spot_futures_note,
       spot_futures_note_ru: ed.spot_futures_note_ru,
+      spot_futures_note_uk: ed.spot_futures_note_uk,
       horizon: horizonOf(timeframe),
       notes: { chain: ed.chain, dispatches: ed.dispatches },
       x_connected: false,
@@ -206,8 +222,10 @@ app.post('/api/analyze', async (req, res) => {
       plan_fit: checked.answer.plan_fit,
       verdict: checked.answer.verdict,
       verdict_ru: checked.answer.verdict_ru,
+      verdict_uk: checked.answer.verdict_uk,
       spot_futures_note: checked.answer.spot_futures_note,
       spot_futures_note_ru: checked.answer.spot_futures_note_ru,
+      spot_futures_note_uk: checked.answer.spot_futures_note_uk,
       horizon: gathered.horizon,
       notes: {
         chain: checked.answer.chain,

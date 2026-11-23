@@ -6,24 +6,27 @@ const client = new Anthropic();
 export const SCHEMA = {
   type: 'object',
   additionalProperties: false,
-  required: ['direction', 'plan_fit', 'verdict', 'verdict_ru', 'spot_futures_note', 'spot_futures_note_ru', 'chain'],
+  required: ['direction', 'plan_fit', 'verdict', 'verdict_ru', 'verdict_uk', 'spot_futures_note', 'spot_futures_note_ru', 'spot_futures_note_uk', 'chain'],
   properties: {
     direction: { type: 'string', enum: ['up', 'down', 'sideways'] },
     plan_fit: { type: 'string', enum: ['supports', 'mixed', 'against'] },
     verdict: { type: 'string', description: 'Newspaper headline, at most 6 words, no numbers or percent.' },
     verdict_ru: { type: 'string', description: 'The same headline in natural Russian, at most 6 words, no numbers or percent.' },
+    verdict_uk: { type: 'string', description: 'The same headline in natural Ukrainian, at most 6 words, no numbers or percent.' },
     spot_futures_note: { type: 'string', description: 'One short sentence on how spot and futures may differ.' },
     spot_futures_note_ru: { type: 'string', description: 'The same sentence in natural Russian.' },
+    spot_futures_note_uk: { type: 'string', description: 'The same sentence in natural Ukrainian.' },
     chain: {
       type: 'array',
       description: 'Cause and effect from the wide picture down to the coin, 2 to 5 steps.',
       items: {
         type: 'object',
         additionalProperties: false,
-        required: ['step', 'step_ru', 'cites'],
+        required: ['step', 'step_ru', 'step_uk', 'cites'],
         properties: {
           step: { type: 'string', description: 'One sentence.' },
           step_ru: { type: 'string', description: 'The same sentence in natural Russian.' },
+          step_uk: { type: 'string', description: 'The same sentence in natural Ukrainian.' },
           cites: { type: 'array', items: { type: 'integer' }, description: 'Numbers of the dispatches this step relies on.' }
         }
       }
@@ -45,7 +48,7 @@ plan_fit: supports if the direction matches the plan, against if it opposes it, 
 verdict: a newspaper headline of at most 6 words, such as "Growth expected for ETH", "Correction for SOL" or "Neutral for now". No numbers, no percent signs.
 spot_futures_note: one short sentence; futures react faster and amplify moves, spot is calmer.
 When the wider picture is mixed but the coin's own official news is clearly positive or clearly negative, let that news decide the direction and say so in the chain.
-Every text field also has a _ru twin: the same meaning in natural, plain Russian for a trader (keep coin tickers, Long and Short in Latin letters).
+Every text field also has a _ru twin and a _uk twin: the same meaning in natural, plain Russian and in natural, plain Ukrainian for a trader (real Ukrainian, not Russian with changed letters; keep coin tickers, Long and Short in Latin letters).
 Choose sideways only when the coin's own news is thin or balanced and the wider picture gives no clear push either way.`;
 
 // Stocks get their own editor: different catalysts (results, guidance, filings), a trading session instead of 24/7.
@@ -63,7 +66,7 @@ direction: where the news background is likely to push the shares over the next 
 plan_fit: supports if the direction matches the plan, against if it opposes it, mixed when sideways or unclear.
 verdict: a newspaper headline of at most 6 words, such as "Pressure on AAPL", "Earnings lift NVDA" or "Quiet for KO". No numbers, no percent signs.
 spot_futures_note: here this is the risk note for shares: one short sentence on gap risk at the open, a coming earnings date or leverage. Never advice to buy or sell.
-Every text field also has a _ru twin: the same meaning in natural, plain Russian for an investor (keep tickers, Long and Short in Latin letters).
+Every text field also has a _ru twin and a _uk twin: the same meaning in natural, plain Russian and in natural, plain Ukrainian for an investor (real Ukrainian, not Russian with changed letters; keep tickers, Long and Short in Latin letters).
 Choose sideways only when the company's own news is thin or balanced and the wider picture gives no clear push either way.`;
 
 export function buildPrompt({ coin, plan, horizon, items, assetClass, context }) {

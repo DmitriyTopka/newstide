@@ -8,7 +8,8 @@ let coins = [];
 let stockList = [];   // the 100 companies, loaded when the stock tab is first opened
 let asset = 'crypto'; // 'crypto' or 'stock'
 let lang = 'en';
-try { lang = localStorage.getItem('newstide-lang') === 'ru' ? 'ru' : 'en'; } catch {}
+const LANGS = ['en', 'uk', 'ru'];
+try { const saved = localStorage.getItem('newstide-lang'); lang = LANGS.includes(saved) ? saved : 'en'; } catch {}
 const T = () => TEXT[lang];
 let mode = { replay: false, public_live: false };
 let last = null; // last result and plan, re-printed when the language changes
@@ -35,8 +36,7 @@ function applyLanguage() {
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = T()[el.dataset.i18nPlaceholder]; });
   $('ringTop').textContent = T().ringTop;
   $('ringBottom').textContent = T().ringBottom;
-  $('langToggle').textContent = T().switchTo;
-  $('langToggle').lang = lang === 'en' ? 'ru' : 'en';
+  document.querySelectorAll('#langSwitch button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   $('dateline').textContent = new Date().toLocaleDateString(T().locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   $('themeToggle').textContent = night ? T().day : T().night;
   $('price').textContent = T().priceStart;
@@ -52,11 +52,12 @@ function applyLanguage() {
   if (lastMarket) renderMarket(lastMarket);
   if (last) showResult(last.r, last.plan, true);
 }
-$('langToggle').addEventListener('click', () => {
-  lang = lang === 'en' ? 'ru' : 'en';
+document.querySelectorAll('#langSwitch button').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.lang === lang) return;
+  lang = b.dataset.lang;
   try { localStorage.setItem('newstide-lang', lang); } catch {}
   applyLanguage();
-});
+}));
 
 // Coin suggestions
 async function loadCoins() {
@@ -189,7 +190,7 @@ function escapeHtml(s) {
 const images = { up: 'img/bull.jpg', down: 'img/bear.jpg', sideways: 'img/hamster.jpg' };
 const moods = { up: 'up', down: 'down', sideways: 'flat' };
 // The model writes English and, on the live site, Russian too; older editions fall back to English.
-const pick = (r, field) => (lang === 'ru' && r[`${field}_ru`]) || r[field];
+const pick = (r, field) => (lang !== 'en' && r[`${field}_${lang}`]) || r[field];
 
 function showResult(r, plan, reprint = false) {
   last = { r, plan };
@@ -228,7 +229,7 @@ function showResult(r, plan, reprint = false) {
   }
   if (r.archived) {
     const d = new Date(r.archived.at).toLocaleDateString(t.locale, { day: 'numeric', month: 'long', year: 'numeric' });
-    $('resultSample').textContent = t.archived(d, r.archived.items, r.archived.model) + (lang === 'ru' && !r.verdict_ru ? ` ${t.englishOnly}` : '');
+    $('resultSample').textContent = t.archived(d, r.archived.items, r.archived.model) + (lang !== 'en' && !r[`verdict_${lang}`] ? ` ${t.englishOnly}` : '');
   }
 
   // Editor's notes: the reasoning chain, closed by default
@@ -236,7 +237,7 @@ function showResult(r, plan, reprint = false) {
   $('notes').open = false;
   $('notes').hidden = !notes.chain.length;
   $('chain').innerHTML = notes.chain
-    .map(c => `<li>${escapeHtml((lang === 'ru' && c.step_ru) || c.step)} <span class="cites">${(c.cites ?? []).map(n => `[${Number(n) | 0}]`).join(' ')}</span></li>`).join('');
+    .map(c => `<li>${escapeHtml((lang !== 'en' && c[`step_${lang}`]) || c.step)} <span class="cites">${(c.cites ?? []).map(n => `[${Number(n) | 0}]`).join(' ')}</span></li>`).join('');
   $('cited').innerHTML = notes.dispatches
     .map(d => `<li><span class="cites">[${Number(d.n) | 0}]</span> ${escapeHtml(pick(d, 'title'))} <small>${escapeHtml(d.source)}</small></li>`).join('');
 

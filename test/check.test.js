@@ -55,3 +55,9 @@ test('citations are de-duplicated and sorted', () => {
   const r = check({ ...base, chain: [{ step: 's', cites: [3, 1, 3, 2] }] }, { plan: 'long', items });
   assert.deepEqual(r.answer.chain[0].cites, [1, 2, 3]);
 });
+
+test('percent signs are removed from the Russian and Ukrainian verdicts too', () => {
+  const r = check({ ...base, verdict_ru: 'Рост ETH на 62%', verdict_uk: 'Зростання ETH на 62%' }, { plan: 'long', items });
+  assert.ok(!r.answer.verdict_ru.includes('%'));
+  assert.ok(!r.answer.verdict_uk.includes('%'));
+});

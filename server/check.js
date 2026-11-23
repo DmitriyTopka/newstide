@@ -32,7 +32,9 @@ export function check(answer, { plan, items }) {
     verdict = words.slice(0, 6).join(' ');
   }
   fixed.verdict = verdict || 'Neutral for now';
-  if (typeof fixed.verdict_ru === 'string') fixed.verdict_ru = fixed.verdict_ru.replace(/[0-9]+([.,][0-9]+)?\s*%|%/g, '').replace(/\s+/g, ' ').trim();
+  for (const k of ['verdict_ru', 'verdict_uk']) {
+    if (typeof fixed[k] === 'string') fixed[k] = fixed[k].replace(/[0-9]+([.,][0-9]+)?\s*%|%/g, '').replace(/\s+/g, ' ').trim();
+  }
 
   const chain = Array.isArray(fixed.chain) ? fixed.chain : [];
   if (!chain.length) problems.push('chain is empty');
